@@ -1,0 +1,63 @@
+.App {
+}
+
+.App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 44px;
+}
+
+.App-menu {
+    background-color: #222;
+    height: 44px;
+    padding: 8px;
+    color: white;
+}
+
+.App-content {
+    max-width: 75%;
+    background-color: aqua;
+}
+
+    .App-content__wrapper{
+        padding: 24px;
+    }
+
+        .App-theme {
+            font-size: 1.5em;
+        }
+
+        .App-theme__types {
+            font-size: 1em;
+        }
+
+        .App-theme__types__items{
+            font-size: 1em;
+        }
+
+    .App-content__answers{
+        margin: 24px 0;
+    }
+        .App-content__answer{
+
+        }
+
+.App-questions {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 25%;
+    background-color: #ffca77;
+}
+
+.App-intro {
+    font-size: large;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
