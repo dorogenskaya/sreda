@@ -1,0 +1,26 @@
+.Answer{
+    margin: 0 0 32px 0;
+}
+
+.Answer h3{
+    margin: 0;
+}
+
+.Answer__meta{
+    margin-bottom: 32px;
+}
+.Answer__meta h4, img{
+    display: inline-block;
+    padding-right: 24px;
+}
+
+.Answer__divider{
+    border-bottom: 1px solid antiquewhite;
+}
+.Questions-tag {
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: space-between;*/
+    text-align: right;
+    display: inline-block;
+}

@@ -7,38 +7,41 @@
 }
 
 .App-menu {
+    position: fixed;
+    top: 0;
+    width: 100%
+;
     background-color: #222;
     height: 44px;
     padding: 8px;
     color: white;
+
 }
 
 .App-content {
     max-width: 75%;
     background-color: aqua;
-}
 
+}
     .App-content__wrapper{
-        padding: 24px;
+        padding: 32px;
+
+    }
+
+    .App-content__header {
+        margin: 32px 0 60px 0;
     }
 
         .App-theme {
-            font-size: 1.5em;
+            font-size: 3em;
+            display: inline-block;
         }
 
         .App-theme__types {
             font-size: 1em;
         }
 
-        .App-theme__types__items{
-            font-size: 1em;
-        }
-
-    .App-content__answers{
-        margin: 24px 0;
-    }
-        .App-content__answer{
-
+        .App-theme__types__items {
         }
 
 .App-questions {
@@ -46,6 +49,7 @@
     right: 0;
     top: 60px;
     width: 25%;
+    height: 100vh;
     background-color: #ffca77;
 }
 
