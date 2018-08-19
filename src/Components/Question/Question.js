@@ -1,15 +1,11 @@
 import React from 'react';
 import './Question.css';
 
-const question = {
-    name: 'MarginOtto Pizzeria',
-};
-
 class Question extends React.Component {
     render() {
         return (
             <div>
-            <li className="Question"><a href="">{question.name}</a></li>
+            <li className="Question"><a href="">{this.props.question.name}</a></li>
             </div>
         );
     }

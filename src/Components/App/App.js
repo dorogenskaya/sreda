@@ -4,7 +4,26 @@ import './App.css';
 import AnswerList from "../AnswerList/AnswerList";
 import QuestionList from "../QuestionList/QuestionList";
 
+const answer = {
+    name: 'MarginOtto Pizzeria',
+    description:"fdfssdffs",
+    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+    creator: 'Lena',
+    rating: 4,
+    coinCount: 90,
+};
+
+let answerS = [answer,answer,answer,answer,answer,answer];
+
+const question = {
+    name: 'MarginOtto Pizzeria',
+};
+
+let questionS = [question, question, question, question, question, question];
+
+
 class App extends Component {
+
     render() {
         return (
             <div className="App">
@@ -24,7 +43,7 @@ class App extends Component {
                                 <li className="App-theme__types__items"><a href="">Level name</a></li>
                             </ul>
                         </div>
-                        <AnswerList/>
+                        <AnswerList answers={answerS}/>
                     </div>
                 </div>
 
@@ -33,7 +52,7 @@ class App extends Component {
                     <div className="App-content__wrapper">
                         <h2>Вопросы по
                             теме</h2>
-                        <QuestionList />
+                        <QuestionList questions={questionS}/>
                     </div>
                 </div>
             </div>

@@ -4,14 +4,16 @@ import './QuestionList.css';
 import Question from '../Question/Question';
 
 class QuestionList extends React.Component {
+
     render() {
         return (
             <ol className="QuestionList">
-                <Question />
-                <Question />
-                <Question />
+                {
+                    this.props.questions.map(
+                        question => {return <Question question = {question}/>}
+                    )
+                }
             </ol>
-
         );
     }
 }
