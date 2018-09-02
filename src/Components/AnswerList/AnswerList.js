@@ -11,7 +11,7 @@ class AnswerList extends React.Component {
                     // for each element of array answers (in APP), called answer
                     // return component Answer with props - answer
                     this.props.answers.map(answer => {
-                        return <Answer answer={answer} />
+                        return <Answer key={answer.id} answer={answer} tag={answer.tag} name={answer.name}/>;
                     })
                 }
             </div>

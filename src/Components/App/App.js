@@ -4,25 +4,57 @@ import './App.css';
 import AnswerList from "../AnswerList/AnswerList";
 import QuestionList from "../QuestionList/QuestionList";
 
-const answer = {
-    name: 'MarginOtto Pizzeria',
+const answerS = [
+    {name: 'Pizzeria',
+    description:"fdfsfdfsfdsfdsfdsfdssdffs",
+    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+    creator: 'Lena',
+    rating: 4,
+    coinCount: 0,
+    id: 12,
+    tags:['1']},
+
+    {name: 'Otto Pizzeria',
     description:"fdfssdffs",
     videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
     creator: 'Lena',
     rating: 4,
-    coinCount: 90,
-};
+    id: 13,
+    coinCount: 1380,
+    tags:['2']},
 
-let answerS = [answer,answer,answer,answer,answer,answer];
+    {name: 'MarginOtto Pizzeria',
+    description:"куцкупцапавпа",
+    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+    creator: 'Lena',
+    rating: 4,
+    id: 14,
+    coinCount: 10,
+    tags:['3']}
+];
 
-const question = {
-    name: 'MarginOtto Pizzeria',
-};
-
-let questionS = [question, question, question, question, question, question];
-
+const questionS = [
+    {name: 'Mafdf', id: '1'},
+    {name: 'Margidfda', id: '2'},
+    {name: 'to Pizzeria', id: '3'},
+];
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            answers: answerS,
+        };
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick = (questionId) => {
+        this.setState({
+            answers: answerS.filter(({tags}) => tags.includes(questionId))
+        })
+    };
 
     render() {
         return (
@@ -43,7 +75,7 @@ class App extends Component {
                                 <li className="App-theme__types__items"><a href="">Level name</a></li>
                             </ul>
                         </div>
-                        <AnswerList answers={answerS}/>
+                        <AnswerList answers={this.state.answers}/>
                     </div>
                 </div>
 
@@ -52,7 +84,7 @@ class App extends Component {
                     <div className="App-content__wrapper">
                         <h2>Вопросы по
                             теме</h2>
-                        <QuestionList questions={questionS}/>
+                        <QuestionList handleClick={this.handleClick} questions={questionS} />
                     </div>
                 </div>
             </div>
