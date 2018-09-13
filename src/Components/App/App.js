@@ -44,7 +44,7 @@ class App extends Component {
         super(props);
 
         this.state = {
-            answers: answerS,
+            answers: answerS
         };
 
         this.handleClick = this.handleClick.bind(this);
