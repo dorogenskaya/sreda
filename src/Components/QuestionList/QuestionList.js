@@ -1,7 +1,7 @@
 import React from 'react';
 import './QuestionList.css';
-
 import Question from '../Question/Question';
+import PropTypes from 'prop-types';
 
 class QuestionList extends React.Component {
 
@@ -18,5 +18,10 @@ class QuestionList extends React.Component {
         );
     }
 }
+
+QuestionList.propTypes = {
+    questions:PropTypes.array.isRequired,
+    handleClick:PropTypes.func.isRequired
+};
 
 export default QuestionList;

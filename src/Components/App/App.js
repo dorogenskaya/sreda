@@ -30,7 +30,7 @@ const answerS = [
     rating: 4,
     id: 14,
     coinCount: 10,
-    tags:['3']}
+    tags:['3','2']}
 ];
 
 const questionS = [
@@ -45,7 +45,7 @@ class App extends Component {
 
         this.state = {
             answers: answerS
-        };
+        }
 
         this.handleClick = this.handleClick.bind(this);
     }
@@ -75,7 +75,9 @@ class App extends Component {
                                 <li className="App-theme__types__items"><a href="">Level name</a></li>
                             </ul>
                         </div>
-                        <AnswerList answers={this.state.answers}/>
+                        <AnswerList
+                            answers={this.state.answers}
+                            handleClick={this.handleClick}/>
                     </div>
                 </div>
 

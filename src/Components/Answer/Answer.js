@@ -1,16 +1,23 @@
 import React from 'react';
 import './Answer.css';
+import PropTypes from 'prop-types';
+import AnswerTag from '../AnswerTag/AnswerTag';
 
 class Answer extends React.Component {
     render() {
+        const handleClick = this.props.handleClick;
+        const id = this.props.key;
+
         return (
-            <div className="Answer" key={this.props.tag} >
+            <div className="Answer" key={id} >
                     <div className="Answer__info">
                         <h2>{this.props.name}</h2>
                         <div className="Questions-tag">
                             <ul className="App-theme__types">
-                                <li className="App-theme__types__items"><a href="">1</a></li>
-                                <li className="App-theme__types__items"><a href="">3</a></li>
+                                {/*component for question tag*/}
+                                {this.props.questionId.map(element =>
+                                    <AnswerTag key={element} onClick={() => handleClick(element)} value={element}/>
+                                )}
                             </ul>
                         </div>
                         <p>{this.props.answer.description}</p>
@@ -29,4 +36,10 @@ class Answer extends React.Component {
     }
 }
 
+Answer.propTypes = {
+    questionId: PropTypes.array.isRequired,
+    name:PropTypes.string.isRequired,
+    answer:PropTypes.object.isRequired,
+    key:PropTypes.number.isRequired
+};
 export default Answer;

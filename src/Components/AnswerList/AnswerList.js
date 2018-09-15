@@ -1,6 +1,6 @@
 import React from 'react';
 import './AnswerList.css';
-
+import PropTypes from 'prop-types';
 import Answer from '../Answer/Answer';
 
 class AnswerList extends React.Component {
@@ -11,12 +11,22 @@ class AnswerList extends React.Component {
                     // for each element of array answers (in APP), called answer
                     // return component Answer with props - answer
                     this.props.answers.map(answer => {
-                        return <Answer key={answer.id} answer={answer} tag={answer.tag} name={answer.name}/>;
+                        return <Answer
+                            key={answer.id}
+                            answer={answer}
+                            questionId={answer.tags}
+                            name={answer.name}
+                            handleClick={this.props.handleClick}
+                        />;
                     })
                 }
             </div>
         );
     }
 }
+
+AnswerList.propTypes = {
+    answers:PropTypes.array.isRequired,
+};
 
 export default AnswerList;

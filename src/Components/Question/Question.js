@@ -1,10 +1,10 @@
 import React from 'react';
 import './Question.css';
+import PropTypes from 'prop-types';
 
 class Question extends React.Component {
 
 
-    // const onSelect = props.onSelect;
     render() {
         const id = this.props.id;
         const name = this.props.name;
@@ -15,4 +15,9 @@ class Question extends React.Component {
     }
 }
 
+Question.propTypes = {
+    id:PropTypes.string.isRequired,
+    name:PropTypes.string.isRequired,
+    handleClick:PropTypes.func.isRequired
+};
 export default Question;
