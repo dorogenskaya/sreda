@@ -17,10 +17,9 @@
 .Answer__divider{
     border-bottom: 1px solid antiquewhite;
 }
-.Questions-tag {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: space-between;*/
+.Answer__tags {
+    display: flex;
     text-align: right;
-    display: inline-block;
+    list-style: none outside;
+    padding-inline-start: 0px;
 }

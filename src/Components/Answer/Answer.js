@@ -12,24 +12,41 @@ class Answer extends React.Component {
             <div className="Answer" key={id} >
                     <div className="Answer__info">
                         <h2>{this.props.name}</h2>
-                        <div className="Questions-tag">
-                            <ul className="App-theme__types">
-                                {/*component for question tag*/}
-                                {this.props.questionId.map(element =>
-                                    <AnswerTag key={element} onClick={() => handleClick(element)} value={element}/>
-                                )}
-                            </ul>
-                        </div>
+                        <ul className="Answer__tags">
+                            Questions:
+                            {this.props.questionId.map(element =>
+                                <AnswerTag
+                                    key={element}
+                                    onClick={() => handleClick(element)}
+                                    value={element}/>
+                            )}
+                        </ul>
+
+                        {/*Component description with video image etc,*/}
+
                         <p>{this.props.answer.description}</p>
                         <video src={this.props.answer.videoSrc}></video>
+
                     </div>
                     <div className="Answer__meta">
+
+                        {/*Component creator*/}
+
                         <h4>{this.props.answer.creator}</h4>
                         <img src="" alt=""/>
+
+                        {/*Component coins*/}
+
                         <span>{`${this.props.answer.coinCount} coins`}</span>
                     </div>
+
+                {/*Component actions*/}
+
                     <div className="Answer__actions"></div>
-                    <div className="Answer__divider"></div>
+
+                {/*Component divider*/}
+
+                <div className="Answer__divider"></div>
 
             </div>
         );

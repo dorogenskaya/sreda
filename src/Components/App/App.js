@@ -32,7 +32,9 @@ const answerS = [
     coinCount: 10,
     tags:['3','2']}
 ];
-
+const questionAll = {
+    name: 'all', id: '0'
+};
 const questionS = [
     {name: 'Mafdf', id: '1'},
     {name: 'Margidfda', id: '2'},
@@ -44,7 +46,8 @@ class App extends Component {
         super(props);
 
         this.state = {
-            answers: answerS
+            answers: answerS,
+            questionActive: questionAll
         }
 
         this.handleClick = this.handleClick.bind(this);
@@ -52,7 +55,8 @@ class App extends Component {
 
     handleClick = (questionId) => {
         this.setState({
-            answers: answerS.filter(({tags}) => tags.includes(questionId))
+            answers: answerS.filter(({tags}) => tags.includes(questionId)),
+            questionActive: questionId
         })
     };
 
@@ -86,7 +90,8 @@ class App extends Component {
                     <div className="App-content__wrapper">
                         <h2>Вопросы по
                             теме</h2>
-                        <QuestionList handleClick={this.handleClick} questions={questionS} />
+                        <div>{questionAll.name}</div>
+                        <QuestionList handleClick={this.handleClick} questions={questionS} questionActive={this.state.questionActive}/>
                     </div>
                 </div>
             </div>
