@@ -17,6 +17,8 @@ class AnswerList extends React.Component {
                             questionId={answer.tags}
                             name={answer.name}
                             handleClick={this.props.handleClick}
+                            liked={this.props.liked}
+                            toggleLike={this.props.toggleLike}
                         />;
                     })
                 }

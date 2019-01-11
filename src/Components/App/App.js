@@ -47,10 +47,12 @@ class App extends Component {
 
         this.state = {
             answers: answerS,
-            questionActive: questionAll
-        }
-
+            questionActive: questionAll,
+            liked: false
+    }
         this.handleClick = this.handleClick.bind(this);
+        this.toggleLike = this.toggleLike.bind(this);
+
     }
 
     handleClick = (questionId) => {
@@ -59,6 +61,10 @@ class App extends Component {
             questionActive: questionId
         })
     };
+
+    toggleLike () {
+        this.setState(previousState => ({ liked: !previousState.liked}))
+    }
 
     render() {
         return (
@@ -81,7 +87,11 @@ class App extends Component {
                         </div>
                         <AnswerList
                             answers={this.state.answers}
-                            handleClick={this.handleClick}/>
+                            handleClick={this.handleClick}
+                            liked={this.state.liked}
+                            toggleLike={this.toggleLike}
+
+                        />
                     </div>
                 </div>
 

@@ -6,10 +6,10 @@
     margin: 0;
 }
 
-.Answer__meta{
+.Answer__profile{
     margin-bottom: 32px;
 }
-.Answer__meta h4, img{
+.Answer__profile h4, img{
     display: inline-block;
     padding-right: 24px;
 }

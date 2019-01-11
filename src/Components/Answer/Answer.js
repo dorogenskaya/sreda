@@ -2,6 +2,8 @@ import React from 'react';
 import './Answer.css';
 import PropTypes from 'prop-types';
 import AnswerTag from '../AnswerTag/AnswerTag';
+import AnswerActions from '../AnswerActions/AnswerActions';
+
 
 class Answer extends React.Component {
     render() {
@@ -21,31 +23,23 @@ class Answer extends React.Component {
                                     value={element}/>
                             )}
                         </ul>
-
                         {/*Component description with video image etc,*/}
-
                         <p>{this.props.answer.description}</p>
                         <video src={this.props.answer.videoSrc}></video>
 
                     </div>
-                    <div className="Answer__meta">
-
+                    <div className="Answer__profile">
                         {/*Component creator*/}
-
-                        <h4>{this.props.answer.creator}</h4>
                         <img src="" alt=""/>
-
-                        {/*Component coins*/}
-
-                        <span>{`${this.props.answer.coinCount} coins`}</span>
+                        <h4>{this.props.answer.creator}</h4>
                     </div>
 
                 {/*Component actions*/}
-
-                    <div className="Answer__actions"></div>
-
-                {/*Component divider*/}
-
+                    <AnswerActions
+                        coinCount = {this.props.answer.coinCount}
+                        liked={this.props.liked}
+                        toggleLike={this.props.toggleLike}
+                    />
                 <div className="Answer__divider"></div>
 
             </div>
