@@ -1,5 +1,4 @@
 /node_modules
 /.idea
-*.xml
-src/.DS_Store
-.DS_Store
+package-lock.json
+yarn-lock.json
