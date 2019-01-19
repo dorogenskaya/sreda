@@ -6,14 +6,13 @@ import Like from '../Like/Like';
 
 class AnswerActions extends React.Component{
     render () {
-        const coinCount = this.props.coinCount;
         return (
             <div className="Answer__actions">
                 <Like
                     liked={this.props.liked}
                     toggleLike={this.props.toggleLike}
+                    coinCount={this.props.coinCount}
                 />
-                <span>{`${coinCount} coins`}</span>
             </div>
         );
     }

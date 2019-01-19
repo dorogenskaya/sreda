@@ -10,7 +10,7 @@ const answerS = [
     videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
     creator: 'Lena',
     rating: 4,
-    coinCount: 0,
+    // coinCount: 0,
     id: 12,
     tags:['1']},
 
@@ -20,7 +20,7 @@ const answerS = [
     creator: 'Lena',
     rating: 4,
     id: 13,
-    coinCount: 1380,
+    // coinCount: 1380,
     tags:['2']},
 
     {name: 'MarginOtto Pizzeria',
@@ -29,7 +29,7 @@ const answerS = [
     creator: 'Lena',
     rating: 4,
     id: 14,
-    coinCount: 10,
+    // coinCount: 10,
     tags:['3','2']}
 ];
 const questionAll = {
@@ -48,11 +48,11 @@ class App extends Component {
         this.state = {
             answers: answerS,
             questionActive: questionAll,
-            liked: false
+            liked: false,
+            coinCount: 0
     }
         this.handleClick = this.handleClick.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
-
     }
 
     handleClick = (questionId) => {
@@ -63,7 +63,10 @@ class App extends Component {
     };
 
     toggleLike () {
-        this.setState(previousState => ({ liked: !previousState.liked}))
+        this.setState(previousState => ({
+            liked: !previousState.liked,
+            coinCount: this.state.coinCount + 1
+        }))
     }
 
     render() {
@@ -90,7 +93,7 @@ class App extends Component {
                             handleClick={this.handleClick}
                             liked={this.state.liked}
                             toggleLike={this.toggleLike}
-
+                            coinCount={this.state.coinCount}
                         />
                     </div>
                 </div>
@@ -101,7 +104,10 @@ class App extends Component {
                         <h2>Вопросы по
                             теме</h2>
                         <div>{questionAll.name}</div>
-                        <QuestionList handleClick={this.handleClick} questions={questionS} questionActive={this.state.questionActive}/>
+                        <QuestionList
+                            handleClick={this.handleClick}
+                            questions={questionS}
+                            questionActive={this.state.questionActive}/>
                     </div>
                 </div>
             </div>

@@ -1,28 +1,23 @@
 import React from 'react';
 import './Like.css';
 import Icon from '../Icon/Icon';
+import CoinCount from '../CoinCount/CoinCount';
 // import PropTypes from 'prop-types';
 
 
-class Like extends React.Component {
+export default class Like extends React.Component {
     render() {
         return (
             <div>
-                {this.props.liked && <Icon />}
                 <div>
                     <button type="button" className="btn no-outline btn-secondary" onClick={this.props.toggleLike}>
-
-                        <i
-                            className="fa fa-thumbs-o-up fa-4 align-middle"
-                            aria-hidden="true"
-                        />
+                        {this.props.liked && <Icon />}
                         &nbsp;
                         <span className="align-middle">Like</span>
                     </button>
+                    <CoinCount coinCount={this.props.coinCount}/>
                 </div>
             </div>
         )
     }
 }
-
-export default Like;

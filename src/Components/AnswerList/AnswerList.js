@@ -19,6 +19,7 @@ class AnswerList extends React.Component {
                             handleClick={this.props.handleClick}
                             liked={this.props.liked}
                             toggleLike={this.props.toggleLike}
+                            coinCount={this.props.coinCount}
                         />;
                     })
                 }

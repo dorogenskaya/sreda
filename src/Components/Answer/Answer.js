@@ -34,9 +34,8 @@ class Answer extends React.Component {
                         <h4>{this.props.answer.creator}</h4>
                     </div>
 
-                {/*Component actions*/}
                     <AnswerActions
-                        coinCount = {this.props.answer.coinCount}
+                        coinCount = {this.props.coinCount}
                         liked={this.props.liked}
                         toggleLike={this.props.toggleLike}
                     />
