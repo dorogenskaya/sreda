@@ -22,11 +22,11 @@ class Question extends React.Component {
         });
 
         return (
-            <li className={questionClass} onClick={() => handleClick(id)}
-            >
-                <a href=""
+            <li className={questionClass}>
+                <span
                 className={questionClass}
-            >{name}</a></li>
+                onClick={() => handleClick(id)}>{name}</span>
+            </li>
         );
     }
 }
