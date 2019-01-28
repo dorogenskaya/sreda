@@ -38,8 +38,9 @@ class Answer extends React.Component {
                         coinCount = {this.props.coinCount}
                         liked={this.props.liked}
                         toggleLike={this.props.toggleLike}
+                        likersList={this.props.likersList}
                     />
-                <div className="Answer__divider"></div>
+                {/*<div className="Answer__divider"></div>*/}
 
             </div>
         );

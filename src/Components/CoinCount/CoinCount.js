@@ -6,7 +6,12 @@ export default class CoinCount extends React.Component {
     render() {
         const coinCount = this.props.coinCount;
         return (
-            <span>{`${coinCount} coins`}</span>
+            <div>
+                <span>{`${coinCount} coins`}</span>
+                <ul>
+                    {this.props.likersList.map(nameUser => <li key ={nameUser}>{nameUser}</li>)}
+                </ul>
+            </div>
         )
     }
 }

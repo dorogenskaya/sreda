@@ -15,7 +15,10 @@ export default class Like extends React.Component {
                         &nbsp;
                         <span className="align-middle">Like</span>
                     </button>
-                    <CoinCount coinCount={this.props.coinCount}/>
+                    <CoinCount
+                        coinCount={this.props.coinCount}
+                        likersList={this.props.likersList}
+                    />
                 </div>
             </div>
         )

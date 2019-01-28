@@ -4,15 +4,21 @@ import './App.css';
 import AnswerList from "../AnswerList/AnswerList";
 import QuestionList from "../QuestionList/QuestionList";
 
+const username =
+    {nameUser: 'myName'
+    };
+
 const answerS = [
     {name: 'Pizzeria',
     description:"fdfsfdfsfdsfdsfdsfdssdffs",
     videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
     creator: 'Lena',
     rating: 4,
-    // coinCount: 0,
+    coinCount: 0,
     id: 12,
-    tags:['1']},
+    tags:['1'],
+    likersList:['Таня Иванова', 'Оля Петрова']
+    },
 
     {name: 'Otto Pizzeria',
     description:"fdfssdffs",
@@ -20,21 +26,27 @@ const answerS = [
     creator: 'Lena',
     rating: 4,
     id: 13,
-    // coinCount: 1380,
-    tags:['2']},
+    coinCount: 1380,
+    tags:['2'],
+    likersList:['Таня Иванова', 'Оля Петрова']
+    },
 
     {name: 'MarginOtto Pizzeria',
+    tags:['3','2'],
     description:"куцкупцапавпа",
     videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
     creator: 'Lena',
     rating: 4,
     id: 14,
-    // coinCount: 10,
-    tags:['3','2']}
+    coinCount: 10,
+    likersList:['Nfyz Bdfyjdf', 'Jkz Gtnhjdf']
+    }
 ];
+
 const questionAll = {
     name: 'all', id: '0'
 };
+
 const questionS = [
     {name: 'Mafdf', id: '1'},
     {name: 'Margidfda', id: '2'},
@@ -49,10 +61,13 @@ class App extends Component {
             answers: answerS,
             questionActive: questionAll,
             liked: false,
-            coinCount: 0
+            coinCount: 10,
+            likersList: ['Nfyz Bdfyjdf', 'Jkz Gtnhjdf']
     }
+
         this.handleClick = this.handleClick.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
+
     }
 
     handleClick = (questionId) => {
@@ -65,11 +80,13 @@ class App extends Component {
     toggleLike () {
         this.setState(previousState => ({
             liked: !previousState.liked,
-            coinCount: this.state.coinCount + 1
+            coinCount: this.state.coinCount + 1,
+            likersList: this.state.likersList.push(username.nameUser)
         }))
     }
 
-    render() {
+
+render() {
         return (
             <div className="App">
 
@@ -94,6 +111,7 @@ class App extends Component {
                             liked={this.state.liked}
                             toggleLike={this.toggleLike}
                             coinCount={this.state.coinCount}
+                            likersList={this.state.likersList}
                         />
                     </div>
                 </div>

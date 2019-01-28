@@ -12,7 +12,9 @@ class AnswerActions extends React.Component{
                     liked={this.props.liked}
                     toggleLike={this.props.toggleLike}
                     coinCount={this.props.coinCount}
+                    likersList={this.props.likersList}
                 />
+                <button>add to favorites</button>
             </div>
         );
     }
