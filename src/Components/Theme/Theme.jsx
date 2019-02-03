@@ -1,36 +1,35 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './Theme.css';
 import AnswerList from "../AnswerList/AnswerList";
 import QuestionList from "../QuestionList/QuestionList";
 
 const answerS = [
     {name: 'Pizzeria',
-    description:"fdfsfdfsfdsfdsfdsfdssdffs",
-    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
-    creator: 'Lena',
-    rating: 4,
-    coinCount: 0,
-    id: 12,
-    tags:['1']},
+        description:"fdfsfdfsfdsfdsfdsfdssdffs",
+        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+        creator: 'Lena',
+        rating: 4,
+        coinCount: 0,
+        id: 12,
+        tags:['1']},
 
     {name: 'Otto Pizzeria',
-    description:"fdfssdffs",
-    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
-    creator: 'Lena',
-    rating: 4,
-    id: 13,
-    coinCount: 1380,
-    tags:['2']},
+        description:"fdfssdffs",
+        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+        creator: 'Lena',
+        rating: 4,
+        id: 13,
+        coinCount: 1380,
+        tags:['2']},
 
     {name: 'MarginOtto Pizzeria',
-    description:"куцкупцапавпа",
-    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
-    creator: 'Lena',
-    rating: 4,
-    id: 14,
-    coinCount: 10,
-    tags:['3','2']}
+        description:"куцкупцапавпа",
+        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+        creator: 'Lena',
+        rating: 4,
+        id: 14,
+        coinCount: 10,
+        tags:['3','2']}
 ];
 const questionAll = {
     name: 'all', id: '0'
@@ -41,7 +40,7 @@ const questionS = [
     {name: 'to Pizzeria', id: '3'},
 ];
 
-class App extends Component {
+class Theme extends Component {
     constructor(props) {
         super(props);
 
@@ -49,7 +48,7 @@ class App extends Component {
             answers: answerS,
             questionActive: questionAll,
             liked: false
-    }
+        }
         this.handleClick = this.handleClick.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
 
@@ -68,21 +67,15 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-
-                {/*header*/}
-                <header className="App-menu">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                </header>
-
+            <div className="Theme">
                 {/*left column*/}
-                <div className="App-content">
-                    <div className="App-content__wrapper">
-                        <div className="App-content__header">
-                            <h1 className="App-theme">Theme name</h1>
-                            <ul className="App-theme__types">
-                                <li className="App-theme__types__items"><a href="">Subject name</a></li>
-                                <li className="App-theme__types__items"><a href="">Level name</a></li>
+                <div className="Theme-content">
+                    <div className="Theme-content__wrapper">
+                        <div className="Theme-content__header">
+                            <h1 className="Theme-theme">Theme name</h1>
+                            <ul className="Theme-theme__types">
+                                <li className="Theme-theme__types__items"><a href="">Subject name</a></li>
+                                <li className="Theme-theme__types__items"><a href="">Level name</a></li>
                             </ul>
                         </div>
                         <AnswerList
@@ -96,8 +89,8 @@ class App extends Component {
                 </div>
 
                 {/*right column*/}
-                <div className="App-questions">
-                    <div className="App-content__wrapper">
+                <div className="Theme-questions">
+                    <div className="Theme-content__wrapper">
                         <h2>Вопросы по
                             теме</h2>
                         <div>{questionAll.name}</div>
@@ -109,4 +102,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default Theme;

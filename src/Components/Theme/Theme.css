@@ -1,0 +1,37 @@
+.Theme-content {
+    max-width: 75%;
+    background-color: aqua;
+
+}
+    .Theme-content__wrapper{
+        padding: 32px;
+    }
+
+    .Theme-content__header {
+        margin: 32px 0 60px 0;
+    }
+
+        .Theme-theme {
+            font-size: 3em;
+            display: inline-block;
+        }
+
+        .Theme-theme__types {
+            font-size: 1em;
+        }
+
+        .Theme-theme__types__items {
+        }
+
+.Theme-questions {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 25%;
+    height: 100vh;
+    background-color: #ffca77;
+}
+
+.Theme-intro {
+    font-size: large;
+}

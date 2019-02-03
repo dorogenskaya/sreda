@@ -6,55 +6,37 @@
     height: 44px;
 }
 
-.App-menu {
+.header {
     position: fixed;
     top: 0;
-    width: 100%
-;
+    width: 100%;
     background-color: #222;
     height: 44px;
     padding: 8px;
     color: white;
-
+    display: flex;
+    align-items: center;
 }
 
-.App-content {
-    max-width: 75%;
-    background-color: aqua;
-
-}
-    .App-content__wrapper{
-        padding: 32px;
-
-    }
-
-    .App-content__header {
-        margin: 32px 0 60px 0;
-    }
-
-        .App-theme {
-            font-size: 3em;
-            display: inline-block;
-        }
-
-        .App-theme__types {
-            font-size: 1em;
-        }
-
-        .App-theme__types__items {
-        }
-
-.App-questions {
-    position: fixed;
-    right: 0;
-    top: 60px;
-    width: 25%;
-    height: 100vh;
-    background-color: #ffca77;
+.nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0 0 0 30px;
+    padding: 0;
 }
 
-.App-intro {
-    font-size: large;
+.nav-list-item {
+    margin-right: 20px;
+}
+
+.nav-list-item-link {
+    color: #fff;
+    text-decoration: none;
+    transition: color .3s;
+}
+
+.nav-list-item-link:hover {
+    color: #ccc;
 }
 
 @keyframes App-logo-spin {
