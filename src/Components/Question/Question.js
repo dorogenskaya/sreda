@@ -12,7 +12,7 @@ class Question extends React.Component {
         const questionActive = this.props.questionActive;
 
 
-        // const questionClass = classNames({
+        // const questionClass = classNames({ff
         //     questionActive === id ? 'tag-active' : 'tag-normal'});
 
         var questionClass = classNames('question',{

@@ -1,6 +1,7 @@
 import React from 'react';
 import './AnswerActions.css';
 import Like from '../Like/Like';
+import CoinCount from '../CoinCount/CoinCount';
 
 // import PropTypes from 'prop-types';
 
@@ -9,10 +10,9 @@ class AnswerActions extends React.Component{
         return (
             <div className="Answer__actions">
                 <Like
-                    liked={this.props.liked}
-                    toggleLike={this.props.toggleLike}
-                    coinCount={this.props.coinCount}
-                    likersList={this.props.likersList}
+                    handleLike={this.props.handleLike}
+                />
+                <CoinCount
                 />
                 <button>add to favorites</button>
             </div>

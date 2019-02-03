@@ -4,9 +4,7 @@ import './App.css';
 import AnswerList from "../AnswerList/AnswerList";
 import QuestionList from "../QuestionList/QuestionList";
 
-const username =
-    {nameUser: 'myName'
-    };
+const username = 'Lena Dorogenskaya';
 
 const answerS = [
     {name: 'Pizzeria',
@@ -17,7 +15,8 @@ const answerS = [
     coinCount: 0,
     id: 12,
     tags:['1'],
-    likersList:['Таня Иванова', 'Оля Петрова']
+    likerList:['Оля Петрова','Lena Dorogenskaya'],
+    liked: true
     },
 
     {name: 'Otto Pizzeria',
@@ -28,7 +27,8 @@ const answerS = [
     id: 13,
     coinCount: 1380,
     tags:['2'],
-    likersList:['Таня Иванова', 'Оля Петрова']
+    likerList:['Миранда Каримова', 'Илья Буяльский', 'Захар Шлимаков'],
+    liked: false
     },
 
     {name: 'MarginOtto Pizzeria',
@@ -39,7 +39,8 @@ const answerS = [
     rating: 4,
     id: 14,
     coinCount: 10,
-    likersList:['Nfyz Bdfyjdf', 'Jkz Gtnhjdf']
+    likerList:['Lena Dorogenskaya', 'Jkz Gtnhjdf'],
+    liked: true
     }
 ];
 
@@ -60,14 +61,8 @@ class App extends Component {
         this.state = {
             answers: answerS,
             questionActive: questionAll,
-            liked: false,
-            coinCount: 10,
-            likersList: ['Nfyz Bdfyjdf', 'Jkz Gtnhjdf']
     }
-
         this.handleClick = this.handleClick.bind(this);
-        this.toggleLike = this.toggleLike.bind(this);
-
     }
 
     handleClick = (questionId) => {
@@ -77,14 +72,18 @@ class App extends Component {
         })
     };
 
-    toggleLike () {
-        this.setState(previousState => ({
-            liked: !previousState.liked,
-            coinCount: this.state.coinCount + 1,
-            likersList: this.state.likersList.push(username.nameUser)
-        }))
-    }
+    handleLike (answer) {
+        // console.log(answer);
+        // const answers = [...this.state.answers]
+        const likerList = [...answer.likerList];
+        // console.log(likerList);
+        const liked = answer.liked;
+        // console.log(liked);
 
+        const index = likerList.indexOf(username);
+        console.log(index);
+        answers = // if liked ? likerList.splice(index,1) : ;
+    }
 
 render() {
         return (
@@ -108,10 +107,7 @@ render() {
                         <AnswerList
                             answers={this.state.answers}
                             handleClick={this.handleClick}
-                            liked={this.state.liked}
-                            toggleLike={this.toggleLike}
-                            coinCount={this.state.coinCount}
-                            likersList={this.state.likersList}
+                            handleLike={this.handleLike}
                         />
                     </div>
                 </div>

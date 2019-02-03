@@ -8,10 +8,10 @@ import AnswerActions from '../AnswerActions/AnswerActions';
 class Answer extends React.Component {
     render() {
         const handleClick = this.props.handleClick;
-        const id = this.props.key;
-
+        const key = this.props.key;
+        console.log(key);
         return (
-            <div className="Answer" key={id} >
+            <div className="Answer" key={key} >
                     <div className="Answer__info">
                         <h2>{this.props.name}</h2>
                         <ul className="Answer__tags">
@@ -35,13 +35,10 @@ class Answer extends React.Component {
                     </div>
 
                     <AnswerActions
-                        coinCount = {this.props.coinCount}
-                        liked={this.props.liked}
-                        toggleLike={this.props.toggleLike}
-                        likersList={this.props.likersList}
+                        handleLike={this.props.handleLike}
                     />
-                {/*<div className="Answer__divider"></div>*/}
-
+                <div className="Answer__divider">
+                </div>
             </div>
         );
     }
