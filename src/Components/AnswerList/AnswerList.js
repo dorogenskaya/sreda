@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Answer from '../Answer/Answer';
 
 export default class AnswerList extends React.Component {
+
     render() {
         return (
             <div className="AnswerList">
@@ -14,7 +15,7 @@ export default class AnswerList extends React.Component {
                         questionId={answer.tags}
                         name={answer.name}
                         handleClick={this.props.handleClick}
-                        handleLike={() => this.props.handleLike(answer)}
+                        username={this.props.username}
                         />;
                     })
                 }

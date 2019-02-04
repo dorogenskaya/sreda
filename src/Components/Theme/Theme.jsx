@@ -3,33 +3,44 @@ import './Theme.css';
 import AnswerList from "../AnswerList/AnswerList";
 import QuestionList from "../QuestionList/QuestionList";
 
+const username = 'Lena Dorogenskaya';
+
 const answerS = [
     {name: 'Pizzeria',
-        description:"fdfsfdfsfdsfdsfdsfdssdffs",
-        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
-        creator: 'Lena',
-        rating: 4,
-        coinCount: 0,
-        id: 12,
-        tags:['1']},
+    description:"fdfsfdfsfdsfdsfdsfdssdffs",
+    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+    creator: 'Lena',
+    rating: 4,
+    coinCount: 0,
+    id: 12,
+    tags:['1'],
+    likerList:['Оля Петрова','Lena Dorogenskaya'],
+    liked: true
+    },
 
     {name: 'Otto Pizzeria',
-        description:"fdfssdffs",
-        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
-        creator: 'Lena',
-        rating: 4,
-        id: 13,
-        coinCount: 1380,
-        tags:['2']},
+    description:"fdfssdffs",
+    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+    creator: 'Lena',
+    rating: 4,
+    id: 13,
+    coinCount: 1380,
+    tags:['2'],
+    likerList:['Миранда Каримова', 'Илья Буяльский', 'Захар Шлимаков'],
+    liked: false
+    },
 
     {name: 'MarginOtto Pizzeria',
-        description:"куцкупцапавпа",
-        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
-        creator: 'Lena',
-        rating: 4,
-        id: 14,
-        coinCount: 10,
-        tags:['3','2']}
+    tags:['3','2'],
+    description:"куцкупцапавпа",
+    videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
+    creator: 'Lena',
+    rating: 4,
+    id: 14,
+    coinCount: 10,
+    likerList:['Lena Dorogenskaya', 'Jkz Gtnhjdf'],
+    liked: true
+    }
 ];
 const questionAll = {
     name: 'all', id: '0'
@@ -47,11 +58,8 @@ class Theme extends Component {
         this.state = {
             answers: answerS,
             questionActive: questionAll,
-            liked: false
-        }
+    }
         this.handleClick = this.handleClick.bind(this);
-        this.toggleLike = this.toggleLike.bind(this);
-
     }
 
     handleClick = (questionId) => {
@@ -61,9 +69,7 @@ class Theme extends Component {
         })
     };
 
-    toggleLike () {
-        this.setState(previousState => ({ liked: !previousState.liked}))
-    }
+
 
     render() {
         return (
@@ -81,9 +87,7 @@ class Theme extends Component {
                         <AnswerList
                             answers={this.state.answers}
                             handleClick={this.handleClick}
-                            liked={this.state.liked}
-                            toggleLike={this.toggleLike}
-
+                            username={username}
                         />
                     </div>
                 </div>
@@ -94,7 +98,10 @@ class Theme extends Component {
                         <h2>Вопросы по
                             теме</h2>
                         <div>{questionAll.name}</div>
-                        <QuestionList handleClick={this.handleClick} questions={questionS} questionActive={this.state.questionActive}/>
+                        <QuestionList
+                            handleClick={this.handleClick}
+                            questions={questionS}
+                            questionActive={this.state.questionActive}/>
                     </div>
                 </div>
             </div>
@@ -103,3 +110,4 @@ class Theme extends Component {
 }
 
 export default Theme;
+

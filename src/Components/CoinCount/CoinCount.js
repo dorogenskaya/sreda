@@ -4,11 +4,12 @@ import './CoinCount.css';
 
 export default class CoinCount extends React.Component {
     render() {
+        const {likerList} =  this.props;
         return (
             <div>
-                <span>{`coins`}</span>
+                <span>{`${likerList.length}coins`}</span>
                 <ul>
-                    {/*{this.props.likerList.map(nameUser => <li key ={nameUser}>{nameUser}</li>)}*/}
+                    {likerList.map(nameUser => <li key ={nameUser}>{nameUser}</li>)}
                 </ul>
             </div>
         )

@@ -6,21 +6,39 @@ import AnswerActions from '../AnswerActions/AnswerActions';
 
 
 class Answer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            answer: this.props.answer,
+        }
+    }
+    handleLike = answer => {
+        this.state.answer.liked = !answer.liked;
+        const index = answer.likerList.indexOf(this.props.username);
+        answer.liked ? answer.likerList.push(this.props.username) : answer.likerList.splice(index,1);
+        this.setState({ answer });
+        console.log(this.state.answer.likerList);
+    };
+
+
     render() {
         const handleClick = this.props.handleClick;
         const key = this.props.key;
-        console.log(key);
+        const arrayQuestion = this.props.questionId;
+        console.log(arrayQuestion);
+
         return (
             <div className="Answer" key={key} >
                     <div className="Answer__info">
                         <h2>{this.props.name}</h2>
                         <ul className="Answer__tags">
                             Questions:
-                            {this.props.questionId.map(element =>
+                            {arrayQuestion.map(tag =>
                                 <AnswerTag
-                                    key={element}
-                                    onClick={() => handleClick(element)}
-                                    value={element}/>
+                                    key={tag}
+                                    onClick={() => handleClick(tag)}
+                                    value={tag}/>
                             )}
                         </ul>
                         {/*Component description with video image etc,*/}
@@ -35,7 +53,8 @@ class Answer extends React.Component {
                     </div>
 
                     <AnswerActions
-                        handleLike={this.props.handleLike}
+                        handleLike={() => this.handleLike(this.state.answer)}
+                        answer={this.props.answer}
                     />
                 <div className="Answer__divider">
                 </div>

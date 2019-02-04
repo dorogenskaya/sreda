@@ -11,8 +11,10 @@ class AnswerActions extends React.Component{
             <div className="Answer__actions">
                 <Like
                     handleLike={this.props.handleLike}
+                    liked={this.props.answer.liked}
                 />
                 <CoinCount
+                    likerList={this.props.answer.likerList}
                 />
                 <button>add to favorites</button>
             </div>
