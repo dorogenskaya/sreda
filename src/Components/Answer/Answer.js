@@ -4,23 +4,22 @@ import PropTypes from 'prop-types';
 import AnswerTag from '../AnswerTag/AnswerTag';
 import AnswerActions from '../AnswerActions/AnswerActions';
 
-
 class Answer extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             answer: this.props.answer,
         }
     }
+
     handleLike = answer => {
-        this.state.answer.liked = !answer.liked;
+        let answerClone = this.state.answer;
+        answerClone.liked = !answer.liked;
         const index = answer.likerList.indexOf(this.props.username);
         answer.liked ? answer.likerList.push(this.props.username) : answer.likerList.splice(index,1);
         this.setState({ answer });
         console.log(this.state.answer.likerList);
     };
-
 
     render() {
         const handleClick = this.props.handleClick;
@@ -69,4 +68,5 @@ Answer.propTypes = {
     answer:PropTypes.object.isRequired,
     key:PropTypes.number.isRequired
 };
+
 export default Answer;
