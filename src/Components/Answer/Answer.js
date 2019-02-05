@@ -14,18 +14,17 @@ class Answer extends React.Component {
 
     handleLike = answer => {
         let answerClone = this.state.answer;
-        answerClone.liked = !answer.liked;
         const index = answer.likerList.indexOf(this.props.username);
+
+        answerClone.liked = !answer.liked;
         answer.liked ? answer.likerList.push(this.props.username) : answer.likerList.splice(index,1);
         this.setState({ answer });
-        console.log(this.state.answer.likerList);
     };
 
     render() {
         const handleClick = this.props.handleClick;
         const key = this.props.key;
         const arrayQuestion = this.props.questionId;
-        console.log(arrayQuestion);
 
         return (
             <div className="Answer" key={key} >
@@ -40,7 +39,6 @@ class Answer extends React.Component {
                                     value={tag}/>
                             )}
                         </ul>
-                        {/*Component description with video image etc,*/}
                         <p>{this.props.answer.description}</p>
                         <video src={this.props.answer.videoSrc}></video>
 
