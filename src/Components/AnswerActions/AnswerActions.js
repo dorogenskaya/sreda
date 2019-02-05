@@ -22,7 +22,6 @@ class AnswerActions extends React.Component{
                 <Button
                     type="default"
                     className="ant-btn"
-                    // onClick={this.props.handleLike}
                     icon="star">
                 </Button>
             </div>
