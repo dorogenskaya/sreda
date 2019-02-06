@@ -4,26 +4,41 @@ import PropTypes from 'prop-types';
 import AnswerTag from '../AnswerTag/AnswerTag';
 import AnswerActions from '../AnswerActions/AnswerActions';
 
-
 class Answer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            answer: this.props.answer,
+        }
+    }
+
+    handleLike = answer => {
+        let answerClone = this.state.answer;
+        const index = answer.likerList.indexOf(this.props.username);
+
+        answerClone.liked = !answer.liked;
+        answer.liked ? answer.likerList.push(this.props.username) : answer.likerList.splice(index,1);
+        this.setState({ answer });
+    };
+
     render() {
         const handleClick = this.props.handleClick;
-        const id = this.props.key;
+        const key = this.props.key;
+        const arrayQuestion = this.props.questionId;
 
         return (
-            <div className="Answer" key={id} >
+            <div className="Answer" key={key} >
                     <div className="Answer__info">
                         <h2>{this.props.name}</h2>
                         <ul className="Answer__tags">
                             Questions:
-                            {this.props.questionId.map(element =>
+                            {arrayQuestion.map(tag =>
                                 <AnswerTag
-                                    key={element}
-                                    onClick={() => handleClick(element)}
-                                    value={element}/>
+                                    key={tag}
+                                    onClick={() => handleClick(tag)}
+                                    value={tag}/>
                             )}
                         </ul>
-                        {/*Component description with video image etc,*/}
                         <p>{this.props.answer.description}</p>
                         <video src={this.props.answer.videoSrc}></video>
 
@@ -34,14 +49,12 @@ class Answer extends React.Component {
                         <h4>{this.props.answer.creator}</h4>
                     </div>
 
-                {/*Component actions*/}
                     <AnswerActions
-                        coinCount = {this.props.answer.coinCount}
-                        liked={this.props.liked}
-                        toggleLike={this.props.toggleLike}
+                        handleLike={() => this.handleLike(this.state.answer)}
+                        answer={this.props.answer}
                     />
-                <div className="Answer__divider"></div>
-
+                <div className="Answer__divider">
+                </div>
             </div>
         );
     }
@@ -53,4 +66,5 @@ Answer.propTypes = {
     answer:PropTypes.object.isRequired,
     key:PropTypes.number.isRequired
 };
+
 export default Answer;

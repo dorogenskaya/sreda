@@ -8,7 +8,7 @@ export default class AnswerTag extends React.Component{
             <li className="Answer__tag"
                 key={this.props.key}
                 onClick={this.props.onClick}>
-                <a href="">{this.props.value}</a>
+                <span href="">{this.props.value}</span>
             </li>
 
         )
