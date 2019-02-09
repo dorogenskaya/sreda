@@ -8,7 +8,6 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                {/*header*/}
                 <header className="header">
                     <Link className="logo" to="/"><img src={logo} className="App-logo" alt="logo"/></Link>
                     <nav className="header-nav">

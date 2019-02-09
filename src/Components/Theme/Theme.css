@@ -1,11 +1,8 @@
 .Theme-content {
     max-width: 75%;
     background-color: aqua;
-
+    padding: 32px;
 }
-    .Theme-content__wrapper{
-        padding: 32px;
-    }
 
     .Theme-content__header {
         margin: 32px 0 60px 0;
