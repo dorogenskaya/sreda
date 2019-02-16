@@ -1,3 +1,4 @@
+import * as questionsAPI from "./fakeQuestionService";
 
 const answerS = [
     {name: 'Pizzeria',
@@ -37,23 +38,12 @@ const answerS = [
     }
 ];
 
-
 const username = 'Lena Dorogenskaya';
-
-const questionS = [
-    {name: 'Mafdf', id: '1'},
-    {name: 'Margidfda', id: '2'},
-    {name: 'to Pizzeria', id: '3'},
-];
-
 
 export function getAnswers() {
     return answerS;
 }
 
-export function getQuestions() {
-    return questionS;
-}
 export function getUsername() {
     return username;
 }
