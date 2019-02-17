@@ -9,23 +9,19 @@ class Question extends React.Component {
         const id = this.props.id;
         const name = this.props.name;
         const handleClick = this.props.handleClick;
-        const questionActive = this.props.questionActive;
-
-
-        // const questionClass = classNames({ff
-        //     questionActive === id ? 'tag-active' : 'tag-normal'});
+        const selectedQuestion = this.props.selectedQuestion;
 
         var questionClass = classNames('question',{
-            'question-active': questionActive === id,
-            'question-normal': questionActive !== id,
-
+            'question-active': selectedQuestion === id,
+            'question-normal': selectedQuestion !== id,
         });
 
         return (
             <li className={questionClass}>
                 <span
                 className={questionClass}
-                onClick={() => handleClick(id)}>{name}</span>
+                onClick={() => handleClick(id)}>{name}
+                </span>
             </li>
         );
     }

@@ -5,18 +5,22 @@ import PropTypes from 'prop-types';
 
 class QuestionList extends React.Component {
     render() {
+        const {handleReset} = this.props;
         return (
             <ol className="QuestionList">
-                {
-                    this.props.questions.map(({id,name}) => (
-                        <Question
-                            key={id}
-                            handleClick={this.props.handleClick}
-                            id={id}
-                            name={name}
-                            questionActive={this.props.questionActive}
-                        />
-                        )
+                <button
+                    className="btn"
+                    onClick={handleReset}>All
+                </button>
+
+                {this.props.questions.map(({id,name}) => (
+                    <Question
+                        key={id}
+                        handleClick={this.props.handleClick}
+                        id={id}
+                        name={name}
+                        selectedQuestion={this.props.selectedQuestion}
+                    />)
                     )
                 }
             </ol>
@@ -27,7 +31,7 @@ class QuestionList extends React.Component {
 QuestionList.propTypes = {
     questions:PropTypes.array.isRequired,
     handleClick:PropTypes.func.isRequired,
-    questionActive:PropTypes.object.isRequired,
+    selectedQuestion:PropTypes.object.isRequired,
 };
 
 export default QuestionList;
