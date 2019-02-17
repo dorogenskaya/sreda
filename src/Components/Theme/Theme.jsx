@@ -42,6 +42,8 @@ class Theme extends Component {
 
     render() {
         const {answers, selectedQuestion, currentPage, pageSize, questions} = this.state;
+
+
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;

@@ -8,6 +8,7 @@ export default class AnswerList extends React.Component {
     render() {
         return (
             <div className="AnswerList">
+
                 {this.props.answers.map(answer => {
                     return <Answer
                         key={answer.id}

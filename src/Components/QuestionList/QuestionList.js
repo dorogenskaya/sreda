@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 class QuestionList extends React.Component {
     render() {
-        const {handleReset} = this.props;
+        const { handleReset, questions, handleClick, selectedQuestion } = this.props;
         return (
             <ol className="QuestionList">
                 <button
@@ -13,13 +13,13 @@ class QuestionList extends React.Component {
                     onClick={handleReset}>All
                 </button>
 
-                {this.props.questions.map(({id,name}) => (
+                {questions.map(({id,name}) => (
                     <Question
                         key={id}
-                        handleClick={this.props.handleClick}
+                        handleClick={handleClick}
                         id={id}
                         name={name}
-                        selectedQuestion={this.props.selectedQuestion}
+                        selectedQuestion={selectedQuestion}
                     />)
                     )
                 }
