@@ -1,0 +1,22 @@
+.programm {
+    padding: 0 20px;
+}
+
+.programm-filters, .subjects-list {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.filter-block {
+    width: 33.3%;
+}
+
+.filter-block:not(:first-child), .subject-item:not(:first-child) {
+    margin-left: 20px;
+}
+
+.themes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
