@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 
 class ThemeItem extends Component {
     render () {
-        return <li key={this.props.i} className="theme-item">
-            <Link className="theme-link" to={this.props.data.url} title={this.props.data.label}>{this.props.data.label}</Link>
+        const {i, data} = this.props;
+        return <li key={i} className="theme-item">
+            <Link className="theme-link" to={data.url} title={data.label}>{data.label}</Link>
         </li>
     }
 };

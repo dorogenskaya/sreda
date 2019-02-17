@@ -1,8 +1,8 @@
-const programmData = {
-    "programms": [
+const ProgramData = {
+    "Programs": [
         {
-            "id": "Programm_One",
-            "label": "Programm One",
+            "id": "Program_One",
+            "label": "Program One",
             "classes": ["C-1", "C-2", "C-3", "C-4", "C-5", "C-6", "C-7", "C-8", "C-9", "C-10"]
         },
         {
@@ -207,7 +207,7 @@ const programmData = {
             "url": "/"
         }
     ],
-    "defaultProgramm": "Programm_One",
+    "defaultProgram": "Program_One",
     "defaultClass": "C-5"
 }
-export default programmData;
+export default ProgramData;
