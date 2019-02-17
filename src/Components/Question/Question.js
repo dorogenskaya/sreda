@@ -6,18 +6,14 @@ import classNames from 'classnames';
 class Question extends React.Component {
 
     render() {
-        const id = this.props.id;
-        const name = this.props.name;
-        const handleClick = this.props.handleClick;
-        const selectedQuestion = this.props.selectedQuestion;
-
-        var questionClass = classNames('question',{
+        const { id, name, handleClick, selectedQuestion } = this.props;
+        let questionClass = classNames('question',{
             'question-active': selectedQuestion === id,
             'question-normal': selectedQuestion !== id,
         });
 
         return (
-            <li className={questionClass}>
+            <li>
                 <span
                 className={questionClass}
                 onClick={() => handleClick(id)}>{name}
