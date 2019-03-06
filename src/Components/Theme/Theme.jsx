@@ -6,6 +6,8 @@ import Pagination from "../Pagination/pagination";
 import {paginate} from '../../util/paginate';
 import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
+import  _ from 'lodash';
+
 
 let username = getUsername();
 
@@ -19,9 +21,16 @@ class Theme extends Component {
             currentPage: 1,
             pageSize: 2,
             selectedQuestion: 0,
+            sortState: 'createDate'
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
+
+    handleSort = (sortState) => {
+        if (sortState === this.state.sortState) return null;
+        this.setState({ sortState });
+        console.log(this.state.sortState);
+    };
 
     componentDidMount() {
         const questions = [...getQuestions()];
@@ -40,15 +49,16 @@ class Theme extends Component {
         this.setState({selectedQuestion: 0 });
     };
 
-    render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions} = this.state;
 
+    render() {
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState} = this.state;
 
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
 
-        const answersPage = paginate(filteredAnswers, currentPage, pageSize);
+        const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
+        const answersPage = paginate(sorted, currentPage, pageSize);
 
         return (
             <div className="Theme">
@@ -65,6 +75,8 @@ class Theme extends Component {
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}
                         username={username}
+                        handleSort={this.handleSort}
+                        sortState={sortState}
                     />
 
                     <Pagination

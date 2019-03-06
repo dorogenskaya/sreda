@@ -2,6 +2,7 @@ import * as questionsAPI from "./fakeQuestionService";
 
 const answerS = [
     {name: 'Pizzeria',
+        createDate:'1-30-2018',
         description:"fdfsfdfsfdsfdsfdsfdssdffs",
         videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
         creator: 'Lena',
@@ -14,6 +15,7 @@ const answerS = [
     },
 
     {name: 'Otto Pizzeria',
+        createDate:'1-16-2018',
         description:"fdfssdffs",
         videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
         creator: 'Lena',
@@ -26,6 +28,7 @@ const answerS = [
     },
 
     {name: 'MarginOtto Pizzeria',
+        createDate:'1-18-2018',
         tags:['3','2'],
         description:"куцкупцапавпа",
         videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
