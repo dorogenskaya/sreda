@@ -17,21 +17,22 @@ export default class AnswerList extends React.Component {
     };
 
     render() {
+        const {sortState, answers, handleClick, username} = this.props;
         return (
             <div className="AnswerList">
-                <Radio.Group defaultValue={this.props.sortState} buttonStyle="solid">
+                <Radio.Group defaultValue={sortState} buttonStyle="solid">
                     <Radio.Button value="createDate" onClick={() => this.sorting('createDate')} >Последние</Radio.Button>
                     <Radio.Button value="favorite" onClick={() => this.sorting('likerlist.length')}>Популярные</Radio.Button>
                 </Radio.Group>
 
-                {this.props.answers.map(answer => {
+                {answers.map(answer => {
                     return <Answer
                         key={answer.id}
                         answer={answer}
                         questionId={answer.tags}
                         name={answer.name}
-                        handleClick={this.props.handleClick}
-                        username={this.props.username}
+                        handleClick={handleClick}
+                        username={username}
                         />;
                     })
                 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import './QuestionList.css';
+import { Link } from 'react-router-dom';
 import Question from '../Question/Question';
 import PropTypes from 'prop-types';
 
@@ -8,10 +9,8 @@ class QuestionList extends React.Component {
         const { handleReset, questions, handleClick, selectedQuestion } = this.props;
         return (
             <ol className="QuestionList">
-                <button
-                    className="btn"
-                    onClick={handleReset}>All
-                </button>
+                <Link to="/theme" onClick={() => handleReset()}>All
+                </Link>
 
                 {questions.map(({id,name}) => (
                     <Question
@@ -31,7 +30,7 @@ class QuestionList extends React.Component {
 QuestionList.propTypes = {
     questions:PropTypes.array.isRequired,
     handleClick:PropTypes.func.isRequired,
-    selectedQuestion:PropTypes.object.isRequired,
+    selectedQuestion:PropTypes.number.isRequired,
 };
 
 export default QuestionList;
