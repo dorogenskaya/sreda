@@ -13,7 +13,7 @@ class Answer extends React.Component {
     }
 
     handleLike = answer => {
-        let answerClone = this.state.answer;
+        let {answer: answerClone}  = this.state;
         const index = answer.likerList.indexOf(this.props.username);
 
         answerClone.liked = !answer.liked;
@@ -22,36 +22,34 @@ class Answer extends React.Component {
     };
 
     render() {
-        const handleClick = this.props.handleClick;
-        const key = this.props.key;
-        const arrayQuestion = this.props.questionId;
+        const {handleClick, questionId, name, answer } = this.props;
 
         return (
-            <div className="Answer" key={key} >
+            <div className="Answer">
                     <div className="Answer__info">
-                        <h2>{this.props.name}</h2>
+                        <h2>{name}</h2>
                         <ul className="Answer__tags">
                             Questions:
-                            {arrayQuestion.map(tag =>
+                            {questionId.map(tag =>
                                 <AnswerTag
                                     key={tag}
                                     onClick={() => handleClick(tag)}
                                     value={tag}/>
-                            )}
+                                )}
                         </ul>
-                        <p>{this.props.answer.description}</p>
-                        <video src={this.props.answer.videoSrc}></video>
+                        <p>{answer.description}</p>
+                        <video src={answer.videoSrc}></video>
 
                     </div>
                     <div className="Answer__profile">
                         {/*Component creator*/}
                         <img src="" alt=""/>
-                        <h4>{this.props.answer.creator}</h4>
+                        <h4>{answer.creator}</h4>
                     </div>
 
                     <AnswerActions
                         handleLike={() => this.handleLike(this.state.answer)}
-                        answer={this.props.answer}
+                        answer={answer}
                     />
                 <div className="Answer__divider">
                 </div>
@@ -64,7 +62,6 @@ Answer.propTypes = {
     questionId: PropTypes.array.isRequired,
     name:PropTypes.string.isRequired,
     answer:PropTypes.object.isRequired,
-    key:PropTypes.number.isRequired
 };
 
 export default Answer;

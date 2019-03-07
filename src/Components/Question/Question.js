@@ -1,5 +1,6 @@
 import React from 'react';
 import './Question.css';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -14,17 +15,16 @@ class Question extends React.Component {
 
         return (
             <li>
-                <span
-                className={questionClass}
-                onClick={() => handleClick(id)}>{name}
-                </span>
+                <Link to={`/theme/question${id}`} className={questionClass}
+                             onClick={() => handleClick(id)}>{name}
+            </Link>
             </li>
         );
     }
 }
 
 Question.propTypes = {
-    id:PropTypes.string.isRequired,
+    id:PropTypes.number.isRequired,
     name:PropTypes.string.isRequired,
     handleClick:PropTypes.func.isRequired
 };
