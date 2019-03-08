@@ -5,9 +5,7 @@ import { Link } from 'react-router-dom';
 class ThemeItem extends Component {
     render () {
         const {i, data} = this.props;
-        return <li key={i} className="theme-item">
-            <Link className="theme-link" to={data.url} title={data.label}>{data.label}</Link>
-        </li>
+        return <Link key={i} className="theme-link" to={data.url} title={data.label}>{data.label}</Link>
     }
 };
 
