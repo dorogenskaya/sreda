@@ -128,22 +128,22 @@ const ProgramData = {
     "themes": [
         {
             "id": "T-1",
-            "label": "Theme 1",
+            "label": "Theme One",
             "url": "/"
         },
         {
             "id": "T-2",
-            "label": "Theme 2",
+            "label": "Theme Three Words",
             "url": "/"
         },
         {
             "id": "T-3",
-            "label": "Theme 3",
+            "label": "Theme LongWordName",
             "url": "/"
         },
         {
             "id": "T-4",
-            "label": "Theme 4",
+            "label": "Theme Four Words Label",
             "url": "/"
         },
         {
@@ -158,7 +158,7 @@ const ProgramData = {
         },
         {
             "id": "T-7",
-            "label": "Theme 7",
+            "label": "Theme VeryLongThemeNameLabel with five words",
             "url": "/"
         },
         {
