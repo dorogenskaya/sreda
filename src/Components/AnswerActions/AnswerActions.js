@@ -8,7 +8,7 @@ import Button from 'antd/lib/button';
 class AnswerActions extends React.Component{
     render () {
         return (
-            <div className="Answer__actions">
+            <div className="Answer__actions" >
                 <div>
                     <Like
                         handleLike={this.props.handleLike}

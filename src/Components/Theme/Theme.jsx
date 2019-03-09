@@ -8,7 +8,6 @@ import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
 import  _ from 'lodash';
 
-
 let username = getUsername();
 
 class Theme extends Component {
@@ -29,7 +28,6 @@ class Theme extends Component {
     handleSort = (sortState) => {
         if (sortState === this.state.sortState) return null;
         this.setState({ sortState });
-        console.log(this.state.sortState);
     };
 
     componentDidMount() {
