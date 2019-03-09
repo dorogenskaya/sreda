@@ -4,10 +4,11 @@ import ThemeItem from './ThemeItem';
 
 class SubjectItem extends Component {
     render () {
+        const {subjectLabel, themesList} = this.props;
         return (<div className="subject-item">
-            <h3 className="subject-item-title">{this.props.subjectLabel}</h3>
+            <h3 className="subject-item-title">{subjectLabel}</h3>
             <div className="themes-list">
-                {this.props.themesList.map((theme, i) => <ThemeItem key={i} data={theme}/>)}
+                {themesList.map((theme, i) => <ThemeItem key={i} data={theme}/>)}
             </div>
         </div>)
     }

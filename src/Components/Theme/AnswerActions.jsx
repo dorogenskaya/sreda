@@ -1,7 +1,6 @@
 import React from 'react';
-import './AnswerActions.css';
 import Like from '../Like/Like';
-import CoinCount from '../CoinCount/CoinCount';
+import CoinCount from './CoinCount';
 import Button from 'antd/lib/button';
 // import PropTypes from 'prop-types';
 

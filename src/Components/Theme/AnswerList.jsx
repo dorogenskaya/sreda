@@ -1,7 +1,6 @@
 import React from 'react';
-import './AnswerList.css';
 import PropTypes from 'prop-types';
-import Answer from '../Answer/Answer';
+import Answer from './Answer';
 import { Radio } from 'antd';
 
 export default class AnswerList extends React.Component {
@@ -11,7 +10,7 @@ export default class AnswerList extends React.Component {
 
         if (sortState === sort) {
             return null; }
-        else {sortState = sort; console.log("Sort by createDate");}
+        else {sortState = sort; }
 
         return this.props.handleSort(sortState);
     };
