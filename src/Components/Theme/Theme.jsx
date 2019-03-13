@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import './Theme.css';
-import AnswerList from "../AnswerList/AnswerList";
-import QuestionList from "../QuestionList/QuestionList";
+import AnswerList from "./AnswerList";
+import ThemeHeader from "./ThemeHeader";
+import QuestionList from "./QuestionList";
 import Pagination from "../Pagination/pagination";
 import {paginate} from '../../util/paginate';
 import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
 import  _ from 'lodash';
-
 
 let username = getUsername();
 
@@ -29,7 +29,6 @@ class Theme extends Component {
     handleSort = (sortState) => {
         if (sortState === this.state.sortState) return null;
         this.setState({ sortState });
-        console.log(this.state.sortState);
     };
 
     componentDidMount() {
@@ -63,14 +62,7 @@ class Theme extends Component {
         return (
             <div className="Theme">
                 <div className="Theme-content">
-                    <div className="Theme-content__header">
-                        <h1 className="Theme-theme">Theme name</h1>
-                        <ul className="Theme-theme__types">
-                            <li className="Theme-theme__types__items"><a href="">Subject name</a></li>
-                            <li className="Theme-theme__types__items"><a href="">Level name</a></li>
-                        </ul>
-                    </div>
-
+                    <ThemeHeader/>
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}

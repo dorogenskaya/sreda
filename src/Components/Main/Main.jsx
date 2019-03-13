@@ -11,6 +11,7 @@ class Main extends Component {
         return (
             <main className="main">
                 <Switch>
+                    <Route path="/themes/:id" component={Theme}></Route>
                     <Route path='/theme' component={Theme}/>
                     <Route path='/program' component={Program}/>
                     <Route path="/not-found" component={NotFound}/>

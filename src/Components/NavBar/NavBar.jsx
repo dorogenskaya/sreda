@@ -12,9 +12,7 @@ const NavBar = () => {
                             <img src={logo} className="App-logo" alt="logo"/>
                         </Link>
                     </li>
-                    <li className="nav-list-item">
-                        <Link className="nav-list-item-link" to="/theme">Theme Page</Link>
-                    </li>
+
                     <li className="nav-list-item">
                         <Link className="nav-list-item-link" to="/program">Program Page</Link>
                     </li>

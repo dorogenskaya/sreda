@@ -1,8 +1,8 @@
 import React from 'react';
 import './Answer.css';
 import PropTypes from 'prop-types';
-import AnswerTag from '../AnswerTag/AnswerTag';
-import AnswerActions from '../AnswerActions/AnswerActions';
+import AnswerTag from './AnswerTag';
+import AnswerActions from './AnswerActions';
 
 class Answer extends React.Component {
     constructor(props) {

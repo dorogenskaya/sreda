@@ -1,7 +1,6 @@
 import React from 'react';
-import './QuestionList.css';
 import { Link } from 'react-router-dom';
-import Question from '../Question/Question';
+import Question from './Question';
 import PropTypes from 'prop-types';
 
 class QuestionList extends React.Component {
