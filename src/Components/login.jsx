@@ -3,6 +3,11 @@ import Form from './common/form';
 import Joi from "joi-browser";
 
 class Login extends Form {
+    state ={
+        data: {username: "", password: ""},
+        errors: {}
+    }
+
     schema = {
         username: Joi.string().required().label('Username'),
         password: Joi.string().required().label('Password'),
