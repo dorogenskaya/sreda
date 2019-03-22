@@ -7,7 +7,7 @@ export default class NewAnswer extends React.Component {
         const { visible, onClose } = this.props;
         return (
             <Drawer
-                title="Create a new account"
+                title="Добавить ответ к теме"
                 width={720}
                 onClose={onClose}
                 visible={visible}
@@ -30,10 +30,10 @@ export default class NewAnswer extends React.Component {
                     }}
                 >
                     <Button onClick={onClose} style={{ marginRight: 8 }}>
-                        Cancel
+                        Отмена
                     </Button>
                     <Button onClick={onClose} type="primary">
-                        Submit
+                        Отправить
                     </Button>
                 </div>
             </Drawer>
