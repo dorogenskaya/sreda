@@ -51,7 +51,7 @@ class Theme extends Component {
 
     render() {
         const {answers, selectedQuestion, currentPage, pageSize, questions, sortState} = this.state;
-
+        const themeId = this.props.match.params.id;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
@@ -62,7 +62,7 @@ class Theme extends Component {
         return (
             <div className="Theme">
                 <div className="Theme-content">
-                    <ThemeHeader/>
+                    <ThemeHeader themeId={themeId}/>
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}
