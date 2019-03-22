@@ -4,6 +4,7 @@ import './Main.css';
 import Home from '../Home/Home';
 import Theme from '../Theme/Theme';
 import Program from '../Program/Program';
+import CreateAnswer from '../Theme/createAnswer';
 import NotFound from '../NotFound/NotFound';
 import Register from "../register";
 import Login from "../login";
@@ -22,6 +23,7 @@ class Main extends Component {
                     <Route path='/' exact component={Home}/>
                     <Redirect to="/not-found"/>
                 </Switch>
+                <Route path="/themes/:id/create-answer" component={CreateAnswer}></Route>
             </main>
         )
     }

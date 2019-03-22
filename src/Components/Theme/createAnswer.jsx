@@ -45,8 +45,9 @@ import {Drawer, Button} from 'antd';
 // }
 
 
-export default function CreateAnswer({match: {params: { id }}, history, location}) {
-    const { visible, onClose, } = this.props;
+export default function CreateAnswer ({match: {params: { id }}, history, location}) {
+    const { visible, onClose } = this.props;
+
     return (
         <Drawer
             title={`Добавить ответ к теме ${id}`}
