@@ -4,6 +4,8 @@ import AnswerList from "./AnswerList";
 import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
 import Pagination from "../Pagination/pagination";
+import NewAnswer from "./newAnswer";
+import { Button, Icon } from 'antd';
 import {paginate} from '../../util/paginate';
 import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
@@ -21,20 +23,21 @@ class Theme extends Component {
             currentPage: 1,
             pageSize: 2,
             selectedQuestion: 0,
-            sortState: 'createDate'
+            sortState: 'createDate',
+            visible: false
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
+    }
+
+    componentDidMount() {
+        const questions = [...getQuestions()];
+        this.setState({ answers: getAnswers(), questions });
     }
 
     handleSort = (sortState) => {
         if (sortState === this.state.sortState) return null;
         this.setState({ sortState });
     };
-
-    componentDidMount() {
-        const questions = [...getQuestions()];
-        this.setState({ answers: getAnswers(), questions });
-    }
 
     handlePageClick = (currentPage) =>{
         this.setState({ currentPage });
@@ -48,6 +51,16 @@ class Theme extends Component {
         this.setState({selectedQuestion: 0 });
     };
 
+    handleShowDrawer = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+    handleCloseDrawer = () => {
+        this.setState({
+            visible: false,
+        });
+    }
 
     render() {
         const {answers, selectedQuestion, currentPage, pageSize, questions, sortState} = this.state;
@@ -62,7 +75,19 @@ class Theme extends Component {
         return (
             <div className="Theme">
                 <div className="Theme-content">
-                    <ThemeHeader/>
+
+                    <NewAnswer
+                        visible={this.state.visible}
+                        onClose={this.handleCloseDrawer}
+                    />
+
+                    <ThemeHeader
+                        showDrawer={this.handleShowDrawer}/>
+
+                    <Button type="primary"  onClick={this.handleShowDrawer}>
+                        <Icon type="plus" />Добавить ответ
+                    </Button>
+
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}

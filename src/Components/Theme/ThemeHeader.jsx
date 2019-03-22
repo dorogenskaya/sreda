@@ -9,7 +9,7 @@ const ThemeHeader = () => {
             <ul className="Theme-theme__types">
                 <li className="Theme-theme__types__items">
                     {/*query string of Program with filtered Subject*/}
-                    <Link to={`/program/subject`}>Subject name</Link>
+                    <Link to={`/program/subject`}>Предмет</Link>
                 </li>
             </ul>
         </div>

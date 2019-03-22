@@ -19,7 +19,7 @@ export default class AnswerList extends React.Component {
         const {sortState, answers, handleClick, username} = this.props;
         return (
             <div className="AnswerList">
-                <Radio.Group defaultValue={sortState} buttonStyle="solid">
+                <Radio.Group defaultValue={sortState} size="small">
                     <Radio.Button value="createDate" onClick={() => this.sorting('createDate')} >Последние</Radio.Button>
                     <Radio.Button value="favorite" onClick={() => this.sorting('likerlist.length')}>Популярные</Radio.Button>
                 </Radio.Group>
