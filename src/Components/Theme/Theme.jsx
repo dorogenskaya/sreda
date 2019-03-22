@@ -71,6 +71,7 @@ class Theme extends Component {
 
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
+        const themeId = this.props.match.params.id;
 
         return (
             <div className="Theme">
@@ -79,10 +80,13 @@ class Theme extends Component {
                     <NewAnswer
                         visible={this.state.visible}
                         onClose={this.handleCloseDrawer}
+
                     />
 
                     <ThemeHeader
-                        showDrawer={this.handleShowDrawer}/>
+                        showDrawer={this.handleShowDrawer}
+                        themeId={themeId}
+                    />
 
                     <Button type="primary"  onClick={this.handleShowDrawer}>
                         <Icon type="plus" />Добавить ответ
