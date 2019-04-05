@@ -1,5 +1,6 @@
 import React from 'react';
 import './Theme.css';
+import { Button, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
 function ThemeHeader(props) {
@@ -11,10 +12,11 @@ function ThemeHeader(props) {
                     {/*query string of Program with filtered Subject*/}
                     <Link to={`/program/subject`}>Subject name</Link>
                 </li>
-                <li className="Theme-theme__types__items">
-                    <Link to={`/themes/${props.themeId}/create-answer`}>Create answer</Link>
-                </li>
             </ul>
+            <Button type="primary"  onClick={props.showDrawer}>
+                <Icon type="plus" />
+                <Link to={`/themes/${props.themeId}/create-answer`} style={{color: "#FFF"}}>Добавить ответ</Link>
+            </Button>
         </div>
     );
 };

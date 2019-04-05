@@ -23,7 +23,11 @@ class Main extends Component {
                     <Route path='/' exact component={Home}/>
                     <Redirect to="/not-found"/>
                 </Switch>
-                <Route path="/themes/:id/create-answer" component={CreateAnswer}></Route>
+                <Route path="/themes/:id/create-answer"
+                       render={(props) => (
+                           <CreateAnswer {...props} />
+                       )}
+                       ></Route>
             </main>
         )
     }

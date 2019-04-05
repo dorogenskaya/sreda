@@ -5,7 +5,6 @@ import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
 import Pagination from "../Pagination/pagination";
 import CreateAnswer from "./createAnswer";
-import { Button, Icon } from 'antd';
 import {paginate} from '../../util/paginate';
 import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
@@ -72,23 +71,20 @@ class Theme extends Component {
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
         const themeId = this.props.match.params.id;
+
         return (
             <div className="Theme">
                 <div className="Theme-content">
-
-                    <CreateAnswer
+                    {props =>  <CreateAnswer
+                        {...props}
                         visible={this.state.visible}
                         onClose={this.handleCloseDrawer}
-                    />
+                    />}
 
                     <ThemeHeader
                         showDrawer={this.handleShowDrawer}
                         themeId={themeId}
                     />
-
-                    <Button type="primary"  onClick={this.handleShowDrawer}>
-                        <Icon type="plus" />Добавить ответ
-                    </Button>
 
                     <AnswerList
                         answers={answersPage}
