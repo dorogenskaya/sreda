@@ -7,6 +7,7 @@ import Program from '../Program/Program';
 import NotFound from '../NotFound/NotFound';
 import Register from "../register";
 import Login from "../login";
+import Admin from "../Admin/Admin";
 
 class Main extends Component {
     render() {
@@ -19,6 +20,7 @@ class Main extends Component {
                     <Route path='/login' component={Login}/>
                     <Route path='/register' component={Register}/>
                     <Route path="/not-found" component={NotFound}/>
+                    <Route path='/admin' exact component={Admin}/>
                     <Route path='/' exact component={Home}/>
                     <Redirect to="/not-found"/>
                 </Switch>
