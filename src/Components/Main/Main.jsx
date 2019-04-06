@@ -15,7 +15,7 @@ class Main extends Component {
         return (
             <main className="main">
                 <Switch>
-                    <Route path="/themes/:id" component={Theme}></Route>
+                    <Route path="/themes/:id" component={Theme}/>
                     <Route path='/theme' component={Theme}/>
                     <Route path='/program' component={Program}/>
                     <Route path='/login' component={Login}/>
@@ -29,7 +29,7 @@ class Main extends Component {
                        render={(props) => (
                            <CreateAnswer {...props} />
                        )}
-                       ></Route>
+                />
             </main>
         )
     }

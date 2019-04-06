@@ -1,5 +1,5 @@
 import React from 'react';
-import Like from '../Like/Like';
+import Like from './Like';
 import CoinCount from './CoinCount';
 import Button from 'antd/lib/button';
 // import PropTypes from 'prop-types';
