@@ -3,4 +3,4 @@
 package-lock.json
 yarn.lock
 yarn-error.log
-*/*/model/config.json
+/src/model/config.json
