@@ -4,7 +4,7 @@ import './Main.css';
 import Home from '../Home/Home';
 import Theme from '../Theme/Theme';
 import Program from '../Program/Program';
-import CreateAnswer from '../Theme/createAnswer';
+import CreateAnswerDrawer from '../Theme/createAnswerDrawer';
 import NotFound from '../NotFound/NotFound';
 import Register from "../register";
 import Login from "../login";
@@ -15,7 +15,7 @@ class Main extends Component {
         return (
             <main className="main">
                 <Switch>
-                    <Route path="/themes/:id" component={Theme}></Route>
+                    <Route path="/themes/:id" component={Theme}/>
                     <Route path='/theme' component={Theme}/>
                     <Route path='/program' component={Program}/>
                     <Route path='/login' component={Login}/>
@@ -27,9 +27,9 @@ class Main extends Component {
                 </Switch>
                 <Route path="/themes/:id/create-answer"
                        render={(props) => (
-                           <CreateAnswer {...props} />
+                           <CreateAnswerDrawer {...props} />
                        )}
-                       ></Route>
+                />
             </main>
         )
     }

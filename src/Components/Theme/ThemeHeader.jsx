@@ -9,7 +9,6 @@ function ThemeHeader(props) {
             <h1 className="Theme-theme">Theme name</h1>
             <ul className="Theme-theme__types">
                 <li className="Theme-theme__types__items">
-                    {/*query string of Program with filtered Subject*/}
                     <Link to={`/program/subject`}>Subject name</Link>
                 </li>
             </ul>
@@ -19,6 +18,6 @@ function ThemeHeader(props) {
             </Button>
         </div>
     );
-};
+}
 
 export default ThemeHeader;

@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import './Theme.css';
 import AnswerList from "./AnswerList";
 import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
 import Pagination from "../Pagination/pagination";
-import CreateAnswer from "./createAnswer";
 import {paginate} from '../../util/paginate';
 import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
 import  _ from 'lodash';
+import './Theme.css';
 
 let username = getUsername();
 
@@ -23,7 +22,6 @@ class Theme extends Component {
             pageSize: 2,
             selectedQuestion: 0,
             sortState: 'createDate',
-            visible: false
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
@@ -50,16 +48,6 @@ class Theme extends Component {
         this.setState({selectedQuestion: 0 });
     };
 
-    handleShowDrawer = () => {
-        this.setState({
-            visible: true,
-        });
-    }
-    handleCloseDrawer = () => {
-        this.setState({
-            visible: false,
-        });
-    }
 
     render() {
         const {answers, selectedQuestion, currentPage, pageSize, questions, sortState} = this.state;
@@ -75,12 +63,6 @@ class Theme extends Component {
         return (
             <div className="Theme">
                 <div className="Theme-content">
-                    {props =>  <CreateAnswer
-                        {...props}
-                        visible={this.state.visible}
-                        onClose={this.handleCloseDrawer}
-                    />}
-
                     <ThemeHeader
                         showDrawer={this.handleShowDrawer}
                         themeId={themeId}
