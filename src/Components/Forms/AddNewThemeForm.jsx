@@ -5,15 +5,15 @@ import {database} from '../../model/firebase';
 let id = 0;
 
 class AddNewTheme extends Component {
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
 
         this.state = {
             validateThemeStatus: 'success',
             validateThemeMessage: null,
-            validateSubjetsStatus: 'success',
+            validateSubjectsStatus: 'success',
             validateSubjectsMessage: null,
-            subjectstList: null,
+            subjectsList: null,
             themesList: null
         }
     }
@@ -21,7 +21,7 @@ class AddNewTheme extends Component {
     componentDidMount() {
         database.ref('subjects').on('value', (snapShot) => {
             let data = snapShot.val(),
-                arraySubjects = [];
+                 arraySubjects = [];
 
             for (let key in data) {
                 arraySubjects.push({key: key, subjectName: data[key].subjectName})
@@ -30,9 +30,9 @@ class AddNewTheme extends Component {
             arraySubjects = arraySubjects.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
 
             this.setState({
-                subjectstList: arraySubjects
+                subjectsList: arraySubjects
             })
-        })
+        });
 
         database.ref('themes').on('value', (snapShot) => {
             let data = snapShot.val(),
@@ -66,7 +66,7 @@ class AddNewTheme extends Component {
         form.setFieldsValue({
             keys: keys.filter(key => key !== k),
         });
-    }
+    };
 
     add = () => {
         const {form} = this.props;
@@ -76,7 +76,7 @@ class AddNewTheme extends Component {
         form.setFieldsValue({
             keys: nextKeys,
         });
-    }
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -86,7 +86,7 @@ class AddNewTheme extends Component {
                 database.ref('themes').push().set(data);
             }
         });
-    }
+    };
 
     normalizeData (values) {
         let isValid = true,
@@ -109,13 +109,13 @@ class AddNewTheme extends Component {
         if (!values.subjectsList || !values.subjectsList.length) {
             isValid = false;
             this.setState({
-                validateSubjetsStatus: 'error',
+                validateSubjectsStatus: 'error',
                 validateSubjectsMessage: 'Пожайлуста, выберите предмет(ы)'
             })
         } else {
             data.subjectsList = values.subjectsList;
             this.setState({
-                validateSubjetsStatus: 'success',
+                validateSubjectsStatus: 'success',
                 validateSubjectsMessage: null,
             })
         }
@@ -141,8 +141,8 @@ class AddNewTheme extends Component {
         const formItems = keys.map((k, index) => (
             <Form.Item
                 label={'Добавить новый вопрос в тему'}
-                key={k}
-            >
+                key={k}>
+
                 {getFieldDecorator(`questions[${k}]`, {
                     validateTrigger: ['onChange', 'onBlur'],
                     rules: [{
@@ -165,8 +165,8 @@ class AddNewTheme extends Component {
 
         const {Option} = Select;
         let children = [];
-        if (this.state.subjectstList) {
-            this.state.subjectstList.map((item, i) => children.push(<Option key={i} value={item.key}>{item.subjectName}</Option>));
+        if (this.state.subjectsList) {
+            this.state.subjectsList.map((item, i) => children.push(<Option key={i} value={item.key}>{item.subjectName}</Option>));
         }
 
         return (
@@ -179,21 +179,20 @@ class AddNewTheme extends Component {
                     {getFieldDecorator('themeName', {
                         rules: [{required: true}],
                     })(
-                        <Input name="themeName" prefix={<Icon type="form" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                        <Input name="themeName"
                                placeholder="Добавить новую тему"/>
                     )}
                 </Form.Item>
                 <Form.Item
                     label="Описание темы">
                     {getFieldDecorator('themeDescription', {})(
-                    <Input name="themeDescription" prefix={<Icon type="form" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                               placeholder="Добавить описание темы"/>
+                    <Input name="themeDescription" placeholder="Добавить описание темы"/>
                     )}
                 </Form.Item>
                 <Form.Item
                     label="Выберите предмет(ы)"
                     required
-                    validateStatus={this.state.validateSubjetsStatus}
+                    validateStatus={this.state.validateSubjectsStatus}
                     help={this.state.validateSubjectsMessage}>
                     {getFieldDecorator('subjectsList', {
                         rules: [{required: true}],

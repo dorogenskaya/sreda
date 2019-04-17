@@ -6,17 +6,17 @@ class Login extends Form {
     state ={
         data: {username: "", password: ""},
         errors: {}
-    }
+    };
 
     schema = {
         username: Joi.string().required().label('Username'),
         password: Joi.string().required().label('Password'),
-    }
+    };
 
     doSubmit = () => {
         //call to server
         console.log('Submitted');
-    }
+    };
 
     render() {
         return (

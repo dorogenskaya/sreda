@@ -1,5 +1,3 @@
-import * as questionsAPI from "./fakeQuestionService";
-
 const answerS = [
     {name: 'Pizzeria',
         createDate:'1-30-2018',

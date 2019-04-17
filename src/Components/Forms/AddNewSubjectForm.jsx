@@ -3,8 +3,8 @@ import { Form, Input, Icon, Button} from 'antd';
 import {database} from '../../model/firebase';
 
 class AddNewSubjects extends Component {
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
 
         this.state = {
             validateMessage: null,
@@ -61,7 +61,7 @@ class AddNewSubjects extends Component {
     }
 
     render() {
-        const {getFieldDecorator, getFieldError} = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Form.Item
