@@ -3,8 +3,8 @@ import { Form, Input, Icon, Button} from 'antd';
 import {database} from '../../model/firebase';
 
 class AddNewProgram extends Component {
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
 
         this.state = {
             validateMessage: null,
@@ -42,7 +42,7 @@ class AddNewProgram extends Component {
                 database.ref('programs').push().set(values);
             }
         });
-    }
+    };
 
     validateData (value) {
         if (!value.programName || this.state.programList.includes(value.programName)) {
@@ -61,7 +61,7 @@ class AddNewProgram extends Component {
     }
 
     render() {
-        const {getFieldDecorator, getFieldError} = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Form.Item

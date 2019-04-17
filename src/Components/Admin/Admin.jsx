@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import AddNewProgramForm from '../Forms/AddNewProgramForm';
 import './Admin.css';
 import AddEditProgram from './Program/AddEditProgram';
 import AddNewSubjectForm from '../Forms/AddNewSubjectForm';

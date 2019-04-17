@@ -1,7 +1,5 @@
 import React from 'react';
-import './Like.css';
 import Button from 'antd/lib/button';
-
 
 export default class Like extends React.Component {
     render() {

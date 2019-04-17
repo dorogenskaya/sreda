@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './Theme.css';
 import AnswerList from "./AnswerList";
 import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
@@ -8,6 +7,7 @@ import {paginate} from '../../util/paginate';
 import {getAnswers, getUsername} from '../../services/fakeAnswerService';
 import {getQuestions} from '../../services/fakeQuestionService';
 import  _ from 'lodash';
+import './Theme.css';
 
 let username = getUsername();
 
@@ -21,20 +21,20 @@ class Theme extends Component {
             currentPage: 1,
             pageSize: 2,
             selectedQuestion: 0,
-            sortState: 'createDate'
+            sortState: 'createDate',
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
+    }
+
+    componentDidMount() {
+        const questions = [...getQuestions()];
+        this.setState({ answers: getAnswers(), questions });
     }
 
     handleSort = (sortState) => {
         if (sortState === this.state.sortState) return null;
         this.setState({ sortState });
     };
-
-    componentDidMount() {
-        const questions = [...getQuestions()];
-        this.setState({ answers: getAnswers(), questions });
-    }
 
     handlePageClick = (currentPage) =>{
         this.setState({ currentPage });
@@ -58,11 +58,16 @@ class Theme extends Component {
 
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
+        const themeId = this.props.match.params.id;
 
         return (
             <div className="Theme">
                 <div className="Theme-content">
-                    <ThemeHeader/>
+                    <ThemeHeader
+                        showDrawer={this.handleShowDrawer}
+                        themeId={themeId}
+                    />
+
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}

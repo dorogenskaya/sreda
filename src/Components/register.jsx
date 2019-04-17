@@ -6,19 +6,19 @@ class Register extends Form {
     state ={
         data: {username: "", password: "", name:""},
         errors: {}
-    }
+    };
 
     schema = {
         username: Joi.string().required().label('Username').email(),
         password: Joi.string().required().label('Password').min(5),
         name: Joi.string().required().label('Name'),
 
-    }
+    };
 
     doSubmit = () => {
         //call to server
         console.log('Submitted');
-    }
+    };
 
     render() {
         return (
