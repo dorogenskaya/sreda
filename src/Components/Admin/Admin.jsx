@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Admin.css';
-import AddNewProgramForm from '../Forms/AddNewProgramForm';
+import AddEditProgram from './Program/AddEditProgram';
 import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
 import AddNewThemeForm from '../Forms/AddNewThemeForm';
 
@@ -9,7 +9,7 @@ class Admin extends Component {
         return (
             <div className="admin-section">
                 <div className="admin-form">
-                    <AddNewProgramForm/>
+                    <AddEditProgram/>
                 </div>
                 <div className="admin-form">
                     <AddNewSubjectForm/>
