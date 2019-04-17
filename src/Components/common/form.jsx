@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Joi from "joi-browser";
-import { Button, Input } from 'antd';
+import { Button, Input, Cascader } from 'antd';
 
 class Form extends Component {
     state = {
@@ -53,13 +53,43 @@ class Form extends Component {
         );
     }
 
-    renderInput (name, label, type = 'text') {
+    renderInput (name, label, type = 'text', placeholder) {
         const {data, errors} = this.state;
         const error = errors[name];
 
         return (
             <div className="form-group" style={{marginBottom: '16px'}}>
                 <label htmlFor={name}>{label}</label>
+                <Input size="large" className="form-control"
+                       placeholder={placeholder}
+                       type={type}
+                       id={name}
+                       name={name}
+                       value={data[name]}
+                       label={label}
+                       onChange={this.handleChange}
+                       error={error}
+                />
+                {error && <div style={{color: 'red'}}>{error}</div>}
+            </div>
+
+        );
+    }
+
+    renderCascader (name, label, subjectActive, themeActive, options) {
+        const {data, errors} = this.state;
+        const error = errors[name];
+
+        return (
+            <div className="form-group" style={{marginBottom: '16px'}}>
+                <label htmlFor={name}>{label}</label>
+                <Cascader defaultValue={[subjectActive, themeActive]}
+                          label={label}
+                          options={options}
+                          onChange={this.handleChange}
+                          error={error}/>
+
+
                 <Input size="large" className="form-control"
                        placeholder={label}
                        type={type}

@@ -59,9 +59,6 @@ class AddNewAnswer extends Form {
         console.log(e);
     };
 
-    handleChangeCascader = (value) => {
-        console.log(value);
-    };
 
     render() {
         const {id: themeActive, subjectActive} = this.props;
@@ -89,14 +86,11 @@ class AddNewAnswer extends Form {
         const options = createNestedArray(subjectsList, array2);
 
         return (
-            <div onSubmit={this.handleSubmit}>
-                <Cascader defaultValue={[subjectActive, themeActive]}
-                          label="Предмет / Тема"
-                          options={options}
-                          onChange={this.handleChangeCascader}/>
-
-                <Input label="Заголовок"
-                       placeholder="Ответы с заголовками читают на 34% чаще" />
+            <div >
+                <form onSubmit={this.handleSubmit}>
+                    {this.renderCascader('theme', 'Предмет / Тема', subjectActive, themeActive, options)}
+                    {this.renderInput('password', 'Заголовок', 'text','Ответы с заголовками читают на 34% чаще')}
+                </form>
 
                 <TextArea
                     label="Ответ"
