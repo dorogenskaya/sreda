@@ -78,13 +78,8 @@ class Form extends Component {
 
     renderTextArea (label, placeholder, rows) {
         const { TextArea } = Input;
-        <div>
-            <TextArea>
-                label={label}
-                placeholder={placeholder}
-                rows={rows}
-            </TextArea>
-        </div>
+
+        <TextArea label={label} placeholder={placeholder} rows={rows}/>
     }
 
     renderCascader (name, label, subjectActive, themeActive, themesList, subjectsList) {
