@@ -1,6 +1,6 @@
 import React from 'react';
 import {database} from '../../model/firebase';
-import {Input, Button, Cascader} from 'antd';
+import {Button} from 'antd';
 import Form from '../common/form';
 import Joi from "joi-browser";
 
@@ -63,39 +63,14 @@ class AddNewAnswer extends Form {
     render() {
         const {id: themeActive, subjectActive} = this.props;
         const { subjectsList, themesList } = this.state;
-        const { TextArea } = Input;
-
-        const createNestedArray = (array1, array2) => {
-            return array1
-                .map(element1 => {return {value: element1.subjectName, label: element1.subjectName, children: array2
-                    .filter((element2) => {
-                        if (element2.subjects.includes(element1.key)) return {value: element2.test, label: element2.test};
-                        return null;
-
-                    })
-                };
-            })
-        };
-
-        const array2 =[
-            {test: 'Theme name 1', subjects:['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 2', subjects:['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 3', subjects:['-tytrxXlQWJfDilNru','-fdsQWJfDilNtu']}
-        ];
-
-        const options = createNestedArray(subjectsList, array2);
 
         return (
             <div >
                 <form onSubmit={this.handleSubmit}>
-                    {this.renderCascader('theme', 'Предмет / Тема', subjectActive, themeActive, options)}
-                    {this.renderInput('password', 'Заголовок', 'text','Ответы с заголовками читают на 34% чаще')}
+                    {this.renderCascader('theme', 'fdjkfjdk', subjectActive, themeActive, themesList, subjectsList)}
+                    {this.renderInput('title', 'Заголовок', 'text','Ответы с заголовками читают на 34% чаще')}
+                    {this.renderTextArea('Ответ', 'Пиши то, что тебе было самому интересно прочитать. Пиши кратко и просто, вставь картинки, придумывай мемы, снимай видео и фото — просто вставь ссылку на ютуб. Не забудь ссылки на статьи, которые ты использовал.', 5)}
                 </form>
-
-                <TextArea
-                    label="Ответ"
-                    placeholder="Пиши то, что тебе было самому интересно прочитать. Пиши кратко и просто, вставь картинки, придумывай мемы, снимай видео и фото — просто вставь ссылку на ютуб. Не забудь ссылки на статьи, которые ты использовал."
-                    rows={5} />
 
                 <Button
                     onClick={() => {this.props.history.push(this.props.previousLocation)}}

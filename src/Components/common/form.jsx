@@ -76,9 +76,40 @@ class Form extends Component {
         );
     }
 
-    renderCascader (name, label, subjectActive, themeActive, options) {
-        const {data, errors} = this.state;
+    renderTextArea (label, placeholder, rows) {
+        const { TextArea } = Input;
+        <div>
+            <TextArea>
+                label={label}
+                placeholder={placeholder}
+                rows={rows}
+            </TextArea>
+        </div>
+    }
+
+    renderCascader (name, label, subjectActive, themeActive, themesList, subjectsList) {
+        const {errors} = this.state;
         const error = errors[name];
+
+        const createNestedArray = (array1, array2) => {
+            return array1
+                .map(element1 => {return {value: element1.subjectName, label: element1.subjectName, children: array2
+                        .filter((element2) => {
+                            if (element2.subjects.includes(element1.key)) return {value: element2.test, label: element2.test};
+                            return null;
+
+                        })
+                    };
+                })
+            };
+
+        const array2 =[
+            {test: 'Theme name 1', subjects:['-Lb9fI5xXlQWJfDilNru']},
+            {test: 'Theme name 2', subjects:['-Lb9fI5xXlQWJfDilNru']},
+            {test: 'Theme name 3', subjects:['-tytrxXlQWJfDilNru','-fdsQWJfDilNtu']}
+        ];
+
+        const options = createNestedArray(subjectsList, array2);
 
         return (
             <div className="form-group" style={{marginBottom: '16px'}}>
@@ -88,19 +119,6 @@ class Form extends Component {
                           options={options}
                           onChange={this.handleChange}
                           error={error}/>
-
-
-                <Input size="large" className="form-control"
-                       placeholder={label}
-                       type={type}
-                       id={name}
-                       name={name}
-                       value={data[name]}
-                       label={label}
-                       onChange={this.handleChange}
-                       error={error}
-                />
-                {error && <div style={{color: 'red'}}>{error}</div>}
             </div>
 
         );
