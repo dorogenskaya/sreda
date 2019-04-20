@@ -9,6 +9,10 @@ import NotFound from '../NotFound/NotFound';
 import Register from "../register";
 import Login from "../login";
 import Admin from "../Admin/Admin";
+import AddNewProgramForm from "../Forms/AddNewProgramForm";
+import EditProgramNameForm from "../Forms/EditProgramNameForm";
+import EditProgramContentForm from "../Forms/EditProgramContentForm";
+import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
 
 class Main extends Component {
     render() {
@@ -23,6 +27,10 @@ class Main extends Component {
                     <Route path="/not-found" component={NotFound}/>
                     <Route path='/admin' exact component={Admin}/>
                     <Route path='/' exact component={Home}/>
+                    <Route path="/admin/program/add" component={AddNewProgramForm}/>
+                    <Route path="/admin/program/edit/name" component={EditProgramNameForm}/>
+                    <Route path="/admin/program/edit/theme" component={EditProgramContentForm}/>
+                    <Route path="/admin/subject/add" component={AddNewSubjectForm}/>
                     <Redirect to="/not-found"/>
                 </Switch>
                 <Route path="/themes/:id/create-answer"

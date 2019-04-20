@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Form, Input, Icon, Button, Select} from 'antd';
+import DynamicInputs from './Input/DynamicInputs';
 import {database} from '../../model/firebase';
 
 let id = 0;
@@ -60,24 +61,6 @@ class AddNewTheme extends Component {
         })
     }
 
-    remove = (k) => {
-        const {form} = this.props;
-        const keys = form.getFieldValue('keys');
-        form.setFieldsValue({
-            keys: keys.filter(key => key !== k),
-        });
-    };
-
-    add = () => {
-        const {form} = this.props;
-        const keys = form.getFieldValue('keys');
-        const nextKeys = keys.concat(id++);
-
-        form.setFieldsValue({
-            keys: nextKeys,
-        });
-    };
-
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -137,32 +120,6 @@ class AddNewTheme extends Component {
     render() {
         const {getFieldDecorator, getFieldValue} = this.props.form;
         getFieldDecorator('keys', {initialValue: []});
-        const keys = getFieldValue('keys');
-        const formItems = keys.map((k, index) => (
-            <Form.Item
-                label={'Добавить новый вопрос в тему'}
-                key={k}>
-
-                {getFieldDecorator(`questions[${k}]`, {
-                    validateTrigger: ['onChange', 'onBlur'],
-                    rules: [{
-                        required: true,
-                        whitespace: true,
-                        message: "Пожайлуста, заполните или удалите поле",
-                    }],
-                })(
-                    <Input placeholder="Введите, пожайлуста вопрос" style={{width: '60%', marginRight: 8}}/>
-                )}
-                {keys.length > 0 ? (
-                    <Icon
-                        className="dynamic-delete-button"
-                        type="minus-circle-o"
-                        onClick={() => this.remove(k)}
-                    />
-                ) : null}
-            </Form.Item>
-        ));
-
         const {Option} = Select;
         let children = [];
         if (this.state.subjectsList) {
@@ -209,12 +166,29 @@ class AddNewTheme extends Component {
                         </Select>
                     )}
                 </Form.Item>
-                {formItems}
-                <Form.Item >
-                    <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
-                        <Icon type="plus"/> Добавить вопрос в тему
-                    </Button>
-                </Form.Item>
+                <DynamicInputs
+                    input={{
+                        label: 'Добавить новый вопрос в тему',
+                        name: 'questions',
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [{
+                            required: true,
+                            whitespace: true,
+                            message: "Пожайлуста, заполните или удалите поле"
+                        }],
+                        placeholder: 'Введите, пожайлуста вопрос',
+                        style: {width: '60%', marginRight: 8}
+                    }}
+                    button={{
+                        label: 'Добавить вопрос в тему',
+                        type: 'dashed',
+                        style: {width: '60%'},
+                        icon: {
+                            type: 'plus'
+                        }
+                    }}
+                    form={this.props.form}
+                />
                 <Form.Item>
                     <Button type="primary" htmlType="submit">Добавить тему</Button>
                 </Form.Item>
