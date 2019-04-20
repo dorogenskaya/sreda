@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Form, Input, Icon, Button, Select} from 'antd';
+import DynamicInputs from './Input/DynamicInputs';
 import {database} from '../../model/firebase';
 
 let id = 0;

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Form, Input, Icon, Button} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
+import {Link} from 'react-router-dom';
 import {database} from '../../model/firebase';
 
 class AddNewSubjects extends Component {
@@ -29,7 +30,7 @@ class AddNewSubjects extends Component {
                 this.setState({
                     subjectList: arrayNames,
                     validateStatus: 'success',
-                    validateMessage: `Предмет ${arrayNames[arrayNames.length -1]} был успешно добавлена`
+                    validateMessage: `Предмет ${arrayNames[arrayNames.length - 1]} был успешно добавлена`
                 })
             }
         })
@@ -44,7 +45,7 @@ class AddNewSubjects extends Component {
         });
     }
 
-    validateData (value) {
+    validateData(value) {
         if (!value.subjectName || this.state.subjectList.includes(value.subjectName)) {
             this.setState({
                 validateStatus: 'error',
@@ -63,27 +64,33 @@ class AddNewSubjects extends Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Form.Item
-                    label="Предмет"
-                    validateStatus={this.state.validateStatus}
-                    help={this.state.validateMessage}
-                >
-                    {getFieldDecorator('subjectName', {
-                        rules: [{ required: true}],
-                    })(
-                        <Input prefix={<Icon type="form" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Добавить новый предмет" />
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Добавить новый предмет
-                    </Button>
-                </Form.Item>
-            </Form>
+            <div className="wrapper-block">
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Item
+                        label="Предмет"
+                        validateStatus={this.state.validateStatus}
+                        help={this.state.validateMessage}
+                    >
+                        {getFieldDecorator('subjectName', {
+                            rules: [{required: true}],
+                        })(
+                            <Input prefix={<Icon type="form" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                   placeholder="Добавить новый предмет"/>
+                        )}
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Добавить новый предмет
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <div className="back-link">
+                    <Link className="nav-link" to="/admin">Вернуться назад</Link>
+                </div>
+            </div>
         );
     }
 }
 
-const AddNewSubjectForm = Form.create({ name: 'add_new_subject' })(AddNewSubjects);
+const AddNewSubjectForm = Form.create({name: 'add_new_subject'})(AddNewSubjects);
 export default AddNewSubjectForm;

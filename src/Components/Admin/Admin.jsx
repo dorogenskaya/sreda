@@ -1,24 +1,24 @@
 import React, {Component} from 'react';
-import AddNewProgramForm from '../Forms/AddNewProgramForm';
+import { Link } from 'react-router-dom';
 import './Admin.css';
-import AddEditProgram from './Program/AddEditProgram';
-import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
-import AddNewThemeForm from '../Forms/AddNewThemeForm';
 
 class Admin extends Component {
     render() {
         return (
-            <div className="admin-section">
-                <div className="admin-form">
-                    <AddEditProgram/>
-                </div>
-                <div className="admin-form">
-                    <AddNewSubjectForm/>
-                </div>
-                <div className="admin-form">
-                    <AddNewThemeForm/>
-                </div>
-            </div>
+            <main className={`admin-section`}>
+                <nav className="AdminNavigation">
+                    <h3>Добавление и редактирование програм</h3>
+                    <ul className="NavList">
+                        <li><Link className="nav-link" to="/admin/program/add">Добавление новой программы</Link></li>
+                        <li><Link className="nav-link" to="/admin/program/edit/name">Редактирование названия программы</Link></li>
+                        <li><Link className="nav-link" to="/admin/program/edit/theme">Редактирование содержимого программы</Link></li>
+                    </ul>
+                    <h3>Добавление и редактирование предметов</h3>
+                    <ul className="NavList">
+                        <li><Link className="nav-link" to="/admin/subject/add">Добавление нового предмета</Link></li>
+                    </ul>
+                </nav>
+            </main>
         )
     }
 }
