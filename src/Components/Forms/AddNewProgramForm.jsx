@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Form, Input, Icon, Button} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
+import {Link} from 'react-router-dom';
 import {database} from '../../model/firebase';
 
 class AddNewProgram extends Component {
@@ -29,7 +30,7 @@ class AddNewProgram extends Component {
                 this.setState({
                     programList: arrayNames,
                     validateStatus: 'success',
-                    validateMessage: `Программа ${arrayNames[arrayNames.length -1]} была успешно добавлена`
+                    validateMessage: `Программа ${arrayNames[arrayNames.length - 1]} была успешно добавлена`
                 })
             }
         })
@@ -44,7 +45,7 @@ class AddNewProgram extends Component {
         });
     };
 
-    validateData (value) {
+    validateData(value) {
         if (!value.programName || this.state.programList.includes(value.programName)) {
             this.setState({
                 validateStatus: 'error',
@@ -63,26 +64,32 @@ class AddNewProgram extends Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Form.Item
-                    label="Програма"
-                    validateStatus={this.state.validateStatus}
-                    help={this.state.validateMessage}>
-                    {getFieldDecorator('programName', {
-                        rules: [{ required: true}],
-                    })(
-                        <Input prefix={<Icon type="form" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Добавить новую програму" />
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Добавить новую программу
-                    </Button>
-                </Form.Item>
-            </Form>
+            <div className="wrapper-block">
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Item
+                        label="Програма"
+                        validateStatus={this.state.validateStatus}
+                        help={this.state.validateMessage}>
+                        {getFieldDecorator('programName', {
+                            rules: [{required: true}],
+                        })(
+                            <Input prefix={<Icon type="form" style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                   placeholder="Добавить новую програму"/>
+                        )}
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Добавить новую программу
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <div className="back-link">
+                    <Link className="nav-link" to="/admin">Вернуться назад</Link>
+                </div>
+            </div>
         );
     }
 }
 
-const AddNewProgramForm = Form.create({ name: 'add_new_program' })(AddNewProgram);
+const AddNewProgramForm = Form.create({name: 'add_new_program'})(AddNewProgram);
 export default AddNewProgramForm;
