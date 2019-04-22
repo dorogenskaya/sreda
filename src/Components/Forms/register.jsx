@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from './common/form';
+import Form from '../common/form';
 import Joi from "joi-browser";
 
 class Register extends Form {

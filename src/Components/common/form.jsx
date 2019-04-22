@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Joi from "joi-browser";
-import { Button, Input, Cascader } from 'antd';
+import { Button, Input, Cascader, Select } from 'antd';
 
 class Form extends Component {
     state = {
@@ -10,32 +10,42 @@ class Form extends Component {
 
     validate = () => {
         const options = {abortEarly: false};
+
+        // error property from the result of validation
         const {error} = Joi.validate(this.state.data, this.schema, options);
         if (!error) return null;
 
         const errors = {};
+        // map throw array result.error.details of joi validate
         for (let item of error.details) errors[item.path[0]] = item.message;
         return errors;
     };
 
     validateProperty = ({ name, value}) => {
+        // take input name  with value and store into the obj
         const obj = {[name]: value};
+
+        // take input name with schema and store into the schema
         const schema = {[name]: this.schema[name]};
+
+        // store error into the object. pass value from input and schema for this input from Joi
         const {error} = Joi.validate(obj, schema);
+        // return error message if error is truthy
         return error ? error.details[0].message : null;
     }
 
     handleSubmit = e => {
         e.preventDefault();
-
         const errors = this.validate();
+        // it helps to manage case when errors null
         this.setState({ errors: errors || {} });
         if (errors) return;
+
         this.doSubmit()
     }
 
-
     handleChange = ({currentTarget: input}) => {
+        // check the currentTarget input
         const errors = {...this.state.errors};
         const errorMessage = this.validateProperty(input);
         if (errorMessage) errors[input.name] = errorMessage;
@@ -43,13 +53,15 @@ class Form extends Component {
 
         const data = {...this.state.data};
         data[input.name] = input.value;
-        this.setState({ data, errors});
+        this.setState({ data, errors });
     };
 
     renderButton(label) {
         return (
-            <Button
-                disabled={this.validate()} type="primary">{label}</Button>
+        // if there are no errors this.validate is false< otherwise it is truthy
+        <Button
+                disabled={this.validate()}
+                type="primary">{label}</Button>
         );
     }
 
@@ -65,10 +77,10 @@ class Form extends Component {
                        type={type}
                        id={name}
                        name={name}
-                       value={data[name]}
                        label={label}
-                       onChange={this.handleChange}
                        error={error}
+                       value={data[name]}
+                       onChange={this.handleChange}
                 />
                 {error && <div style={{color: 'red'}}>{error}</div>}
             </div>
@@ -76,14 +88,60 @@ class Form extends Component {
         );
     }
 
-    renderTextArea (label, placeholder, rows) {
+    renderSelect (name, label, placeholder, options) {
+        const Option = Select.Option;
+        for (let i = 10; i < 36; i++) {
+            options.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+        }
+
+        const {data, errors} = this.state;
+        const error = errors[name];
+
+        return (
+            <div className="form-group" style={{marginBottom: '16px'}}>
+                <label htmlFor={name}>{label}</label>
+                <Select
+                    mode="multiple"
+                    style={{ width: '100%' }}
+                    placeholder={placeholder}
+                    onChange={this.handleChange}
+                    value={data[name]}
+                    error={error}
+                >
+                    {options}
+                </Select>
+                {error && <div style={{color: 'red'}}>{error}</div>}
+            </div>
+
+        );
+    }
+
+    renderTextArea (name, label, placeholder, rows) {
+        const {data, errors} = this.state;
+        const error = errors[name];
         const { TextArea } = Input;
 
-        <TextArea label={label} placeholder={placeholder} rows={rows}/>
+        return(
+            <div className="form-group" style={{marginBottom: '16px'}}>
+                <label htmlFor={label}>{label}</label>
+
+                <TextArea
+                    name={name}
+                    label={label}
+                    placeholder={placeholder}
+                    rows={rows}
+                    onChange={this.handleChange}
+                    value={data[name]}
+                    error={error}
+                />
+                {error && <div style={{color: 'red'}}>{error}</div>}
+
+            </div>
+        );
     }
 
     renderCascader (name, label, subjectActive, themeActive, themesList, subjectsList) {
-        const {errors} = this.state;
+        const {data, errors} = this.state;
         const error = errors[name];
 
         const createNestedArray = (array1, array2) => {
@@ -113,7 +171,9 @@ class Form extends Component {
                           label={label}
                           options={options}
                           onChange={this.handleChange}
-                          error={error}/>
+                          error={error}
+                          value={data[name]}/>
+                {error && <div style={{color: 'red'}}>{error}</div>}
             </div>
 
         );

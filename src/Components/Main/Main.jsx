@@ -6,8 +6,8 @@ import Theme from '../Theme/Theme';
 import Program from '../Program/Program';
 import CreateAnswerDrawer from '../Theme/createAnswerDrawer';
 import NotFound from '../NotFound/NotFound';
-import Register from "../register";
-import Login from "../login";
+import Register from "../Forms/register";
+import Login from "../Forms/login";
 import Admin from "../Admin/Admin";
 import AddNewProgramForm from "../Forms/AddNewProgramForm";
 import EditProgramNameForm from "../Forms/EditProgramNameForm";
@@ -35,7 +35,7 @@ class Main extends Component {
                 </Switch>
                 <Route path="/themes/:id/create-answer"
                        render={(props) => (
-                           <CreateAnswerDrawer {...props} />
+                           <CreateAnswerDrawer {...props} themeId={'-Lc7CNosXWq3ZdZvnnRf'}/>
                        )}
                 />
             </main>

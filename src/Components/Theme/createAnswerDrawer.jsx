@@ -2,7 +2,7 @@ import React from "react";
 import {Drawer} from 'antd';
 import AddNewAnswer from '../Forms/addNewAnswerForm_form';
 
-export default function CreateAnswerDrawer ({match: {params: { id }}, history, location}) {
+export default function CreateAnswerDrawer ({match: {params: { id }}, history, location, themeId}) {
     const previousLocation = location.pathname.replace(/create-answer.*$/i, '');
     return (
         <Drawer
@@ -19,6 +19,7 @@ export default function CreateAnswerDrawer ({match: {params: { id }}, history, l
         >
             <AddNewAnswer
                 id={id}
+                themeId={themeId}
                 history={history}
                 previousLocation={previousLocation}
                 subjectActive={"Алгебра"}
