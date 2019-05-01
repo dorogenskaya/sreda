@@ -12,12 +12,12 @@ class EditProgramContent extends Component {
         this.state = {
             programsData: null,
             programsArray: null,
-            currentProgramId: null,
-            currentProgramName: null,
-            validateMessage: null
+            levelsList: null,
+            subjectsList: null
         }
 
         this.handleSelectProgram = this.handleSelectProgram.bind(this);
+        this.handleSelectLevel = this.handleSelectLevel.bind(this);
     }
 
     componentDidMount() {
@@ -29,8 +29,13 @@ class EditProgramContent extends Component {
             }
             programsArray = programsArray.sort((a, b) => a.programName > b.programName ? 1 : -1)
             this.setState({
-                programsData,
-                programsArray
+                programsData, programsArray
+            })
+        })
+
+        database.ref('subjects').on('value', (snapShot) => {
+            this.setState({
+                subjectsData: snapShot.val()
             })
         })
     }
@@ -46,14 +51,20 @@ class EditProgramContent extends Component {
     }
 
     handleSelectProgram(val) {
-        console.log(val, 'Select Programm');
+        const {levelList} = this.state.programsData[val];
+        this.setState({
+            levelsList: levelList,
+            subjectsList: null
+        });
     }
 
     handleSelectSubject(val) {
+
         console.log(val, 'Select Subject')
     }
 
     handleSelectLevel(val) {
+        console.log(this.state);
         console.log(val, 'Select Level')
     }
 
@@ -95,7 +106,7 @@ class EditProgramContent extends Component {
                                      onChange: this.handleSelectLevel
                                  }}
                                  form={this.props.form}
-                                 data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
+                                 data={{data: this.state.levelsList, nameKey: 'label', valueKey: 'id'}}
                     />
                     <InputSelect name={`subject`}
                                  label={`Выберите предмет`}
@@ -111,7 +122,7 @@ class EditProgramContent extends Component {
                                      onChange: this.handleSelectSubject
                                  }}
                                  form={this.props.form}
-                                 data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
+                                 data={{data: this.state.subjectsArray, nameKey: 'subjectName', valueKey: 'id'}}
                     />
                     <DynamicInputs
                         form={this.props.form}
