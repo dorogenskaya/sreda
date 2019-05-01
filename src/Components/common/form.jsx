@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Joi from "joi-browser";
 import { Button, Input, Cascader, Select } from 'antd';
+import {database} from "../../model/firebase";
 
 class Form extends Component {
     state = {
@@ -55,6 +56,22 @@ class Form extends Component {
         data[input.name] = input.value;
         this.setState({ data, errors });
     };
+
+    handleChangeTheme = () => {
+        // database.ref('subjects').on('value', (snapShot) => {
+        //     let data = snapShot.val(),
+        //         arraySubjects = [];
+        //
+        //     for (let key in data) {
+        //         arraySubjects.push({key: key, subjectName: data[key].subjectName})
+        //     }
+        //
+        //     arraySubjects = arraySubjects.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
+        //     this.setState({
+        //         subjectsList: arraySubjects
+        //     })
+        // });
+    }
 
     renderButton(label) {
         return (
@@ -170,7 +187,7 @@ class Form extends Component {
                 <Cascader defaultValue={[subjectActive, themeActive]}
                           label={label}
                           options={options}
-                          onChange={this.handleChange}
+                          onChange={this.handleChangeTheme}
                           error={error}
                           value={data[name]}/>
                 {error && <div style={{color: 'red'}}>{error}</div>}
