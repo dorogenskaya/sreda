@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import Joi from "joi-browser";
-import { Button, Input, Cascader, Select } from 'antd';
+import {Button, Input, Cascader, Select} from 'antd';
 import {database} from "../../model/firebase";
 
 class Form extends Component {
     state = {
-        data:{},
-        errors:{}
+        data: {},
+        errors: {}
     };
 
     validate = () => {
@@ -22,7 +22,7 @@ class Form extends Component {
         return errors;
     };
 
-    validateProperty = ({ name, value}) => {
+    validateProperty = ({name, value}) => {
         // take input name  with value and store into the obj
         const obj = {[name]: value};
 
@@ -39,7 +39,7 @@ class Form extends Component {
         e.preventDefault();
         const errors = this.validate();
         // it helps to manage case when errors null
-        this.setState({ errors: errors || {} });
+        this.setState({errors: errors || {}});
         if (errors) return;
 
         this.doSubmit()
@@ -54,7 +54,7 @@ class Form extends Component {
 
         const data = {...this.state.data};
         data[input.name] = input.value;
-        this.setState({ data, errors });
+        this.setState({data, errors});
     };
 
     handleChangeTheme = () => {
@@ -75,14 +75,14 @@ class Form extends Component {
 
     renderButton(label) {
         return (
-        // if there are no errors this.validate is false< otherwise it is truthy
-        <Button
+            // if there are no errors this.validate is false< otherwise it is truthy
+            <Button
                 disabled={this.validate()}
                 type="primary">{label}</Button>
         );
     }
 
-    renderInput (name, label, type = 'text', placeholder) {
+    renderInput(name, label, type = 'text', placeholder) {
         const {data, errors} = this.state;
         const error = errors[name];
 
@@ -105,11 +105,11 @@ class Form extends Component {
         );
     }
 
-    renderSelect (name, label, placeholder, options) {
+    renderSelect(name, label, placeholder, options) {
         const Option = Select.Option;
-        for (let i = 10; i < 36; i++) {
-            options.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-        }
+        let children = [];
+        options.map((item) => children.push(<Option key={item.key} value={item.name}>{item.name}</Option>));
+
 
         const {data, errors} = this.state;
         const error = errors[name];
@@ -119,13 +119,13 @@ class Form extends Component {
                 <label htmlFor={name}>{label}</label>
                 <Select
                     mode="multiple"
-                    style={{ width: '100%' }}
+                    style={{width: '100%'}}
                     placeholder={placeholder}
                     onChange={this.handleChange}
                     value={data[name]}
                     error={error}
                 >
-                    {options}
+                    {children}
                 </Select>
                 {error && <div style={{color: 'red'}}>{error}</div>}
             </div>
@@ -133,12 +133,12 @@ class Form extends Component {
         );
     }
 
-    renderTextArea (name, label, placeholder, rows) {
+    renderTextArea(name, label, placeholder, rows) {
         const {data, errors} = this.state;
         const error = errors[name];
-        const { TextArea } = Input;
+        const {TextArea} = Input;
 
-        return(
+        return (
             <div className="form-group" style={{marginBottom: '16px'}}>
                 <label htmlFor={label}>{label}</label>
 
@@ -157,26 +157,31 @@ class Form extends Component {
         );
     }
 
-    renderCascader (name, label, subjectActive, themeActive, themesList, subjectsList) {
+    renderCascader(name, label, subjectActive, themeActive, themesList, subjectsList) {
         const {data, errors} = this.state;
         const error = errors[name];
 
         const createNestedArray = (array1, array2) => {
             return array1
-                .map(element1 => {return {value: element1.subjectName, label: element1.subjectName, children: array2
-                        .filter((element2) => {
-                            if (element2.subjects.includes(element1.key)) return {value: element2.test, label: element2.test};
-                            return null;
+                .map(element1 => {
+                    return {
+                        value: element1.subjectName, label: element1.subjectName, children: array2
+                            .filter((element2) => {
+                                if (element2.subjects.includes(element1.key)) return {
+                                    value: element2.test,
+                                    label: element2.test
+                                };
+                                return null;
 
-                        })
+                            })
                     };
                 })
-            };
+        };
 
-        const array2 =[
-            {test: 'Theme name 1', subjects:['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 2', subjects:['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 3', subjects:['-tytrxXlQWJfDilNru','-fdsQWJfDilNtu']}
+        const array2 = [
+            {test: 'Theme name 1', subjects: ['-Lb9fI5xXlQWJfDilNru']},
+            {test: 'Theme name 2', subjects: ['-Lb9fI5xXlQWJfDilNru']},
+            {test: 'Theme name 3', subjects: ['-tytrxXlQWJfDilNru', '-fdsQWJfDilNtu']}
         ];
 
         const options = createNestedArray(subjectsList, array2);
@@ -196,4 +201,5 @@ class Form extends Component {
         );
     }
 }
+
 export default Form;

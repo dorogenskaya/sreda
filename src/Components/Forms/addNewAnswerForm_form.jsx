@@ -40,7 +40,7 @@ class AddNewAnswer extends Form {
             let questionsList =  data.map((item, i) => {
                 return {key: i, name: item.question}
             });
-            this.setState(questionsList);
+            this.setState({questionsList});
             this.setState( {themeActive: themeActive});
 
             console.log(questionsList);
