@@ -43,10 +43,18 @@ class EditProgramContent extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log(err, values, 'SUBMIT');
-            // if (this.validateData(values) && !err) {
-            //     database.ref('programs').push().set(values);
-            // }
+            if (!err && values.themeName) {
+                values.themeName.forEach((theme)=> {
+                    const data = {
+                        themeName: theme,
+                        levelList: [values.level],
+                        subjectsList: [values.subject],
+                        programList: [values.program]
+                    }
+                    database.ref('themes').push().set(data);
+                })
+            }
+
         });
     }
 
@@ -56,16 +64,26 @@ class EditProgramContent extends Component {
             levelsList: levelList,
             subjectsList: null
         });
-    }
-
-    handleSelectSubject(val) {
-
-        console.log(val, 'Select Subject')
+        this.clearField('subject');
     }
 
     handleSelectLevel(val) {
-        console.log(this.state);
-        console.log(val, 'Select Level')
+        let subjectsArray = [];
+
+        for (let key in this.state.subjectsData) {
+            if (this.state.subjectsData[key].levelList.includes(val)) {
+                subjectsArray.push({id: key, subjectName: this.state.subjectsData[key].subjectName});
+            }
+        }
+
+        this.setState({subjectsArray});
+        this.clearField('subject');
+    }
+
+    clearField(name) {
+        let field = {};
+        field[name] = '';
+        this.props.form.setFieldsValue(field);
     }
 
 
@@ -119,7 +137,7 @@ class EditProgramContent extends Component {
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
                                      allowClear: true,
-                                     onChange: this.handleSelectSubject
+                                     onChange: null
                                  }}
                                  form={this.props.form}
                                  data={{data: this.state.subjectsArray, nameKey: 'subjectName', valueKey: 'id'}}
