@@ -12,12 +12,12 @@ class EditProgramContent extends Component {
         this.state = {
             programsData: null,
             programsArray: null,
-            currentProgramId: null,
-            currentProgramName: null,
-            validateMessage: null
+            levelsList: null,
+            subjectsList: null
         }
 
         this.handleSelectProgram = this.handleSelectProgram.bind(this);
+        this.handleSelectLevel = this.handleSelectLevel.bind(this);
     }
 
     componentDidMount() {
@@ -29,8 +29,13 @@ class EditProgramContent extends Component {
             }
             programsArray = programsArray.sort((a, b) => a.programName > b.programName ? 1 : -1)
             this.setState({
-                programsData,
-                programsArray
+                programsData, programsArray
+            })
+        })
+
+        database.ref('subjects').on('value', (snapShot) => {
+            this.setState({
+                subjectsData: snapShot.val()
             })
         })
     }
@@ -38,23 +43,47 @@ class EditProgramContent extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log(err, values, 'SUBMIT');
-            // if (this.validateData(values) && !err) {
-            //     database.ref('programs').push().set(values);
-            // }
+            if (!err && values.themeName) {
+                values.themeName.forEach((theme)=> {
+                    const data = {
+                        themeName: theme,
+                        levelList: [values.level],
+                        subjectsList: [values.subject],
+                        programList: [values.program]
+                    }
+                    database.ref('themes').push().set(data);
+                })
+            }
+
         });
     }
 
     handleSelectProgram(val) {
-        console.log(val, 'Select Programm');
-    }
-
-    handleSelectSubject(val) {
-        console.log(val, 'Select Subject')
+        const {levelList} = this.state.programsData[val];
+        this.setState({
+            levelsList: levelList,
+            subjectsList: null
+        });
+        this.clearField('subject');
     }
 
     handleSelectLevel(val) {
-        console.log(val, 'Select Level')
+        let subjectsArray = [];
+
+        for (let key in this.state.subjectsData) {
+            if (this.state.subjectsData[key].levelList.includes(val)) {
+                subjectsArray.push({id: key, subjectName: this.state.subjectsData[key].subjectName});
+            }
+        }
+
+        this.setState({subjectsArray});
+        this.clearField('subject');
+    }
+
+    clearField(name) {
+        let field = {};
+        field[name] = '';
+        this.props.form.setFieldsValue(field);
     }
 
 
@@ -95,7 +124,7 @@ class EditProgramContent extends Component {
                                      onChange: this.handleSelectLevel
                                  }}
                                  form={this.props.form}
-                                 data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
+                                 data={{data: this.state.levelsList, nameKey: 'label', valueKey: 'id'}}
                     />
                     <InputSelect name={`subject`}
                                  label={`Выберите предмет`}
@@ -108,10 +137,10 @@ class EditProgramContent extends Component {
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
                                      allowClear: true,
-                                     onChange: this.handleSelectSubject
+                                     onChange: null
                                  }}
                                  form={this.props.form}
-                                 data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
+                                 data={{data: this.state.subjectsArray, nameKey: 'subjectName', valueKey: 'id'}}
                     />
                     <DynamicInputs
                         form={this.props.form}
