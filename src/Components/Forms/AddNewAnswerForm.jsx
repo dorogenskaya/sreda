@@ -161,7 +161,6 @@ class AddNewAnswer extends Component {
                 >
                     <Cascader defaultValue={[subjectActive, themeActive]}
                               options={options}
-
                               onChange={onChange}
                     />
                 </Form.Item>

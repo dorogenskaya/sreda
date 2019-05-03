@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import {database} from '../../model/firebase';
 
 class EditProgramName extends Component {
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
 
         this.state = {
             programsData: null,
@@ -42,9 +42,7 @@ class EditProgramName extends Component {
 
     handleSelectProgram(val) {
         const programName = val ? this.state.programsData[val].programName : null;
-        this.props.form.setFieldsValue({
-            programName: programName
-        })
+        this.props.form.setFieldsValue({programName})
     }
 
     render() {
@@ -58,9 +56,10 @@ class EditProgramName extends Component {
                                  label={`Выберите программу`}
                                  rules={[{
                                      required: true,
-                                     message: 'Выберите редактируюемую программу'
+                                     message: 'Выберите редактируемую программу'
                                  }]}
                                  config={{
+                                     mode:'tag',
                                      placeholder: 'Выберите программу',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,

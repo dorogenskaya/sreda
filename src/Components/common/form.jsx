@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Joi from "joi-browser";
 import {Button, Input, Cascader, Select} from 'antd';
-import {database} from "../../model/firebase";
 
 class Form extends Component {
     state = {
@@ -45,6 +44,31 @@ class Form extends Component {
         this.doSubmit()
     }
 
+    handleChangeSelect = (name, e, i) => {
+        console.log(name, e, i);
+
+        const errors = {...this.state.errors};
+        const input = {name: name, value: e};
+        const errorMessage = this.validateProperty(input);
+        if (errorMessage) errors[name] = errorMessage;
+        else delete errors[name];
+
+        const data = {...this.state.data};
+
+        data[name] = e;
+        this.setState({data, errors});
+        console.log(data);
+    };
+
+    getQuestionID = (i) => {
+        const data = {...this.state.data};
+
+        let arrayId = [];
+        i.forEach(item => arrayId.push(item.key));
+        data.questionsListID = arrayId;
+        this.setState({data});
+    }
+
     handleChange = ({currentTarget: input}) => {
         // check the currentTarget input
         const errors = {...this.state.errors};
@@ -54,7 +78,8 @@ class Form extends Component {
 
         const data = {...this.state.data};
         data[input.name] = input.value;
-        this.setState({data, errors});
+        this.setState({data});
+        this.setState({errors});
     };
 
     handleChangeTheme = () => {
@@ -101,7 +126,6 @@ class Form extends Component {
                 />
                 {error && <div style={{color: 'red'}}>{error}</div>}
             </div>
-
         );
     }
 
@@ -110,7 +134,6 @@ class Form extends Component {
         let children = [];
         options.map((item) => children.push(<Option key={item.key} value={item.name}>{item.name}</Option>));
 
-
         const {data, errors} = this.state;
         const error = errors[name];
 
@@ -118,12 +141,13 @@ class Form extends Component {
             <div className="form-group" style={{marginBottom: '16px'}}>
                 <label htmlFor={name}>{label}</label>
                 <Select
+                    name={name}
                     mode="multiple"
                     style={{width: '100%'}}
                     placeholder={placeholder}
-                    onChange={this.handleChange}
+                    onChange={(e, i) => this.handleChangeSelect(name, e, i)}
                     value={data[name]}
-                    error={error}
+                    error={errors}
                 >
                     {children}
                 </Select>
@@ -158,48 +182,44 @@ class Form extends Component {
     }
 
     renderCascader(name, label, subjectActive, themeActive, themesList, subjectsList) {
+
         const {data, errors} = this.state;
         const error = errors[name];
 
-        const createNestedArray = (array1, array2) => {
-            return array1
-                .map(element1 => {
-                    return {
-                        value: element1.subjectName, label: element1.subjectName, children: array2
-                            .filter((element2) => {
-                                if (element2.subjects.includes(element1.key)) return {
-                                    value: element2.test,
-                                    label: element2.test
-                                };
-                                return null;
+        const options = [{
+            value: 'алгебра',
+            label: 'Алгебра',
+            children: [{
+                value: 'тема Алгебры',
+                label: 'тема Алгебры',
+            }],
+        }, {
+            value: 'русский язык',
+            label: 'Русский язык',
+            children: [{
+                value: 'тема русского языка',
+                label: 'Тема русского языка',
+            }],
+        }];
 
-                            })
-                    };
-                })
-        };
-
-        const array2 = [
-            {test: 'Theme name 1', subjects: ['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 2', subjects: ['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 3', subjects: ['-tytrxXlQWJfDilNru', '-fdsQWJfDilNtu']}
-        ];
-
-        const options = createNestedArray(subjectsList, array2);
 
         return (
             <div className="form-group" style={{marginBottom: '16px'}}>
                 <label htmlFor={name}>{label}</label>
-                <Cascader defaultValue={[subjectActive, themeActive]}
-                          label={label}
-                          options={options}
-                          onChange={this.handleChangeTheme}
-                          error={error}
-                          value={data[name]}/>
-                {error && <div style={{color: 'red'}}>{error}</div>}
-            </div>
+                <Cascader
+                    defaultValue={['алгебра', 'тема Алгебры']}
+                    name={name}
+                    label={label}
+                    error={error}
+                    value={data[name]}
+                    options={options}
+                    onChange={(e, i) => this.handleChangeSelect(name, e, i)}
+                />
+                     {error && <div style={{color: 'red'}}>{error}</div>}
 
-        );
+            </div>
+            // {console.log()}
+        )
     }
 }
-
 export default Form;
