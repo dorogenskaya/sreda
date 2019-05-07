@@ -23,7 +23,6 @@ class AddNewAnswer extends Component {
     }
 
     componentDidMount() {
-        //get active subject and active theme
         const subjectActive = 'Алгебра';
         const themeID = this.props.themeId;
 
@@ -34,8 +33,6 @@ class AddNewAnswer extends Component {
             });
             this.setState({subjectActive, themeActive, questionsList});
         });
-
-
     };
 
     handleSubmit = (e) => {
@@ -81,14 +78,18 @@ class AddNewAnswer extends Component {
 
     testFunction() {
         const {subjectsList, themesList} = this.state;
+        const subjectID = subjectsList.map(element1 => element1.id);
+        const subjectsID = themesList.map(element2 => element2.subjectsID[0]);
 
         if (subjectsList.length && themesList.length) {
+            // if (subjectsID.includes(element1.id))
             const options = subjectsList.map((element1) => {
-                return {key: element1.id, value: element1.subjectName, label: element1.subjectName, children: themesList.filter(element2 => {
-                        if (!element2.subjectsID.includes(element1.id)) return null;
-                        return Object.assign(element2, {value: element2.themeName , label: element2.themeName } )
-                    })
-                }
+                // console.log(subjectsID, element1.id);
+                    return {key: element1.id, value: element1.subjectName, label: element1.subjectName, children: themesList.filter(element2 => {
+                            if (!element2.subjectsID.includes(element1.id)) return null;
+                            return Object.assign(element2, {value: element2.themeName , label: element2.themeName } )
+                        })
+                    }
             });
             this.setState({ options });
         }
@@ -112,7 +113,7 @@ class AddNewAnswer extends Component {
         const {getFieldDecorator} = this.props.form;
         const { TextArea } = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
-        console.log(subjectActive, themeActive, questionsList, 'ffdsfdshdfjks');
+        console.log(options);
 
         return (
             <div className="wrapper-block">
