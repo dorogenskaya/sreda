@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Form, Input, Select, Icon} from 'antd';
+import {Form, Select} from 'antd';
 
 class InputSelect extends Component {
     render() {
-        const {getFieldDecorator, getFieldError} = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         const {name, label, rules, config, data} = this.props;
         const {Option} = Select;
         let children = [];

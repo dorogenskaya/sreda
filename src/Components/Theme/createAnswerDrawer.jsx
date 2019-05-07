@@ -1,6 +1,6 @@
 import React from "react";
 import {Drawer} from 'antd';
-import AddNewAnswer from '../Forms/addNewAnswerForm_form';
+import AddNewAnswer from '../Forms/AddNewAnswerForm';
 
 export default function CreateAnswerDrawer ({match: {params: { id }}, history, location, themeId}) {
     const previousLocation = location.pathname.replace(/create-answer.*$/i, '');

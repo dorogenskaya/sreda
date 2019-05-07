@@ -218,7 +218,6 @@ class Form extends Component {
                      {error && <div style={{color: 'red'}}>{error}</div>}
 
             </div>
-            // {console.log()}
         )
     }
 }
