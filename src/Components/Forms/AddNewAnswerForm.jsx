@@ -96,17 +96,15 @@ class AddNewAnswer extends Component {
 
     handleSelectTheme = (value, e) => {
         const subjectActive = e[0].value;
-        let themeActive = e[1];
-
         database.ref('themes/' + e[1].id).on('value', snapshot => {
 
+            let themeActive = snapshot.val();
             if (!themeActive.questionsList) return [];
             let questionsList = themeActive.questionsList.map((item, i) => {
                 return {id: i, name: item.question}
             });
 
             this.setState({subjectActive, themeActive, questionsList});
-            console.log(subjectActive, themeActive, questionsList, 'ffdsfdshdfjks');
         });
     }
 
@@ -114,7 +112,7 @@ class AddNewAnswer extends Component {
         const {getFieldDecorator} = this.props.form;
         const { TextArea } = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
-        console.log(this.state);
+        console.log(subjectActive, themeActive, questionsList, 'ffdsfdshdfjks');
 
         return (
             <div className="wrapper-block">
