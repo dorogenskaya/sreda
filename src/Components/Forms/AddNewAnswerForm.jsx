@@ -98,13 +98,13 @@ class AddNewAnswer extends Component {
     handleSelectTheme = (value, e) => {
         const subjectActive = e[0].value;
         database.ref('themes/' + e[1].id).on('value', snapshot => {
-
             let themeActive = snapshot.val();
-            if (!themeActive.questionsList) return [];
-            let questionsList = themeActive.questionsList.map((item, i) => {
-                return {id: i, name: item.question}
-            });
-
+            let questionsList = [];
+            if (themeActive.questionsList) {
+                themeActive.questionsList.forEach((item, i) => {
+                    questionsList.push({id: i, name: item.question});
+                });
+            }
             this.setState({subjectActive, themeActive, questionsList});
         });
     }
