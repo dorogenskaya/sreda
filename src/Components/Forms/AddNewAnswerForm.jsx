@@ -126,7 +126,7 @@ class AddNewAnswer extends Component {
         const {getFieldDecorator} = this.props.form;
         const { TextArea } = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
-        console.log(options);
+        console.log(themeActive, subjectActive, questionsList, options);
 
         return (
             <div className="wrapper-block">
