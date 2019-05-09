@@ -70,13 +70,11 @@ class AddNewAnswer extends Component {
                 themesList.push({id: key, themeName: data[key].themeName, subjectsID:data[key].subjectsList});
             }
             this.setState({themesList});
-            this.testFunction();
+            this.collectOptions();
         });
-
-
     }
 
-    testFunction() {
+    collectOptions() {
         const {subjectsList, themesList} = this.state;
         const subjectID = subjectsList.map(element1 => element1.id);
         const subjectsID = themesList.map(element2 => element2.subjectsID[0]);
@@ -85,26 +83,41 @@ class AddNewAnswer extends Component {
             // if (subjectsID.includes(element1.id))
             const options = subjectsList.map((element1) => {
                 // console.log(subjectsID, element1.id);
-                    return {key: element1.id, value: element1.subjectName, label: element1.subjectName, children: themesList.filter(element2 => {
-                            if (!element2.subjectsID.includes(element1.id)) return null;
-                            return Object.assign(element2, {value: element2.themeName , label: element2.themeName } )
-                        })
+                    return {key: element1.id, value: element1.subjectName, label: element1.subjectName,
+                        children: this.renameThemes(themesList.filter(element2 => {
+                            return element2.subjectsID.includes(element1.id)
+                        }))
                     }
             });
             this.setState({ options });
         }
     }
 
+    renameThemes (data) {
+        let newThemes = [];
+        data.forEach(obj => newThemes.push({
+            value: obj.themeName,
+            label: obj.themeName,
+            id: obj.id
+            })
+        )
+        return newThemes;
+    }
+
     handleSelectTheme = (value, e) => {
         const subjectActive = e[0].value;
         database.ref('themes/' + e[1].id).on('value', snapshot => {
             let themeActive = snapshot.val();
+
             let questionsList = [];
+            console.log(themeActive, '!!');
+
             if (themeActive.questionsList) {
                 themeActive.questionsList.forEach((item, i) => {
                     questionsList.push({id: i, name: item.question});
                 });
             }
+
             this.setState({subjectActive, themeActive, questionsList});
         });
     }
@@ -123,7 +136,7 @@ class AddNewAnswer extends Component {
                         {getFieldDecorator('themes', {
                             initialValue:[subjectActive, themeActive.themeName]
                         })(
-                            <Cascader
+                               <Cascader
                                 name = {'themes'}
                                 options={options}
                                 onClick={this.handleClickTheme}
