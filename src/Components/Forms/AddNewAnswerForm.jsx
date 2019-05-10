@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Form, Input, Button, Cascader} from 'antd';
 import InputSelect from './Input/InputSelect';
 import {database} from '../../model/firebase';
+import DynamicInputs from './Input/DynamicInputs';
+
 
 class AddNewAnswer extends Component {
     constructor(props) {
@@ -60,7 +62,7 @@ class AddNewAnswer extends Component {
             }
             subjectsList = subjectsList.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
             this.setState({subjectsList});
-            this.testFunction();
+            this.collectOptions();
         });
 
         database.ref('themes').on('value', snapshot => {
@@ -76,21 +78,23 @@ class AddNewAnswer extends Component {
 
     collectOptions() {
         const {subjectsList, themesList} = this.state;
-        const subjectID = subjectsList.map(element1 => element1.id);
-        const subjectsID = themesList.map(element2 => element2.subjectsID[0]);
 
         if (subjectsList.length && themesList.length) {
-            // if (subjectsID.includes(element1.id))
-            const options = subjectsList.map((element1) => {
-                // console.log(subjectsID, element1.id);
-                    return {key: element1.id, value: element1.subjectName, label: element1.subjectName,
-                        children: this.renameThemes(themesList.filter(element2 => {
-                            return element2.subjectsID.includes(element1.id)
-                        }))
-                    }
+            const collectedArray = subjectsList.map((element1) => {
+                return {key: element1.id, value: element1.subjectName, label: element1.subjectName,
+                    children: this.renameThemes(themesList.filter(element2 => {
+                        return element2.subjectsID.includes(element1.id)
+                    }))
+                }
             });
+
+            const options = this.filterOptions(collectedArray);
             this.setState({ options });
         }
+    }
+
+    filterOptions(collectedArray) {
+        return collectedArray.filter(object => {return object.children.length > 0} );
     }
 
     renameThemes (data) {
@@ -142,6 +146,7 @@ class AddNewAnswer extends Component {
                                 onClick={this.handleClickTheme}
                                 onChange={(value, e)=>{this.handleSelectTheme(value, e)}}
                                 showSearch={true}
+                                allowClear={false}
                             />
                         )}
                     </Form.Item>
@@ -157,10 +162,33 @@ class AddNewAnswer extends Component {
                              style: {width: '100%'},
                              autoClearSearchValue: true,
                              allowClear: true,
-                             onChange: this.handleSelectProgram
+                             onChange: this.handleSelectProgram,
+                             disabled:!questionsList.length
                         }}
                         form={this.props.form}
                         data={{data: questionsList, nameKey: 'name', valueKey: 'key'}}
+                    />
+                    <DynamicInputs
+                        input={{
+                            label: 'Добавь новый вопрос в тему',
+                            name: 'question',
+                            validateTrigger: ['onChange', 'onBlur'],
+                            rules: [{
+                                whitespace: true,
+                                message: "заполни или удали поле"
+                            }],
+                            placeholder: 'Напиши вопрос',
+                            style: {width: '60%', marginRight: 8}
+                        }}
+                        button={{
+                            label: 'Добавить вопрос в тему',
+                            type: 'dashed',
+                            style: {width: '60%'},
+                            icon: {
+                                type: 'plus'
+                            }
+                        }}
+                        form={this.props.form}
                     />
 
                     <Form.Item

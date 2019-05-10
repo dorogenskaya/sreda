@@ -26,6 +26,7 @@ class InputSelect extends Component {
                         autoClearSearchValue={config.autoClearSearchValue}
                         allowClear={config.allowClear}
                         onChange={config.onChange}
+                        disabled={config.disabled}
                     >
                         {children}
                     </Select>
