@@ -12,6 +12,7 @@ class AddNewAnswer extends Component {
         this.state = {
             answerData: null,
             questionsList:[],
+            selectedQuestions:[],
             themeActive: {},
             subjectActive:'',
             subjectsList:[],
@@ -34,20 +35,28 @@ class AddNewAnswer extends Component {
                 return {id: i, name: item.question}
             });
             this.setState({subjectActive, themeActive, questionsList});
+            this.props.form.setFieldsValue({'themes': [subjectActive, themeActive.themeName]})
         });
     };
 
-    handleSubmit = (e) => {
-        console.log(e);
-        // e.preventDefault();
-        // this.props.form.validateFields((err, values) => {
-        //     if (!err && data) {
-        //         // need to add theme ID
-        //     database.ref('themes/' + + 'answer/').push().set(data);
-        //     }
-        // });
-    };
-    handleClickTheme(){
+    handleSelectTheme = (value, e) => {
+        const subjectActive = e[0].value;
+        database.ref('themes/' + e[1].id).on('value', snapshot => {
+            let themeActive = snapshot.val();
+            let questionsList = [];
+
+            if (themeActive.questionsList) {
+                themeActive.questionsList.forEach((item, i) => {
+                    questionsList.push({id: i, name: item.question});
+                });
+            }
+            this.setState({subjectActive, themeActive, questionsList, selectedQuestions: []});
+            this.props.form.setFieldsValue({questionsList: undefined})
+
+        });
+    }
+
+    handleClickTheme () {
         const {subjectsList, themesList} = this.state;
         if (subjectsList.length && themesList.length){
             return false;
@@ -108,29 +117,51 @@ class AddNewAnswer extends Component {
         return newThemes;
     }
 
-    handleSelectTheme = (value, e) => {
-        const subjectActive = e[0].value;
-        database.ref('themes/' + e[1].id).on('value', snapshot => {
-            let themeActive = snapshot.val();
+    handleSelectQuestions = (value) => {
+        let questionsList = [...this.state.questionsList];
+        let selectedQuestions = questionsList.filter(question => value.includes(question.id));
+        this.setState({selectedQuestions});
 
-            let questionsList = [];
-            console.log(themeActive, '!!');
-
-            if (themeActive.questionsList) {
-                themeActive.questionsList.forEach((item, i) => {
-                    questionsList.push({id: i, name: item.question});
-                });
-            }
-
-            this.setState({subjectActive, themeActive, questionsList});
-        });
     }
+
+    // clearField(name) {
+    //     let field = {};
+    //     field[name] = null;
+    //     this.props.form.setFieldsValue(field);
+    // }
+
+    handleSubmit = (e) => {
+        console.log(e);
+        e.preventDefault();
+        console.log(this.state);
+
+        this.props.form.validateFields((err, values) => {
+            console.log(err, values);
+        })
+
+        // () => {this.props.history.push(this.props.previousLocation)}
+
+        //     this.props.form.validateFields((err, values) => {
+        //         if (!err && values.themeName) {
+        //             values.themeName.forEach((theme)=> {
+        //                 const data = {
+        //                     themeName: theme,
+        //                     levelList: [values.level],
+        //                     subjectsList: [values.subject],
+        //                     programList: [values.program]
+        //                 }
+        //                 database.ref('themes').push().set(data);
+        //             })
+        //         }
+        //
+        //     });
+    };
 
     render() {
         const {getFieldDecorator} = this.props.form;
         const { TextArea } = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
-        console.log(themeActive, subjectActive, questionsList, options);
+        console.log(this.props.form, 'fds');
 
         return (
             <div className="wrapper-block">
@@ -154,19 +185,20 @@ class AddNewAnswer extends Component {
                         name={`questionsList`}
                         label={`Выбери вопросы`}
                         rules={[{
+                            required: true,
                             message: 'Без вопросов нельзя добавить ответ'
                         }]}
                         config={{
-                             mode:'tag',
+                             mode:'multiple',
                              placeholder: 'Выбери один или несколько вопросов',
                              style: {width: '100%'},
                              autoClearSearchValue: true,
                              allowClear: true,
-                             onChange: this.handleSelectProgram,
+                             onChange: this.handleSelectQuestions,
                              disabled:!questionsList.length
                         }}
                         form={this.props.form}
-                        data={{data: questionsList, nameKey: 'name', valueKey: 'key'}}
+                        data={{data: questionsList, nameKey: 'name', valueKey: 'id'}}
                     />
                     <DynamicInputs
                         input={{
@@ -175,7 +207,7 @@ class AddNewAnswer extends Component {
                             validateTrigger: ['onChange', 'onBlur'],
                             rules: [{
                                 whitespace: true,
-                                message: "заполни или удали поле"
+                                message: "Напиши свой вопрос или удали поле"
                             }],
                             placeholder: 'Напиши вопрос',
                             style: {width: '60%', marginRight: 8}
@@ -205,14 +237,12 @@ class AddNewAnswer extends Component {
                                 placeholder="Пиши то, что тебе было самому интересно прочитать. Пиши кратко и просто, вставь картинки, придумывай мемы, снимай видео и фото — просто вставь ссылку на ютуб. Не забудь ссылки на статьи, которые ты использовал."
                                 rows={5} />
                         )}
-
                     </Form.Item>
 
                     <Form.Item>
                         <Button
                             type="primary"
                             htmlType="submit"
-                            onClick={() => {this.props.history.push(this.props.previousLocation)}}
                         >
                             Сохранить изменения в программе
                         </Button>
