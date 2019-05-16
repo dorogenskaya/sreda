@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select, Checkbox} from 'antd';
+import {Form, Button, Checkbox} from 'antd';
 import InputSelect from './Input/InputSelect';
-import DynamicInputs from './Input/DynamicInputs';
+import EditThemeFields from './EditThemeFields';
 import {database} from '../../model/firebase';
 import {Link} from 'react-router-dom';
 
@@ -16,24 +16,12 @@ class EditTheme extends Component {
             themesList: null,
             levelList: null,
             questionsList: [],
-            submitButtonLabel: 'Сохранить тему'
+            submitButtonLabel: 'Сохранить тему',
+            isRemoveMode: false
         }
     }
 
     componentDidMount() {
-        database.ref('themes').once('value', (snapShot) => {
-            let themesSource = snapShot.val(),
-                themesList = [];
-
-            for (let key in themesSource) {
-                themesList.push({id: key, themeName: themesSource[key].themeName})
-            }
-
-            themesList = themesList.sort((a, b) => a.themeName > b.themeName ? 1 : -1);
-
-            this.setState({themesList, themesSource})
-        });
-
         database.ref('programs').once('value', (snapShot) => {
             let data = snapShot.val(),
                 programList = [];
@@ -62,6 +50,23 @@ class EditTheme extends Component {
             subjectsList = subjectsList.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
             this.setState({subjectsList})
         });
+
+        this.loadThemes()
+    }
+
+    loadThemes () {
+        database.ref('themes').once('value', (snapShot) => {
+            let themesSource = snapShot.val(),
+                themesList = [];
+
+            for (let key in themesSource) {
+                themesList.push({id: key, themeName: themesSource[key].themeName})
+            }
+
+            themesList = themesList.sort((a, b) => a.themeName > b.themeName ? 1 : -1);
+
+            this.setState({themesList, themesSource})
+        });
     }
 
     handleSubmit = (e) => {
@@ -70,9 +75,15 @@ class EditTheme extends Component {
             const id = values.theme;
             if (!err) {
                 if (values.removeTheme) {
-                    database.ref(`themes/${id}`).remove().then(()=> {console.log('removed')}).catch((error)=>{console.warm(error)});
+                    database.ref(`themes/${id}`).remove().then(()=> {
+                        this.clearAllFields();
+                        this.loadThemes();
+                    }).catch((error)=>{console.warm(error)});
                 } else {
-                    database.ref(`themes/${id}`).set(this.getPreparedData(values, id));
+                    database.ref(`themes/${id}`).set(this.getPreparedData(values, id)).then(()=>{
+                        this.clearAllFields();
+                        this.loadThemes();
+                    });
                 }
             }
         });
@@ -142,24 +153,33 @@ class EditTheme extends Component {
 
     onRemoveMode = (e) => {
         this.setState({
-            submitButtonLabel: e.target.checked ? 'Удалить тему' :  'Сохранить тему'
+            submitButtonLabel: e.target.checked ? 'Удалить тему' :  'Сохранить тему',
+            isRemoveMode: !!e.target.checked
         })
     }
 
+    clearAllFields () {
+        this.props.form.setFieldsValue({
+            keys: [],
+            questionsList: [],
+            theme: undefined,
+            programList: undefined,
+            levelList: undefined,
+            subjectsList: undefined,
+            removeQuestions: undefined,
+            removeTheme: undefined
+        })
+
+        this.setState({
+            questionsList: []
+        })
+    }
 
     render() {
         const CheckboxGroup = Checkbox.Group;
         const {getFieldDecorator} = this.props.form;
-
-        const checkboxGroup = <div className={'wrapper-remove'}>
-            <h3 className={'title'}>Выберите вопросы для удаления</h3>
-            <Form.Item>
-                {getFieldDecorator('removeQuestions', {})(
-                    <CheckboxGroup options={this.state.questionsList}/>
-                )}
-            </Form.Item>
-        </div>;
-        const removeBlock = this.state.questionsList.length ? checkboxGroup : '';
+        const mainContent = this.state.isRemoveMode ? <h3>{'Для удаления темы нажмите кнопку "Удалить тему"'}</h3> :
+            <EditThemeFields form={this.props.form} programList={this.state.programList} levelList={this.state.levelList} subjectsList={this.state.subjectsList} questionsList={this.state.questionsList} />;
 
         return (
             <div className="wrapper-block">
@@ -181,76 +201,8 @@ class EditTheme extends Component {
                                  data={{data: this.state.themesList, nameKey: 'themeName', valueKey: 'id'}}
                     />
 
-                    <InputSelect name={`programList`}
-                                 label={`Выберите программу`}
-                                 rules={[]}
-                                 config={{
-                                     mode: 'tags',
-                                     placeholder: 'Выберите программу',
-                                     style: {width: '100%'},
-                                     autoClearSearchValue: true,
-                                     allowClear: true,
-                                     onChange: null
-                                 }}
-                                 form={this.props.form}
-                                 data={{data: this.state.programList, nameKey: 'programName', valueKey: 'id'}}
-                    />
+                    {mainContent}
 
-                    <InputSelect name={`levelList`}
-                                 label={`Выберите класс`}
-                                 rules={[]}
-                                 config={{
-                                     mode: 'tags',
-                                     placeholder: 'Выберите класс',
-                                     style: {width: '100%'},
-                                     autoClearSearchValue: true,
-                                     allowClear: true,
-                                     onChange: null
-                                 }}
-                                 form={this.props.form}
-                                 data={{data: this.state.levelList, nameKey: 'label', valueKey: 'id'}}
-                    />
-
-                    <InputSelect name={`subjectsList`}
-                                 label={`Выберите предмет(ы)`}
-                                 rules={[]}
-                                 config={{
-                                     mode: 'tags',
-                                     placeholder: 'Выберите предмет(ы)',
-                                     style: {width: '100%'},
-                                     autoClearSearchValue: true,
-                                     allowClear: true,
-                                     onChange: null
-                                 }}
-                                 form={this.props.form}
-                                 data={{data: this.state.subjectsList, nameKey: 'subjectName', valueKey: 'id'}}
-                    />
-
-                    {removeBlock}
-
-                    <DynamicInputs
-                        input={{
-                            label: 'Добавить новый вопрос в тему',
-                            name: 'questionsList',
-                            validateTrigger: ['onChange', 'onBlur'],
-                            rules: [{
-                                required: true,
-                                whitespace: true,
-                                message: "Пожайлуста, заполните или удалите поле"
-                            }],
-                            placeholder: 'Введите, пожайлуста вопрос',
-                            style: {width: '60%', marginRight: 8}
-                        }}
-                        button={{
-                            label: 'Добавить вопрос в тему',
-                            type: 'dashed',
-                            style: {width: '60%'},
-                            icon: {
-                                type: 'plus'
-                            }
-                        }}
-                        form={this.props.form}
-                    />
                     <Form.Item>
                         {getFieldDecorator('removeTheme', {})(
                             <Checkbox onChange={this.onRemoveMode}>Удалить тему</Checkbox>
