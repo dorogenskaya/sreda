@@ -111,7 +111,7 @@ class AddNewTheme extends Component {
         if (values.questions) {
             questionsArray = values.questions.filter((question) => !!question);
             if (questionsArray.length) {
-                data.guestionsList = questionsArray.map((question) => {
+                data.questionsList = questionsArray.map((question) => {
                     return {question: question}
                 })
             }
