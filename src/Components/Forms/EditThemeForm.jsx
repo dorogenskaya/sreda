@@ -78,7 +78,7 @@ class EditTheme extends Component {
                     database.ref(`themes/${id}`).remove().then(()=> {
                         this.clearAllFields();
                         this.loadThemes();
-                    }).catch((error)=>{console.warm(error)});
+                    }).catch((error)=>{console.warn(error)});
                 } else {
                     database.ref(`themes/${id}`).set(this.getPreparedData(values, id)).then(()=>{
                         this.clearAllFields();
@@ -90,22 +90,24 @@ class EditTheme extends Component {
     };
 
     handleChangeTheme = (id) => {
-        database.ref(`themes/${id}`).once('value', (snapShot) => {
-            let data = snapShot.val(),
-                questionsList = [],
-                {programList, levelList, subjectsList} = data;
+        if (!this.state.isRemoveMode) {
+            database.ref(`themes/${id}`).once('value', (snapShot) => {
+                let data = snapShot.val(),
+                    questionsList = [],
+                    {programList, levelList, subjectsList} = data;
 
-            if (data.questionsList) {
-                data.questionsList.forEach((item, i) => {
-                    questionsList.push({label: item.question, value: i});
-                })
-                questionsList = questionsList.sort((a, b) => a.label > b.label ? 1 : -1)
-            }
+                if (data.questionsList) {
+                    data.questionsList.forEach((item, i) => {
+                        questionsList.push({label: item.question, value: i})
+                    })
+                    questionsList = questionsList.sort((a, b) => a.label > b.label ? 1 : -1)
+                }
 
-            this.props.form.setFieldsValue({programList, levelList, subjectsList})
+                this.props.form.setFieldsValue({programList, levelList, subjectsList})
 
-            this.setState({questionsList});
-        });
+                this.setState({questionsList})
+            })
+        }
     }
 
     getPreparedData(values, id) {
@@ -166,12 +168,12 @@ class EditTheme extends Component {
             programList: undefined,
             levelList: undefined,
             subjectsList: undefined,
-            removeQuestions: undefined,
-            removeTheme: undefined
+            removeQuestions: undefined
         })
 
         this.setState({
-            questionsList: []
+            questionsList: [],
+            isRemoveMode: false
         })
     }
 
@@ -205,7 +207,7 @@ class EditTheme extends Component {
 
                     <Form.Item>
                         {getFieldDecorator('removeTheme', {})(
-                            <Checkbox onChange={this.onRemoveMode}>Удалить тему</Checkbox>
+                            <Checkbox onChange={this.onRemoveMode} checked={this.state.isRemoveMode}>Удалить тему</Checkbox>
                         )}
                     </Form.Item>
                     <Form.Item>
