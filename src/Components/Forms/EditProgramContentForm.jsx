@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Button} from 'antd';
 import DynamicInputs from './Input/DynamicInputs';
 import InputSelect from './Input/InputSelect';
 import { Link } from 'react-router-dom';
@@ -88,8 +88,8 @@ class EditProgramContent extends Component {
 
 
     render() {
-        const {getFieldDecorator, getFieldError} = this.props.form;
-        const {Option} = Select;
+        // const {getFieldDecorator, getFieldError} = this.props.form;
+        // const {Option} = Select;
         console.log(this.state.programsArray);
 
         return (

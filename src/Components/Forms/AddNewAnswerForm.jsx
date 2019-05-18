@@ -14,85 +14,73 @@ class AddNewAnswer extends Component {
             questionsList:[],
             selectedQuestions:[],
             themeActive: {},
-            subjectActive:'',
+            subjectActive:{},
             subjectsList:[],
             themesList:[],
             options:[]
         }
 
-        this.handleClickTheme = this.handleClickTheme.bind(this);
         this.handleSelectTheme = this.handleSelectTheme.bind(this);
-
     }
 
     componentDidMount() {
-        const subjectActive = 'Алгебра';
-        const themeID = this.props.themeId;
+        // console.log('didMount Started');
+        const subjectActive = {
+            key: '-Lb9fI5xXlQWJfDilNru',
+            label:'Алгебра',
+            value: 'Алгебра'
+        };
+        const themeKey = this.props.themeId;
 
-        database.ref('themes/' + themeID).on('value', snapshot => {
-            let themeActive = snapshot.val();
+        database.ref('themes/' + themeKey).once('value', snapshot => {
+            let data = snapshot.val();
+            const themeActive = {
+                key: themeKey,
+                themeName: data.themeName,
+                questionsList: data.questionsList
+            };
+
             let questionsList = themeActive.questionsList.map((item, i) => {
                 return {id: i, name: item.question}
             });
             this.setState({subjectActive, themeActive, questionsList});
-            this.props.form.setFieldsValue({'themes': [subjectActive, themeActive.themeName]})
+            this.props.form.setFieldsValue({'themes': [subjectActive.value, themeActive.themeName]})
         });
-    };
 
-    handleSelectTheme = (value, e) => {
-        const subjectActive = e[0].value;
-        database.ref('themes/' + e[1].id).on('value', snapshot => {
-            let themeActive = snapshot.val();
-            let questionsList = [];
-
-            if (themeActive.questionsList) {
-                themeActive.questionsList.forEach((item, i) => {
-                    questionsList.push({id: i, name: item.question});
-                });
-            }
-            this.setState({subjectActive, themeActive, questionsList, selectedQuestions: []});
-            this.props.form.setFieldsValue({questionsList: undefined})
-
-        });
-    }
-
-    handleClickTheme () {
-        const {subjectsList, themesList} = this.state;
-        if (subjectsList.length && themesList.length){
-            return false;
-        }
-
-        database.ref('subjects').on('value', snapshot => {
+        database.ref('subjects').once('value', snapshot => {
             let subjectsList = [];
             let data = snapshot.val();
 
             for (let key in data) {
-                subjectsList.push({id: key, subjectName: data[key].subjectName});
+                subjectsList.push({key: key, subjectName: data[key].subjectName});
             }
             subjectsList = subjectsList.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
+
             this.setState({subjectsList});
             this.collectOptions();
         });
 
-        database.ref('themes').on('value', snapshot => {
+        database.ref('themes').once('value', snapshot => {
             let themesList = [];
             let data = snapshot.val();
             for (let key in data) {
-                themesList.push({id: key, themeName: data[key].themeName, subjectsID:data[key].subjectsList});
+                themesList.push({key: key, themeName: data[key].themeName, subjectsID:data[key].subjectsList});
             }
             this.setState({themesList});
             this.collectOptions();
         });
-    }
+        // console.log('didMount Finished');
+        this.collectOptions();
+    };
 
     collectOptions() {
-        const {subjectsList, themesList} = this.state;
+      const {subjectsList, themesList} = this.state;
 
         if (subjectsList.length && themesList.length) {
             const collectedArray = subjectsList.map((element1) => {
-                return {key: element1.id, value: element1.subjectName, label: element1.subjectName,
+                return {key: element1.key, value: element1.subjectName, label: element1.subjectName,
                     children: this.renameThemes(themesList.filter(element2 => {
-                        return element2.subjectsID.includes(element1.id)
+                        return element2.subjectsID.includes(element1.key)
                     }))
                 }
             });
@@ -109,59 +97,64 @@ class AddNewAnswer extends Component {
     renameThemes (data) {
         let newThemes = [];
         data.forEach(obj => newThemes.push({
-            value: obj.themeName,
-            label: obj.themeName,
-            id: obj.id
+                value: obj.themeName,
+                label: obj.themeName,
+                key: obj.key
             })
         )
         return newThemes;
+    }
+
+    handleSelectTheme = (value, e) => {
+        const subjectActive = e[0];
+        database.ref('themes/' + e[1].key).once('value', snapshot => {
+            let data = snapshot.val();
+            const themeActive = {
+                key: e[1].key,
+                themeName: data.themeName,
+                questionsList: data.questionsList
+            };
+
+
+            let questionsList = [];
+
+            if (themeActive.questionsList) {
+                themeActive.questionsList.forEach((item, i) => {
+                    questionsList.push({key: i, name: item.question});
+                });
+            }
+            this.setState({subjectActive, themeActive, questionsList, selectedQuestions: []});
+            this.props.form.setFieldsValue({questionsList: undefined})
+        });
     }
 
     handleSelectQuestions = (value) => {
         let questionsList = [...this.state.questionsList];
         let selectedQuestions = questionsList.filter(question => value.includes(question.id));
         this.setState({selectedQuestions});
-
     }
 
-    // clearField(name) {
-    //     let field = {};
-    //     field[name] = null;
-    //     this.props.form.setFieldsValue(field);
-    // }
-
-    handleSubmit = (e) => {
-        console.log(e);
+    handleSubmit = (e, v) => {
         e.preventDefault();
-        console.log(this.state);
-
         this.props.form.validateFields((err, values) => {
-            console.log(err, values);
+            if (!err && values) {
+                const answerData = {
+                    subject: this.state.subjectActive.key,
+                    theme: this.state.themeActive.key,
+                    questionsList: values.questionsList,
+                    title: values.title,
+                    description: values.description
+                }
+                database.ref('answers').push().set(answerData);
+            }
         })
-
         // () => {this.props.history.push(this.props.previousLocation)}
-
-        //     this.props.form.validateFields((err, values) => {
-        //         if (!err && values.themeName) {
-        //             values.themeName.forEach((theme)=> {
-        //                 const data = {
-        //                     themeName: theme,
-        //                     levelList: [values.level],
-        //                     subjectsList: [values.subject],
-        //                     programList: [values.program]
-        //                 }
-        //                 database.ref('themes').push().set(data);
-        //             })
-        //         }
-        //
-        //     });
     };
 
     render() {
         const {getFieldDecorator} = this.props.form;
         const { TextArea } = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
-        console.log(this.props.form, 'fds');
 
         return (
             <div className="wrapper-block">
@@ -169,12 +162,11 @@ class AddNewAnswer extends Component {
                     <Form.Item
                         label="Предмет / Тема">
                         {getFieldDecorator('themes', {
-                            initialValue:[subjectActive, themeActive.themeName]
+                            initialValue:[subjectActive.value, themeActive.themeName]
                         })(
                                <Cascader
                                 name = {'themes'}
                                 options={options}
-                                onClick={this.handleClickTheme}
                                 onChange={(value, e)=>{this.handleSelectTheme(value, e)}}
                                 showSearch={true}
                                 allowClear={false}
@@ -185,7 +177,7 @@ class AddNewAnswer extends Component {
                         name={`questionsList`}
                         label={`Выбери вопросы`}
                         rules={[{
-                            required: true,
+                            required: false,
                             message: 'Без вопросов нельзя добавить ответ'
                         }]}
                         config={{
@@ -200,28 +192,28 @@ class AddNewAnswer extends Component {
                         form={this.props.form}
                         data={{data: questionsList, nameKey: 'name', valueKey: 'id'}}
                     />
-                    <DynamicInputs
-                        input={{
-                            label: 'Добавь новый вопрос в тему',
-                            name: 'question',
-                            validateTrigger: ['onChange', 'onBlur'],
-                            rules: [{
-                                whitespace: true,
-                                message: "Напиши свой вопрос или удали поле"
-                            }],
-                            placeholder: 'Напиши вопрос',
-                            style: {width: '60%', marginRight: 8}
-                        }}
-                        button={{
-                            label: 'Добавить вопрос в тему',
-                            type: 'dashed',
-                            style: {width: '60%'},
-                            icon: {
-                                type: 'plus'
-                            }
-                        }}
-                        form={this.props.form}
-                    />
+                    {/*<DynamicInputs*/}
+                        {/*input={{*/}
+                            {/*label: 'Добавь новый вопрос в тему',*/}
+                            {/*name: 'question',*/}
+                            {/*validateTrigger: ['onChange', 'onBlur'],*/}
+                            {/*rules: [{*/}
+                                {/*whitespace: true,*/}
+                                {/*message: "Напиши свой вопрос или удали поле"*/}
+                            {/*}],*/}
+                            {/*placeholder: 'Напиши вопрос',*/}
+                            {/*style: {width: '60%', marginRight: 8}*/}
+                        {/*}}*/}
+                        {/*button={{*/}
+                            {/*label: 'Добавить вопрос в тему',*/}
+                            {/*type: 'dashed',*/}
+                            {/*style: {width: '60%'},*/}
+                            {/*icon: {*/}
+                                {/*type: 'plus'*/}
+                            {/*}*/}
+                        {/*}}*/}
+                        {/*form={this.props.form}*/}
+                    {/*/>*/}
 
                     <Form.Item
                         label="Заголовок ответа">
@@ -253,5 +245,5 @@ class AddNewAnswer extends Component {
     }
 }
 
-const AddNewAnswerForm = Form.create({ name: 'add_new_answer' })(AddNewAnswer);
+const AddNewAnswerForm = Form.create({name: 'add_new_answer'})(AddNewAnswer);
 export default AddNewAnswerForm;

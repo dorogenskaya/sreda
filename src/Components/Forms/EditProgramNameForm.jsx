@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
 import InputSelect from './Input/InputSelect';
 import { Link } from 'react-router-dom';
 import {database} from '../../model/firebase';
@@ -46,9 +46,7 @@ class EditProgramName extends Component {
     }
 
     render() {
-        const {getFieldDecorator, getFieldError} = this.props.form;
-        const {Option} = Select;
-
+        const {getFieldDecorator} = this.props.form;
         return (
             <div className="wrapper-block">
                 <Form onSubmit={this.handleSubmit}>
