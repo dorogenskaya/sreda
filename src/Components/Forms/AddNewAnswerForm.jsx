@@ -4,7 +4,6 @@ import InputSelect from './Input/InputSelect';
 import {database} from '../../model/firebase';
 import DynamicInputs from './Input/DynamicInputs';
 
-
 class AddNewAnswer extends Component {
     constructor(props) {
         super(props);
@@ -192,28 +191,6 @@ class AddNewAnswer extends Component {
                         form={this.props.form}
                         data={{data: questionsList, nameKey: 'name', valueKey: 'id'}}
                     />
-                    {/*<DynamicInputs*/}
-                        {/*input={{*/}
-                            {/*label: 'Добавь новый вопрос в тему',*/}
-                            {/*name: 'question',*/}
-                            {/*validateTrigger: ['onChange', 'onBlur'],*/}
-                            {/*rules: [{*/}
-                                {/*whitespace: true,*/}
-                                {/*message: "Напиши свой вопрос или удали поле"*/}
-                            {/*}],*/}
-                            {/*placeholder: 'Напиши вопрос',*/}
-                            {/*style: {width: '60%', marginRight: 8}*/}
-                        {/*}}*/}
-                        {/*button={{*/}
-                            {/*label: 'Добавить вопрос в тему',*/}
-                            {/*type: 'dashed',*/}
-                            {/*style: {width: '60%'},*/}
-                            {/*icon: {*/}
-                                {/*type: 'plus'*/}
-                            {/*}*/}
-                        {/*}}*/}
-                        {/*form={this.props.form}*/}
-                    {/*/>*/}
 
                     <Form.Item
                         label="Заголовок ответа">
@@ -235,8 +212,7 @@ class AddNewAnswer extends Component {
                         <Button
                             type="primary"
                             htmlType="submit"
-                        >
-                            Сохранить изменения в программе
+                        >Сохранить ответ
                         </Button>
                     </Form.Item>
                 </Form>
