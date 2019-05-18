@@ -11,7 +11,7 @@ class Admin extends Component {
                     <ul className="NavList">
                         <li><Link className="nav-link" to="/admin/program/add">Добавление новой программы</Link></li>
                         <li><Link className="nav-link" to="/admin/program/edit/name">Редактирование названия программы</Link></li>
-                        <li><Link className="nav-link" to="/admin/program/edit/theme">Редактирование содержимого программы</Link></li>
+                        <li><Link className="nav-link" to="/admin/program/edit">Редактирование содержимого программы</Link></li>
                     </ul>
                     <h3>Добавление и редактирование предметов</h3>
                     <ul className="NavList">
@@ -20,6 +20,7 @@ class Admin extends Component {
                     <h3>Добавление и редактирование тем</h3>
                     <ul className="NavList">
                         <li><Link className="nav-link" to="/admin/theme/add">Добавление новой темы</Link></li>
+                        <li><Link className="nav-link" to="/admin/theme/edit">Редактирование темы</Link></li>
                     </ul>
                 </nav>
             </main>
