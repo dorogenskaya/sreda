@@ -1,10 +1,11 @@
+import {database} from "../model/firebase";
+
+
 const answerS = [
     {name: 'Pizzeria',
         createDate:'1-30-2018',
         description:"fdfsfdfsfdsfdsfdsfdssdffs",
-        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
         creator: 'Lena',
-        rating: 4,
         coinCount: 0,
         id: 12,
         tags:[1],
@@ -15,9 +16,7 @@ const answerS = [
     {name: 'Otto Pizzeria',
         createDate:'1-16-2018',
         description:"fdfssdffs",
-        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
         creator: 'Lena',
-        rating: 4,
         id: 13,
         coinCount: 1380,
         tags:[2],
@@ -29,9 +28,7 @@ const answerS = [
         createDate:'1-18-2018',
         tags:[3,2],
         description:"куцкупцапавпа",
-        videoSrc: 'https://s3.amazonaws.com/codecademy-content/programs/react/ravenous/pizza.jpg',
         creator: 'Lena',
-        rating: 4,
         id: 14,
         coinCount: 10,
         likerList:['Lena Dorogenskaya', 'Jkz Gtnhjdf'],
@@ -39,6 +36,20 @@ const answerS = [
     }
 ];
 
+function getAnswersById(themeKey) {
+    database.ref('themes/' + themeKey).once('value', snapshot => {
+        let data = snapshot.val();
+        const themeActive = {
+            key: themeKey,
+            themeName: data.themeName,
+            questionsList: data.questionsList
+        };
+
+        let questionsList = themeActive.questionsList.map((item, i) => {
+            return {id: i, name: item.question}
+        });
+    });
+}
 const username = 'Lena Dorogenskaya';
 
 export function getAnswers() {

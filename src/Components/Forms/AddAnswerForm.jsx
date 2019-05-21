@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Form, Input, Button, Cascader} from 'antd';
 import InputSelect from './Input/InputSelect';
 import {database} from '../../model/firebase';
-import DynamicInputs from './Input/DynamicInputs';
 
 class AddNewAnswer extends Component {
     constructor(props) {
@@ -10,23 +9,22 @@ class AddNewAnswer extends Component {
 
         this.state = {
             answerData: null,
-            questionsList:[],
-            selectedQuestions:[],
+            questionsList: [],
+            selectedQuestions: [],
             themeActive: {},
-            subjectActive:{},
-            subjectsList:[],
-            themesList:[],
-            options:[]
+            subjectActive: {},
+            subjectsList: [],
+            themesList: [],
+            options: []
         }
 
         this.handleSelectTheme = this.handleSelectTheme.bind(this);
     }
 
     componentDidMount() {
-        // console.log('didMount Started');
         const subjectActive = {
             key: '-Lb9fI5xXlQWJfDilNru',
-            label:'Алгебра',
+            label: 'Алгебра',
             value: 'Алгебра'
         };
         const themeKey = this.props.themeId;
@@ -63,21 +61,21 @@ class AddNewAnswer extends Component {
             let themesList = [];
             let data = snapshot.val();
             for (let key in data) {
-                themesList.push({key: key, themeName: data[key].themeName, subjectsID:data[key].subjectsList});
+                themesList.push({key: key, themeName: data[key].themeName, subjectsID: data[key].subjectsList});
             }
             this.setState({themesList});
             this.collectOptions();
         });
-        // console.log('didMount Finished');
         this.collectOptions();
     };
 
     collectOptions() {
-      const {subjectsList, themesList} = this.state;
+        const {subjectsList, themesList} = this.state;
 
         if (subjectsList.length && themesList.length) {
             const collectedArray = subjectsList.map((element1) => {
-                return {key: element1.key, value: element1.subjectName, label: element1.subjectName,
+                return {
+                    key: element1.key, value: element1.subjectName, label: element1.subjectName,
                     children: this.renameThemes(themesList.filter(element2 => {
                         return element2.subjectsID.includes(element1.key)
                     }))
@@ -85,15 +83,17 @@ class AddNewAnswer extends Component {
             });
 
             const options = this.filterOptions(collectedArray);
-            this.setState({ options });
+            this.setState({options});
         }
     }
 
     filterOptions(collectedArray) {
-        return collectedArray.filter(object => {return object.children.length > 0} );
+        return collectedArray.filter(object => {
+            return object.children.length > 0
+        });
     }
 
-    renameThemes (data) {
+    renameThemes(data) {
         let newThemes = [];
         data.forEach(obj => newThemes.push({
                 value: obj.themeName,
@@ -135,6 +135,10 @@ class AddNewAnswer extends Component {
 
     handleSubmit = (e, v) => {
         e.preventDefault();
+
+        let tempDate = new Date();
+        let createDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
+
         this.props.form.validateFields((err, values) => {
             if (!err && values) {
                 const answerData = {
@@ -142,17 +146,19 @@ class AddNewAnswer extends Component {
                     theme: this.state.themeActive.key,
                     questionsList: values.questionsList,
                     title: values.title,
-                    description: values.description
+                    description: values.description,
+                    createDate: createDate
                 }
-                database.ref('answers').push().set(answerData);
+                database.ref('themes/' + this.state.themeActive.key + '/answersList').push().set(answerData);
+                this.props.history.push(this.props.previousLocation);
             }
+            return err;
         })
-        // () => {this.props.history.push(this.props.previousLocation)}
     };
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        const { TextArea } = Input;
+        const {TextArea} = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
 
         return (
@@ -161,12 +167,14 @@ class AddNewAnswer extends Component {
                     <Form.Item
                         label="Предмет / Тема">
                         {getFieldDecorator('themes', {
-                            initialValue:[subjectActive.value, themeActive.themeName]
+                            initialValue: [subjectActive.value, themeActive.themeName]
                         })(
-                               <Cascader
-                                name = {'themes'}
+                            <Cascader
+                                name={'themes'}
                                 options={options}
-                                onChange={(value, e)=>{this.handleSelectTheme(value, e)}}
+                                onChange={(value, e) => {
+                                    this.handleSelectTheme(value, e)
+                                }}
                                 showSearch={true}
                                 allowClear={false}
                             />
@@ -176,35 +184,43 @@ class AddNewAnswer extends Component {
                         name={`questionsList`}
                         label={`Выбери вопросы`}
                         rules={[{
-                            required: false,
+                            required: true,
                             message: 'Без вопросов нельзя добавить ответ'
                         }]}
                         config={{
-                             mode:'multiple',
-                             placeholder: 'Выбери один или несколько вопросов',
-                             style: {width: '100%'},
-                             autoClearSearchValue: true,
-                             allowClear: true,
-                             onChange: this.handleSelectQuestions,
-                             disabled:!questionsList.length
+                            mode: 'multiple',
+                            placeholder: 'Выбери один или несколько вопросов',
+                            style: {width: '100%'},
+                            autoClearSearchValue: true,
+                            allowClear: true,
+                            onChange: this.handleSelectQuestions,
+                            disabled: !questionsList.length
                         }}
                         form={this.props.form}
                         data={{data: questionsList, nameKey: 'name', valueKey: 'id'}}
                     />
 
                     <Form.Item
-                        label="Заголовок ответа">
+                        label="Заголовок ответа"
+                        rules={[{
+                            required: true,
+                            message: 'Без вопросов нельзя добавить ответ'
+                        }]}>
                         {getFieldDecorator('title', {})(
                             <Input placeholder="Ответы с заголовками читают на 34% чаще"/>
                         )}
                     </Form.Item>
 
                     <Form.Item
-                        label="Ответ">
+                        label="Ответ"
+                        rules={[{
+                            required: true,
+                            message: 'Без вопросов нельзя добавить ответ'
+                        }]}>
                         {getFieldDecorator('description', {})(
                             <TextArea
                                 placeholder="Пиши то, что тебе было самому интересно прочитать. Пиши кратко и просто, вставь картинки, придумывай мемы, снимай видео и фото — просто вставь ссылку на ютуб. Не забудь ссылки на статьи, которые ты использовал."
-                                rows={5} />
+                                rows={5}/>
                         )}
                     </Form.Item>
 
