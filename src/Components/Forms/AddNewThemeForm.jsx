@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Form, Input, Icon, Button, Select} from 'antd';
+import InputSelect from './Input/InputSelect';
 import DynamicInputs from './Input/DynamicInputs';
 import {database} from '../../model/firebase';
 import {Link} from 'react-router-dom';
@@ -11,17 +12,16 @@ class AddNewTheme extends Component {
         super(props);
 
         this.state = {
-            validateThemeStatus: 'success',
-            validateThemeMessage: null,
-            validateSubjectsStatus: 'success',
-            validateSubjectsMessage: null,
             subjectsList: null,
-            themesList: null
+            themesList: null,
+            successMessage: ''
         }
+
+        this.clearSuccessState = this.clearSuccessState.bind(this)
     }
 
     componentDidMount() {
-        database.ref('subjects').on('value', (snapShot) => {
+        database.ref('subjects').once('value', (snapShot) => {
             let data = snapShot.val(),
                 arraySubjects = [];
 
@@ -35,100 +35,53 @@ class AddNewTheme extends Component {
                 subjectsList: arraySubjects
             })
         });
-
-        database.ref('themes').on('value', (snapShot) => {
-            let data = snapShot.val(),
-                arrayThemes = [];
-
-            for (let key in data) {
-                arrayThemes.push(data[key].themeName)
-            }
-
-            if (!this.state.themesList) {
-                this.setState({
-                    themesList: arrayThemes
-                })
-            } else {
-                this.setState({
-                    themesList: arrayThemes,
-                    validateThemeStatus: 'success',
-                    validateThemeMessage: `Тема "${arrayThemes[arrayThemes.length - 1]}" была успешно добавлен`
-                })
-            }
-
-            this.setState({
-                themesList: arrayThemes
-            })
-        })
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            let data = this.normalizeData(values);
-            if (!err && data) {
-                database.ref('themes').push().set(data);
+            if (!err) {
+                let data = this.normalizeData(values),
+                    newKey = database.ref('theme').push().key,
+                    newRefList;
+
+                database.ref(`themes/${newKey}`).set(data).then(()=>{
+                    if (values.questions) {
+                        newRefList = newRefList = database.ref(`themes/${newKey}/questionsList`);
+                        values.questions.forEach(item => {
+                            newRefList.push({question: item});
+                        })
+                    }
+                    this.setState({
+                        successMessage: 'Новая тема успешно добавлена'
+                    })
+                });
             }
         });
     };
 
-    normalizeData(values) {
-        let isValid = true,
-            questionsArray,
-            data = {};
-        if (!values.themeName) {
-            isValid = false;
-            this.setState({
-                validateThemeStatus: 'error',
-                validateThemeMessage: 'Пожайлуста, добавьте название темы'
-            })
-        } else {
-            data.themeName = values.themeName;
-            this.setState({
-                validateThemeStatus: 'success',
-                validateThemeMessage: null
-            })
-        }
 
-        if (!values.subjectsList || !values.subjectsList.length) {
-            isValid = false;
-            this.setState({
-                validateSubjectsStatus: 'error',
-                validateSubjectsMessage: 'Пожайлуста, выберите предмет(ы)'
-            })
-        } else {
-            data.subjectsList = values.subjectsList;
-            this.setState({
-                validateSubjectsStatus: 'success',
-                validateSubjectsMessage: null,
-            })
-        }
+    normalizeData (values) {
+        let questionsArray,
+            data = {
+                themeName: values.themeName,
+                subjectsList: values.subjectsList
+            };
 
         if (values.themeDescription) {
             data.themeDescription = values.themeDescription;
         }
 
-        if (values.questions) {
-            questionsArray = values.questions.filter((question) => !!question);
-            if (questionsArray.length) {
-                data.questionsList = questionsArray.map((question) => {
-                    return {question: question}
-                })
-            }
-        }
-
-        return isValid ? data : isValid;
+        return data;
     }
 
+    clearSuccessState () {
+        this.setState({
+            successMessage: ''
+        })
+    }
     render() {
-        const {getFieldDecorator, getFieldValue} = this.props.form;
-        getFieldDecorator('keys', {initialValue: []});
-        const {Option} = Select;
-        let children = [];
-        if (this.state.subjectsList) {
-            this.state.subjectsList.map((item, i) => children.push(<Option key={i}
-                                                                           value={item.key}>{item.subjectName}</Option>));
-        }
+        const {getFieldDecorator} = this.props.form;
 
         return (
             <div className="wrapper-block">
@@ -139,10 +92,9 @@ class AddNewTheme extends Component {
                         validateStatus={this.state.validateThemeStatus}
                         help={this.state.validateThemeMessage}>
                         {getFieldDecorator('themeName', {
-                            rules: [{required: true}],
+                            rules: [{required: true, message: 'Заполнита, пожайлуста, поле'}]
                         })(
-                            <Input name="themeName"
-                                   placeholder="Добавить новую тему"/>
+                            <Input name="themeName" placeholder="Добавить новую тему" onFocus={this.clearSuccessState}/>
                         )}
                     </Form.Item>
                     <Form.Item
@@ -151,26 +103,25 @@ class AddNewTheme extends Component {
                             <Input name="themeDescription" placeholder="Добавить описание темы"/>
                         )}
                     </Form.Item>
-                    <Form.Item
-                        label="Выберите предмет(ы)"
-                        required
-                        validateStatus={this.state.validateSubjectsStatus}
-                        help={this.state.validateSubjectsMessage}>
-                        {getFieldDecorator('subjectsList', {
-                            rules: [{required: true}],
-                        })(
-                            <Select
-                                mode={'tags'}
-                                placeholder={'Выберите предмет'}
-                                name={'subjectsList'}
-                                style={{width: '100%'}}
-                                autoClearSearchValue={true}
-                                allowClear={true}
-                            >
-                                {children}
-                            </Select>
-                        )}
-                    </Form.Item>
+
+                    <InputSelect name={`subjectsList`}
+                                 label={`Выберите предмет(ы)`}
+                                 rules={[{
+                                     required: true,
+                                     message: 'Выберите предмет'
+                                 }]}
+                                 config={{
+                                     mode: 'tags',
+                                     placeholder: 'Выберите предмет',
+                                     style: {width: '100%'},
+                                     autoClearSearchValue: true,
+                                     allowClear: true,
+                                     onChange: null
+                                 }}
+                                 form={this.props.form}
+                                 data={{data: this.state.subjectsList, nameKey: 'subjectName', valueKey: 'key'}}
+                    />
+
                     <DynamicInputs
                         input={{
                             label: 'Добавить новый вопрос в тему',
@@ -197,6 +148,7 @@ class AddNewTheme extends Component {
                     <Form.Item>
                         <Button type="primary" htmlType="submit">Добавить тему</Button>
                     </Form.Item>
+                    <div className="success-message">{this.state.successMessage}</div>
                 </Form>
                 <div className="back-link">
                     <Link className="nav-link" to="/admin">Вернуться назад</Link>
