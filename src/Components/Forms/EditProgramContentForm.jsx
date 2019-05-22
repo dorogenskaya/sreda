@@ -70,6 +70,7 @@ class EditProgramContent extends Component {
         // const {Option} = Select;
         console.log(this.state.programsArray);
 
+
         return (
             <div className="wrapper-block">
                 <Form onSubmit={this.handleSubmit}>
