@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Input, Icon, Button} from 'antd';
 import InputSelect from './Input/InputSelect';
 import { Link } from 'react-router-dom';
 import {database} from '../../model/firebase';
 
 class EditProgramName extends Component {
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
 
         this.state = {
             programsData: null,
@@ -42,15 +42,11 @@ class EditProgramName extends Component {
 
     handleSelectProgram(val) {
         const programName = val ? this.state.programsData[val].programName : null;
-        this.props.form.setFieldsValue({
-            programName: programName
-        })
+        this.props.form.setFieldsValue({programName})
     }
 
     render() {
-        const {getFieldDecorator, getFieldError} = this.props.form;
-        const {Option} = Select;
-
+        const {getFieldDecorator} = this.props.form;
         return (
             <div className="wrapper-block">
                 <Form onSubmit={this.handleSubmit}>
@@ -58,9 +54,10 @@ class EditProgramName extends Component {
                                  label={`Выберите программу`}
                                  rules={[{
                                      required: true,
-                                     message: 'Выберите редактируюемую программу'
+                                     message: 'Выберите редактируемую программу'
                                  }]}
                                  config={{
+                                     mode:'tag',
                                      placeholder: 'Выберите программу',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,

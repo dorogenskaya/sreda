@@ -1,205 +1,225 @@
 import React, {Component} from 'react';
 import {Form, Input, Button, Cascader} from 'antd';
+import InputSelect from './Input/InputSelect';
 import {database} from '../../model/firebase';
+import DynamicInputs from './Input/DynamicInputs';
 
 class AddNewAnswer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            validateMessage: null,
-            validateStatus: 'success',
-            subjectsList: [],
-            themesList: [],
+            answerData: null,
             questionsList:[],
-            themeActive: this.props.id,
-            subjectActive:'Алгебра',
+            selectedQuestions:[],
+            themeActive: {},
+            subjectActive:{},
+            subjectsList:[],
+            themesList:[],
+            options:[]
         }
+
+        this.handleSelectTheme = this.handleSelectTheme.bind(this);
     }
 
     componentDidMount() {
-        database.ref('subjects').on('value', (snapShot) => {
-            let data = snapShot.val(),
-                arraySubjects = [];
+        // console.log('didMount Started');
+        const subjectActive = {
+            key: '-Lb9fI5xXlQWJfDilNru',
+            label:'Алгебра',
+            value: 'Алгебра'
+        };
+        const themeKey = this.props.themeId;
+
+        database.ref('themes/' + themeKey).once('value', snapshot => {
+            let data = snapshot.val();
+            const themeActive = {
+                key: themeKey,
+                themeName: data.themeName,
+                questionsList: data.questionsList
+            };
+
+            let questionsList = themeActive.questionsList.map((item, i) => {
+                return {id: i, name: item.question}
+            });
+            this.setState({subjectActive, themeActive, questionsList});
+            this.props.form.setFieldsValue({'themes': [subjectActive.value, themeActive.themeName]})
+        });
+
+        database.ref('subjects').once('value', snapshot => {
+            let subjectsList = [];
+            let data = snapshot.val();
 
             for (let key in data) {
-                arraySubjects.push({key: key, subjectName: data[key].subjectName})
+                subjectsList.push({key: key, subjectName: data[key].subjectName});
             }
+            subjectsList = subjectsList.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
 
-            arraySubjects = arraySubjects.sort((a, b) => a.subjectName > b.subjectName ? 1 : -1);
-
-            this.setState({
-                subjectsList: arraySubjects
-            })
+            this.setState({subjectsList});
+            this.collectOptions();
         });
 
-        database.ref('themes').on('value', (snapShot) => {
-            let data = snapShot.val(),
-                arrayThemes = [];
-
+        database.ref('themes').once('value', snapshot => {
+            let themesList = [];
+            let data = snapshot.val();
             for (let key in data) {
-                arrayThemes.push(data[key].themeName)
+                themesList.push({key: key, themeName: data[key].themeName, subjectsID:data[key].subjectsList});
             }
-
-            this.setState({
-                themesList: arrayThemes
-            })
+            this.setState({themesList});
+            this.collectOptions();
         });
+        // console.log('didMount Finished');
+        this.collectOptions();
     };
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let data = this.normalizeData(values);
-            if (!err && data) {
+    collectOptions() {
+      const {subjectsList, themesList} = this.state;
 
-                // need to add theme ID
-            database.ref('themes/' + + 'answer/').push().set(data);
-            }
-        });
-    };
+        if (subjectsList.length && themesList.length) {
+            const collectedArray = subjectsList.map((element1) => {
+                return {key: element1.key, value: element1.subjectName, label: element1.subjectName,
+                    children: this.renameThemes(themesList.filter(element2 => {
+                        return element2.subjectsID.includes(element1.key)
+                    }))
+                }
+            });
 
-    normalizeData (values) {
-        let isValid = true,
-            data = {};
-
-        if (!values.answerName) {
-            isValid = false;
-            this.setState({
-                validateStatus: 'error',
-                validateMessage: 'Добавь описание ответа'
-            })
-        } else {
-            data.answerName = values.answerName;
-            this.setState({
-                validateStatus: 'success',
-                validateMessage: null
-            })
+            const options = this.filterOptions(collectedArray);
+            this.setState({ options });
         }
-
-        if (!values.answerDescription) {
-            isValid = false;
-            this.setState({
-                validateStatus: 'error',
-                validateMessage: 'Напиши ответ'
-            })
-        } else {
-            data.answerDescription = values.answerDescription;
-            this.setState({
-                validateStatus: 'success',
-                validateMessage: null,
-            })
-        }
-
-        if (!values.subjectsList || !values.subjectsList.length) {
-            isValid = false;
-            this.setState({
-                validateStatus: 'error',
-                validateMessage: 'Пожайлуста, выберите предмет(ы)'
-            })
-        } else {
-            data.subjectsList = values.subjectsList;
-            this.setState({
-                validateStatus: 'success',
-                validateMessage: null,
-            })
-        }
-
-        if (!values.questionsList || !values.questionsList.length) {
-            isValid = false;
-            this.setState({
-                validateStatus: 'error',
-                validateMessage: 'Пожайлуста, выберите предмет(ы)'
-            })
-        } else {
-            data.questionsList = values.questionsList;
-            this.setState({
-                validateStatus: 'success',
-                validateMessage: null,
-            })
-        }
-        return isValid ? data : isValid;
     }
 
-    render() {
-        // const {getFieldDecorator} = this.props.form;
-        const {themeActive, subjectActive, subjectsList, themesList, validateStatus, validateMessage} = this.state;
-        const { TextArea } = Input;
+    filterOptions(collectedArray) {
+        return collectedArray.filter(object => {return object.children.length > 0} );
+    }
 
-        function onChange(value) {
-            console.log(value);
-        }
-
-        const array2 =[
-            {test: 'Theme name 1', subjects:['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 2', subjects:['-Lb9fI5xXlQWJfDilNru']},
-            {test: 'Theme name 3', subjects:['-tytrxXlQWJfDilNru','-fdsQWJfDilNtu']}
-        ];
-
-        const createNestedArray = (array1, array2) => {
-            return array1
-                .map(element1 => {return {value: element1.subjectName, label: element1.subjectName, children: array2
-                    .filter((element2) => {
-                        if (!element2.subjects.includes(element1.key)) return null;
-                        return(
-                            {value: element2.test, label: element2.test}
-                        );
-                    })
-                };
+    renameThemes (data) {
+        let newThemes = [];
+        data.forEach(obj => newThemes.push({
+                value: obj.themeName,
+                label: obj.themeName,
+                key: obj.key
             })
-        };
+        )
+        return newThemes;
+    }
 
-        const options = createNestedArray(subjectsList, array2);
-        console.log(options);
+    handleSelectTheme = (value, e) => {
+        const subjectActive = e[0];
+        database.ref('themes/' + e[1].key).once('value', snapshot => {
+            let data = snapshot.val();
+            const themeActive = {
+                key: e[1].key,
+                themeName: data.themeName,
+                questionsList: data.questionsList
+            };
+
+
+            let questionsList = [];
+
+            if (themeActive.questionsList) {
+                themeActive.questionsList.forEach((item, i) => {
+                    questionsList.push({key: i, name: item.question});
+                });
+            }
+            this.setState({subjectActive, themeActive, questionsList, selectedQuestions: []});
+            this.props.form.setFieldsValue({questionsList: undefined})
+        });
+    }
+
+    handleSelectQuestions = (value) => {
+        let questionsList = [...this.state.questionsList];
+        let selectedQuestions = questionsList.filter(question => value.includes(question.id));
+        this.setState({selectedQuestions});
+    }
+
+    handleSubmit = (e, v) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err && values) {
+                const answerData = {
+                    subject: this.state.subjectActive.key,
+                    theme: this.state.themeActive.key,
+                    questionsList: values.questionsList,
+                    title: values.title,
+                    description: values.description
+                }
+                database.ref('answers').push().set(answerData);
+            }
+        })
+        // () => {this.props.history.push(this.props.previousLocation)}
+    };
+
+    render() {
+        const {getFieldDecorator} = this.props.form;
+        const { TextArea } = Input;
+        const {themeActive, subjectActive, questionsList, options} = this.state;
 
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Form.Item
-                    label="Предмет / Тема"
-                    validateStatus={validateStatus}
-                    help={validateMessage}
-                >
-                    <Cascader defaultValue={[subjectActive, themeActive]}
-                              options={options}
-
-                              onChange={onChange}
+            <div className="wrapper-block">
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Item
+                        label="Предмет / Тема">
+                        {getFieldDecorator('themes', {
+                            initialValue:[subjectActive.value, themeActive.themeName]
+                        })(
+                               <Cascader
+                                name = {'themes'}
+                                options={options}
+                                onChange={(value, e)=>{this.handleSelectTheme(value, e)}}
+                                showSearch={true}
+                                allowClear={false}
+                            />
+                        )}
+                    </Form.Item>
+                    <InputSelect
+                        name={`questionsList`}
+                        label={`Выбери вопросы`}
+                        rules={[{
+                            required: false,
+                            message: 'Без вопросов нельзя добавить ответ'
+                        }]}
+                        config={{
+                             mode:'multiple',
+                             placeholder: 'Выбери один или несколько вопросов',
+                             style: {width: '100%'},
+                             autoClearSearchValue: true,
+                             allowClear: true,
+                             onChange: this.handleSelectQuestions,
+                             disabled:!questionsList.length
+                        }}
+                        form={this.props.form}
+                        data={{data: questionsList, nameKey: 'name', valueKey: 'id'}}
                     />
-                </Form.Item>
 
-                <Form.Item
-                    label="Заголовок"
-                    validateStatus={validateStatus}
-                    help={validateMessage}>
-                    <Input placeholder="Ответы с заголовками читают на 34% чаще" />
-                </Form.Item>
+                    <Form.Item
+                        label="Заголовок ответа">
+                        {getFieldDecorator('title', {})(
+                            <Input placeholder="Ответы с заголовками читают на 34% чаще"/>
+                        )}
+                    </Form.Item>
 
-                <Form.Item
-                    label="Ответ"
-                    validateStatus={validateStatus}
-                    help={validateMessage}>
-                    <TextArea
-                        placeholder="Пиши то, что тебе было самому интересно прочитать. Пиши кратко и просто, вставь картинки, придумывай мемы, снимай видео и фото — просто вставь ссылку на ютуб. Не забудь ссылки на статьи, которые ты использовал."
-                        rows={5} />
-                </Form.Item>
+                    <Form.Item
+                        label="Ответ">
+                        {getFieldDecorator('description', {})(
+                            <TextArea
+                                placeholder="Пиши то, что тебе было самому интересно прочитать. Пиши кратко и просто, вставь картинки, придумывай мемы, снимай видео и фото — просто вставь ссылку на ютуб. Не забудь ссылки на статьи, которые ты использовал."
+                                rows={5} />
+                        )}
+                    </Form.Item>
 
-                <Form.Item>
-
-                    {/*submit without errors ? {this.props.history.push(this.props.previousLocation)} :  */}
-                    <Button
-                        onClick={() => {this.props.history.push(this.props.previousLocation)}}
-                        type="primary"
-                        htmlType="submit"
-                    >
-                        Добавить ответ
-                    </Button>
-                </Form.Item>
-
-            </Form>
-
-
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                        >Сохранить ответ
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
         );
     }
 }
 
-const AddNewAnswerForm = Form.create({ name: 'add_new_answer' })(AddNewAnswer);
+const AddNewAnswerForm = Form.create({name: 'add_new_answer'})(AddNewAnswer);
 export default AddNewAnswerForm;

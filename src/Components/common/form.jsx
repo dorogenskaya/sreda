@@ -92,7 +92,7 @@ class Form extends Component {
 
                 <Input size="large" className="form-control"
                        placeholder={label}
-                       type={type}
+                       // type={type}
                        id={name}
                        name={name}
                        value={data[name]}

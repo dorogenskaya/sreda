@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Button} from 'antd';
 import DynamicInputs from './Input/DynamicInputs';
 import InputSelect from './Input/InputSelect';
 import { Link } from 'react-router-dom';
 import {database} from '../../model/firebase';
 
 class EditProgramContent extends Component {
-    constructor(prop) {
-        super(prop);
+    constructor(props) {
+        super(props);
 
         this.state = {
             programsData: null,
@@ -66,6 +66,10 @@ class EditProgramContent extends Component {
     }
 
     render() {
+        // const {getFieldDecorator, getFieldError} = this.props.form;
+        // const {Option} = Select;
+        console.log(this.state.programsArray);
+
         return (
             <div className="wrapper-block">
                 <Form onSubmit={this.handleSubmit}>
