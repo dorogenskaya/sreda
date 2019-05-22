@@ -15,9 +15,6 @@ class EditProgramContent extends Component {
             levelsList: null,
             subjectsList: null
         }
-
-        this.handleSelectProgram = this.handleSelectProgram.bind(this);
-        this.handleSelectLevel = this.handleSelectLevel.bind(this);
     }
 
     componentDidMount() {
@@ -33,10 +30,21 @@ class EditProgramContent extends Component {
             })
         })
 
-        database.ref('subjects').on('value', (snapShot) => {
+        database.ref('levels').on('value', (snapShot) => {
             this.setState({
-                subjectsData: snapShot.val()
+                levelsList: snapShot.val()
             })
+        })
+
+        database.ref('subjects').on('value', (snapShot) => {
+            let subjectsData = snapShot.val(),
+                subjectsArray = [];
+
+            for (let key in subjectsData) {
+                subjectsArray.push({id: key, subjectName: subjectsData[key].subjectName})
+            }
+            subjectsArray = subjectsArray.sort((a, b)=> a.subjectName > b.subjectName ? 1 : -1);
+            this.setState({subjectsArray});
         })
     }
 
@@ -47,45 +55,15 @@ class EditProgramContent extends Component {
                 values.themeName.forEach((theme)=> {
                     const data = {
                         themeName: theme,
-                        levelList: [values.level],
-                        subjectsList: [values.subject],
-                        programList: [values.program]
+                        levelList: values.level,
+                        subjectsList: values.subject,
+                        programList: values.program
                     }
                     database.ref('themes').push().set(data);
                 })
             }
-
         });
     }
-
-    handleSelectProgram(val) {
-        const {levelList} = this.state.programsData[val];
-        this.setState({
-            levelsList: levelList,
-            subjectsList: null
-        });
-        this.clearField('subject');
-    }
-
-    handleSelectLevel(val) {
-        let subjectsArray = [];
-
-        for (let key in this.state.subjectsData) {
-            if (this.state.subjectsData[key].levelList.includes(val)) {
-                subjectsArray.push({id: key, subjectName: this.state.subjectsData[key].subjectName});
-            }
-        }
-
-        this.setState({subjectsArray});
-        this.clearField('subject');
-    }
-
-    clearField(name) {
-        let field = {};
-        field[name] = '';
-        this.props.form.setFieldsValue(field);
-    }
-
 
     render() {
         // const {getFieldDecorator, getFieldError} = this.props.form;
@@ -102,11 +80,12 @@ class EditProgramContent extends Component {
                                      message: 'Выберите редактируюемую программу'
                                  }]}
                                  config={{
+                                     mode: 'tags',
                                      placeholder: 'Выберите программу',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
                                      allowClear: true,
-                                     onChange: this.handleSelectProgram
+                                     onChange: null
                                  }}
                                  form={this.props.form}
                                  data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
@@ -118,11 +97,12 @@ class EditProgramContent extends Component {
                                      message: 'Пожайлуста, выберите класс'
                                  }]}
                                  config={{
+                                     mode: 'tags',
                                      placeholder: 'Выберите класс',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
                                      allowClear: true,
-                                     onChange: this.handleSelectLevel
+                                     onChange: null
                                  }}
                                  form={this.props.form}
                                  data={{data: this.state.levelsList, nameKey: 'label', valueKey: 'id'}}
@@ -134,6 +114,7 @@ class EditProgramContent extends Component {
                                      message: 'Пожайлуста, выберите предмет'
                                  }]}
                                  config={{
+                                     mode: 'tags',
                                      placeholder: 'Выберите предмет',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
