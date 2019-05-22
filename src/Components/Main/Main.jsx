@@ -13,6 +13,8 @@ import AddNewProgramForm from "../Forms/AddNewProgramForm";
 import EditProgramNameForm from "../Forms/EditProgramNameForm";
 import EditProgramContentForm from "../Forms/EditProgramContentForm";
 import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
+import AddNewThemeForm from '../Forms/AddNewThemeForm';
+import EditThemeForm from '../Forms/EditThemeForm';
 
 class Main extends Component {
     render() {
@@ -29,8 +31,10 @@ class Main extends Component {
                     <Route path='/' exact component={Home}/>
                     <Route path="/admin/program/add" component={AddNewProgramForm}/>
                     <Route path="/admin/program/edit/name" component={EditProgramNameForm}/>
-                    <Route path="/admin/program/edit/theme" component={EditProgramContentForm}/>
+                    <Route path="/admin/program/edit" component={EditProgramContentForm}/>
                     <Route path="/admin/subject/add" component={AddNewSubjectForm}/>
+                    <Route path="/admin/theme/add" component={AddNewThemeForm}/>
+                    <Route path="/admin/theme/edit" component={EditThemeForm}/>
                     <Redirect to="/not-found"/>
                 </Switch>
                 <Route path="/themes/:id/create-answer"
