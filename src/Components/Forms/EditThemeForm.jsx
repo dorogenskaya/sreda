@@ -58,7 +58,6 @@ class EditTheme extends Component {
         database.ref('themes').once('value', (snapShot) => {
             let themesSource = snapShot.val(),
                 themesList = [];
-
             for (let key in themesSource) {
                 themesList.push({id: key, themeName: themesSource[key].themeName})
             }
@@ -72,8 +71,8 @@ class EditTheme extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            const id = values.theme;
             if (!err) {
+                const id = values.theme;
                 if (values.removeTheme) {
                     database.ref(`themes/${id}`).remove().then(()=> {
                         this.clearAllFields();
@@ -81,6 +80,11 @@ class EditTheme extends Component {
                     }).catch((error)=>{console.warn(error)});
                 } else {
                     database.ref(`themes/${id}`).set(this.getPreparedData(values, id)).then(()=>{
+                        if (values.questionsList) {
+                            values.questionsList.forEach(item => {
+                                database.ref(`themes/${id}/questionsList`).push({question: item})
+                            })
+                        }
                         this.clearAllFields();
                         this.loadThemes();
                     });
@@ -97,9 +101,9 @@ class EditTheme extends Component {
                     {programList, levelList, subjectsList} = data;
 
                 if (data.questionsList) {
-                    data.questionsList.forEach((item, i) => {
-                        questionsList.push({label: item.question, value: i})
-                    })
+                    for (let key in data.questionsList) {
+                        questionsList.push({label: data.questionsList[key].question, value: key})
+                    }
                     questionsList = questionsList.sort((a, b) => a.label > b.label ? 1 : -1)
                 }
 
@@ -113,30 +117,15 @@ class EditTheme extends Component {
     getPreparedData(values, id) {
         let data = {},
             removeList,
-            questionsList = this.state.questionsList.map((item) => {return {question: item.label}});
+            questionsList = {};
 
-        if (values.removeQuestions) {
-            removeList = values.removeQuestions.sort((a, b) => a < b ? 1 : -1);
-            removeList.forEach((item) => {
-                questionsList.splice(item, 1);
+        if (this.state.questionsList.length) {
+            this.state.questionsList.forEach(item => {
+                if (!values.removeQuestions || !values.removeQuestions.includes(item.value)) {
+                    questionsList[item.value] = {question: item.label}
+                }
             })
             data.questionsList = questionsList;
-
-        }
-
-        if (questionsList || values.questionsList) {
-            if (!data.questionsList) {
-                data.questionsList = questionsList || [];
-            }
-
-            if (values.questionsList) {
-                values.questionsList.forEach((newItem) => {
-                    let oldItems = data.questionsList.filter((oldItem) => oldItem.question === newItem);
-                    if (!oldItems.length) {
-                        data.questionsList.push({question: newItem});
-                    }
-                })
-            }
         }
 
         for (let key in values) {
