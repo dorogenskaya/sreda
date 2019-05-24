@@ -10,8 +10,44 @@ import {getQuestions} from '../../services/fakeQuestionService';
 
 import  _ from 'lodash';
 import './Theme.css';
+import {database} from '../../model/firebase';
 
 let username = getUsername();
+
+function getAnswersDynamic(themeKey) {
+    database.ref('themes/' + themeKey).once('value', snapshot => {
+        let data = snapshot.val();
+
+        console.log(data);
+
+        //return array of answers from theme.answersList
+        //key, title, tags(array of keys of questions), description, with check  - creator, coinCount,  likerList, liked
+
+        //return theme.description and theme.themeName, subjectList
+
+        //return questionList
+
+        // const answer = {
+        //     key: themeKey,
+        //     themeName: data.themeName,
+        //     questionsList: data.questionsList,
+        //
+        //     createDate: data.createDate,
+        //     tags:[3,2],
+        //     description:"куцкупцапавпа",
+        //     creator: 'Lena',
+        //     id: 14,
+        //     coinCount: 10,
+        //     likerList:['Lena Dorogenskaya', 'Jkz Gtnhjdf'],
+        //     liked: true
+        // };
+
+        // let questionsList = themeActive.questionsList.map((item, i) => {
+        //     return {id: i, name: item.question}
+        // });
+    });
+}
+
 
 class Theme extends Component {
     constructor(props) {
@@ -24,6 +60,7 @@ class Theme extends Component {
             pageSize: 2,
             selectedQuestion: 0,
             sortState: 'createDate',
+            themeActive: '-LfViy9MwyKAAk1QCyJO'
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
@@ -31,6 +68,8 @@ class Theme extends Component {
     componentDidMount() {
         const questions = [...getQuestions()];
         this.setState({ answers: getAnswers(), questions });
+        getAnswersDynamic(this.state.themeActive);
+        console.log(this.state.themeActive);
     }
 
     handleSort = (sortState) => {

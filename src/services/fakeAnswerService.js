@@ -35,21 +35,33 @@ const answerS = [
         liked: true
     }
 ];
+//
+// function getAnswersById(themeKey) {
+//     database.ref('themes/' + themeKey).once('value', snapshot => {
+//         let data = snapshot.val();
+//
+//
+//         // const answer = {
+//         //     key: themeKey,
+//         //     themeName: data.themeName,
+//         //     questionsList: data.questionsList,
+//         //
+//         //     createDate: data.createDate,
+//         //     tags:[3,2],
+//         //     description:"куцкупцапавпа",
+//         //     creator: 'Lena',
+//         //     id: 14,
+//         //     coinCount: 10,
+//         //     likerList:['Lena Dorogenskaya', 'Jkz Gtnhjdf'],
+//         //     liked: true
+//         // };
+//
+//         let questionsList = themeActive.questionsList.map((item, i) => {
+//             return {id: i, name: item.question}
+//         });
+//     });
+// }
 
-function getAnswersById(themeKey) {
-    database.ref('themes/' + themeKey).once('value', snapshot => {
-        let data = snapshot.val();
-        const themeActive = {
-            key: themeKey,
-            themeName: data.themeName,
-            questionsList: data.questionsList
-        };
-
-        let questionsList = themeActive.questionsList.map((item, i) => {
-            return {id: i, name: item.question}
-        });
-    });
-}
 const username = 'Lena Dorogenskaya';
 
 export function getAnswers() {

@@ -39,7 +39,7 @@ class Main extends Component {
                 </Switch>
                 <Route path="/themes/:id/create-answer"
                        render={(props) => (
-                           <CreateAnswerDrawer {...props} themeId={'-Lc7CNosXWq3ZdZvnnRf'}/>
+                           <CreateAnswerDrawer {...props} themeId={'-LfViy9MwyKAAk1QCyJO'}/>
                        )}
                 />
             </main>

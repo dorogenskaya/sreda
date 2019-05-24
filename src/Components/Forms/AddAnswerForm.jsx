@@ -23,23 +23,26 @@ class AddNewAnswer extends Component {
 
     componentDidMount() {
         const subjectActive = {
-            key: '-Lb9fI5xXlQWJfDilNru',
-            label: 'Алгебра',
-            value: 'Алгебра'
+            key: '-LbdUWtpbnCB-4q9bG16',
+            label: 'Белорусский язык',
+            value: 'Белорусский язык'
         };
         const themeKey = this.props.themeId;
 
         database.ref('themes/' + themeKey).once('value', snapshot => {
             let data = snapshot.val();
+            let questionsObject = data.questionsList;
+            let questionsList = [];
+
+            for (let key in questionsObject){
+                questionsList.push({id: key, name: questionsObject[key].question});
+            }
+
             const themeActive = {
                 key: themeKey,
                 themeName: data.themeName,
-                questionsList: data.questionsList
+                questionsList: questionsList
             };
-
-            let questionsList = themeActive.questionsList.map((item, i) => {
-                return {id: i, name: item.question}
-            });
             this.setState({subjectActive, themeActive, questionsList});
             this.props.form.setFieldsValue({'themes': [subjectActive.value, themeActive.themeName]})
         });
@@ -47,7 +50,6 @@ class AddNewAnswer extends Component {
         database.ref('subjects').once('value', snapshot => {
             let subjectsList = [];
             let data = snapshot.val();
-
             for (let key in data) {
                 subjectsList.push({key: key, subjectName: data[key].subjectName});
             }
@@ -149,7 +151,7 @@ class AddNewAnswer extends Component {
                     description: values.description,
                     createDate: createDate
                 }
-                database.ref('themes/' + this.state.themeActive.key + '/answersList').push().set(answerData);
+                database.ref('answers').push().set(answerData);
                 this.props.history.push(this.props.previousLocation);
             }
             return err;
