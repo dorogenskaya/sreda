@@ -5,5 +5,7 @@ export const questionS = [
 ];
 
 export function getQuestions() {
-    return questionS.filter(q => q);
+    // return questionS.filter(q => q);
+    return questionS;
+
 }

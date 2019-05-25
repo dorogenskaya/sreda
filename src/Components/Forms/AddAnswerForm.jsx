@@ -151,7 +151,7 @@ class AddNewAnswer extends Component {
                     description: values.description,
                     createDate: createDate
                 }
-                database.ref('answers').push().set(answerData);
+                database.ref('answers/' + this.state.themeActive.key).push().set(answerData);
                 this.props.history.push(this.props.previousLocation);
             }
             return err;
