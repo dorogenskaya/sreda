@@ -42,7 +42,7 @@ class Theme extends Component {
                 name: answer.title,
                 tags: answer.questionsList,
                 createDate: answer.createDate,
-                description: answer.questionsList,
+                description: answer.description,
                 creator: answer.creator,
                 id: key,
                 coinCount: !answer.coinCount ? 0 : answer.coinCount,
