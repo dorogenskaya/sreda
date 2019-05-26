@@ -98,8 +98,8 @@ class EditTheme extends Component {
             database.ref(`themes/${id}`).once('value', (snapShot) => {
                 let data = snapShot.val(),
                     questionsList = [],
-                    {programList, levelList, subjectsList} = data;
-
+                    {programList, levelList, subject, themeName} = data;
+                subject = subject.id;
                 if (data.questionsList) {
                     for (let key in data.questionsList) {
                         questionsList.push({label: data.questionsList[key].question, value: key})
@@ -107,7 +107,7 @@ class EditTheme extends Component {
                     questionsList = questionsList.sort((a, b) => a.label > b.label ? 1 : -1)
                 }
 
-                this.props.form.setFieldsValue({programList, levelList, subjectsList})
+                this.props.form.setFieldsValue({themeName, programList, levelList, subject})
 
                 this.setState({questionsList})
             })
@@ -122,13 +122,18 @@ class EditTheme extends Component {
         if (this.state.questionsList.length) {
             this.state.questionsList.forEach(item => {
                 if (!values.removeQuestions || !values.removeQuestions.includes(item.value)) {
-                    questionsList[item.value] = {question: item.label}
+                    questionsList[item.value] = {question: item.label};
                 }
             })
             data.questionsList = questionsList;
         }
 
         for (let key in values) {
+            if (key === 'subject' && values[key]) {
+                data[key] = this.state.subjectsList.filter((subject) => subject.id === values[key])[0];
+                continue;
+            }
+
             if (key === 'theme' || key === 'keys' || key === 'questionsList' || key === 'removeQuestions') {
                 continue;
             }
@@ -137,8 +142,6 @@ class EditTheme extends Component {
                 data[key] = values[key];
             }
         }
-
-        data.themeName = this.state.themesSource[id].themeName;
         return data;
     }
 
@@ -154,9 +157,10 @@ class EditTheme extends Component {
             keys: [],
             questionsList: [],
             theme: undefined,
+            themeName: undefined,
             programList: undefined,
             levelList: undefined,
-            subjectsList: undefined,
+            subject: undefined,
             removeQuestions: undefined
         })
 

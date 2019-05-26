@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Checkbox} from 'antd';
+import {Form, Checkbox, Input} from 'antd';
 import InputSelect from './Input/InputSelect';
 import DynamicInputs from './Input/DynamicInputs';
 
@@ -22,6 +22,14 @@ class EditThemeFields extends Component {
 
         return (
             <div className="wrapper-block">
+                <Form.Item label={'Редактирование названия темы'}>
+                {getFieldDecorator('themeName', {
+                    rules: [{ required: true, message: 'Пожайлуста, заполните поле' }],
+                })(
+                    <Input placeholder={'Редактирование названия темы'}/>,
+                )}
+            </Form.Item>
+
                 <InputSelect name={`programList`}
                              label={`Выберите программу`}
                              rules={[]}
@@ -52,12 +60,11 @@ class EditThemeFields extends Component {
                              data={{data: levelList, nameKey: 'label', valueKey: 'id'}}
                 />
 
-                <InputSelect name={`subjectsList`}
-                             label={`Выберите предмет(ы)`}
+                <InputSelect name={`subject`}
+                             label={`Выберите предмет`}
                              rules={[]}
                              config={{
-                                 mode: 'tags',
-                                 placeholder: 'Выберите предмет(ы)',
+                                 placeholder: 'Выберите предмет',
                                  style: {width: '100%'},
                                  autoClearSearchValue: true,
                                  allowClear: true,
