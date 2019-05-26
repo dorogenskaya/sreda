@@ -38,13 +38,12 @@ class EditProgramContent extends Component {
 
         database.ref('subjects').on('value', (snapShot) => {
             let subjectsData = snapShot.val(),
-                subjectsArray = [];
-
+                subjectsList = [];
             for (let key in subjectsData) {
-                subjectsArray.push({id: key, subjectName: subjectsData[key].subjectName})
+                subjectsList.push({id: key, subjectName: subjectsData[key].subjectName})
             }
-            subjectsArray = subjectsArray.sort((a, b)=> a.subjectName > b.subjectName ? 1 : -1);
-            this.setState({subjectsArray});
+            subjectsList = subjectsList.sort((a, b)=> a.subjectName > b.subjectName ? 1 : -1);
+            this.setState({subjectsList});
         })
     }
 
@@ -52,11 +51,12 @@ class EditProgramContent extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err && values.themeName) {
+                const subject = this.state.subjectsList.filter((subject) => subject.id === values.subject)[0];
                 values.themeName.forEach((theme)=> {
                     const data = {
                         themeName: theme,
                         levelList: values.level,
-                        subjectsList: values.subject,
+                        subject: subject,
                         programList: values.program
                     }
                     database.ref('themes').push().set(data);
@@ -66,11 +66,6 @@ class EditProgramContent extends Component {
     }
 
     render() {
-        // const {getFieldDecorator, getFieldError} = this.props.form;
-        // const {Option} = Select;
-        console.log(this.state.programsArray);
-
-
         return (
             <div className="wrapper-block">
                 <Form onSubmit={this.handleSubmit}>
@@ -115,7 +110,6 @@ class EditProgramContent extends Component {
                                      message: 'Пожайлуста, выберите предмет'
                                  }]}
                                  config={{
-                                     mode: 'tags',
                                      placeholder: 'Выберите предмет',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
@@ -123,7 +117,7 @@ class EditProgramContent extends Component {
                                      onChange: null
                                  }}
                                  form={this.props.form}
-                                 data={{data: this.state.subjectsArray, nameKey: 'subjectName', valueKey: 'id'}}
+                                 data={{data: this.state.subjectsList, nameKey: 'subjectName', valueKey: 'id'}}
                     />
                     <DynamicInputs
                         form={this.props.form}
