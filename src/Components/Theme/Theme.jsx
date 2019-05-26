@@ -4,14 +4,11 @@ import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
 import Pagination from "../Pagination/pagination";
 import {paginate} from '../../util/paginate';
-
-import {getAnswers, getUsername} from '../../services/fakeAnswerService';
-import {getQuestions} from '../../services/fakeQuestionService';
-
 import  _ from 'lodash';
 import './Theme.css';
+import {database} from "../../model/firebase";
 
-let username = getUsername();
+const username = 'Lena Dorogenskaya';
 
 class Theme extends Component {
     constructor(props) {
@@ -22,15 +19,58 @@ class Theme extends Component {
             questions:[],
             currentPage: 1,
             pageSize: 2,
-            selectedQuestion: 0,
+            selectedQuestion: '',
             sortState: 'createDate',
+
+            themeActive: '-LfViy9MwyKAAk1QCyJO',
+            themeDescription:'',
+            themeName:'',
+            subject:{}
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
 
     componentDidMount() {
-        const questions = [...getQuestions()];
-        this.setState({ answers: getAnswers(), questions });
+        const themeId = this.state.themeActive;
+        database.ref('answers/' + themeId).on('value', snapshot => {
+            let data = snapshot.val();
+            let answers = [];
+
+            for (let key in data){
+            const answer = data[key] ;
+            answers.push({
+                name: answer.title,
+                tags: answer.questionsList,
+                createDate: answer.createDate,
+                description: answer.description,
+                creator: answer.creator,
+                id: key,
+                coinCount: !answer.coinCount ? 0 : answer.coinCount,
+                likerList: !answer.likerList ? [] : answer.likerList,
+                liked: !answer.liked ? false : answer.liked
+            });
+        }
+        this.setState({answers});
+    });
+
+        database.ref('themes/' + themeId).on('value', snapshot => {
+            let theme = snapshot.val();
+            let questions = [];
+
+            for(let key in theme.questionsList){
+                questions.push({
+                    name: theme.questionsList[key].question,
+                    id: key
+                })
+            }
+
+            this.setState({
+                questions,
+                themeName:theme.themeName,
+                themeDescription:theme.themeDescription,
+                subject: theme.subject
+            });
+        });
     }
 
     handleSort = (sortState) => {
@@ -43,6 +83,7 @@ class Theme extends Component {
     };
 
     handleQuestionClick = (selectedQuestion) => {
+        console.log(selectedQuestion);
         this.setState({ selectedQuestion, currentPage: 1 })
     };
 
@@ -50,24 +91,25 @@ class Theme extends Component {
         this.setState({selectedQuestion: 0 });
     };
 
-
     render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState} = this.state;
-
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject } = this.state;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
 
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
-        const themeId = this.props.match.params.id;
+        // const themeId = this.props.match.params.id;
 
         return (
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader
-                        showDrawer={this.handleShowDrawer}
-                        themeId={themeId}
+                        // showDrawer={this.handleShowDrawer}
+                        themeId={themeActive}
+                        themeName={themeName}
+                        themeDescription={themeDescription}
+                        subject={subject}
                     />
 
                     <AnswerList
@@ -76,6 +118,7 @@ class Theme extends Component {
                         username={username}
                         handleSort={this.handleSort}
                         sortState={sortState}
+                        questions={questions}
                     />
 
                     <Pagination

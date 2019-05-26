@@ -29,7 +29,7 @@ class QuestionList extends React.Component {
 QuestionList.propTypes = {
     questions:PropTypes.array.isRequired,
     handleClick:PropTypes.func.isRequired,
-    selectedQuestion:PropTypes.number.isRequired,
+    selectedQuestion:PropTypes.string.isRequired,
 };
 
 export default QuestionList;

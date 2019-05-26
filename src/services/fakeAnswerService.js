@@ -1,5 +1,11 @@
 import {database} from "../model/firebase";
 
+const username = 'Lena Dorogenskaya';
+export function getUsername() {
+    return username;
+}
+
+
 
 const answerS = [
     {name: 'Pizzeria',
@@ -36,26 +42,7 @@ const answerS = [
     }
 ];
 
-function getAnswersById(themeKey) {
-    database.ref('themes/' + themeKey).once('value', snapshot => {
-        let data = snapshot.val();
-        const themeActive = {
-            key: themeKey,
-            themeName: data.themeName,
-            questionsList: data.questionsList
-        };
-
-        let questionsList = themeActive.questionsList.map((item, i) => {
-            return {id: i, name: item.question}
-        });
-    });
-}
-const username = 'Lena Dorogenskaya';
-
-export function getAnswers() {
-    return answerS;
-}
-
-export function getUsername() {
-    return username;
-}
+//
+// export function getAnswers() {
+//     return answerS;
+// }

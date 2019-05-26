@@ -4,17 +4,25 @@ import { Button, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
 function ThemeHeader(props) {
+    const {showDrawer, themeId, themeName, themeDescription, subject} = props;
     return (
         <div className="Theme-content__header">
-            <h1 className="Theme-theme">Theme name</h1>
+            <h1 className="Theme-theme">{themeName}</h1>
             <ul className="Theme-theme__types">
                 <li className="Theme-theme__types__items">
-                    <Link to={`/program/subject`}>Subject name</Link>
+                    <Link to={`/program/${subject.id}`}>{subject.subjectName}</Link>
                 </li>
             </ul>
-            <Button type="primary"  onClick={props.showDrawer}>
+            <Button type="primary"
+                    // onClick={showDrawer}
+            >
                 <Icon type="plus" />
-                <Link to={`/themes/${props.themeId}/create-answer`} style={{color: "#FFF"}}>Добавить ответ</Link>
+                <Link
+                    to={{
+                        pathname: `/themes/${themeId}/create-answer`,
+                        state: { subject: subject }
+                    }}
+                    style={{color: "#FFF"}}>Добавить ответ</Link>
             </Button>
         </div>
     );

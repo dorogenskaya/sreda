@@ -16,7 +16,7 @@ class Question extends React.Component {
         return (
             <li>
                 <Link to={`/theme/question${id}`} className={questionClass}
-                             onClick={() => handleClick(id)}>{name}
+                      onClick={() => handleClick(id)}>{name}
             </Link>
             </li>
         );
@@ -24,7 +24,7 @@ class Question extends React.Component {
 }
 
 Question.propTypes = {
-    id:PropTypes.number.isRequired,
+    id:PropTypes.string.isRequired,
     name:PropTypes.string.isRequired,
     handleClick:PropTypes.func.isRequired
 };
