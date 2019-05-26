@@ -17,6 +17,6 @@ export default class AnswerTag extends React.Component{
 
 AnswerTag.propTypes = {
     onClick:PropTypes.func.isRequired,
-    value:PropTypes.number.isRequired,
+    value:PropTypes.string.isRequired,
 };
 

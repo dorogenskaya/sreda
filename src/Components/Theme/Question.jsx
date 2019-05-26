@@ -24,7 +24,7 @@ class Question extends React.Component {
 }
 
 Question.propTypes = {
-    id:PropTypes.number.isRequired,
+    id:PropTypes.string.isRequired,
     name:PropTypes.string.isRequired,
     handleClick:PropTypes.func.isRequired
 };

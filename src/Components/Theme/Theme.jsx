@@ -4,15 +4,11 @@ import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
 import Pagination from "../Pagination/pagination";
 import {paginate} from '../../util/paginate';
-import {getUsername, getAnswersDynamic} from '../../services/fakeAnswerService';
-import {getQuestions} from '../../services/fakeQuestionService';
 import  _ from 'lodash';
 import './Theme.css';
 import {database} from "../../model/firebase";
 
-let username = getUsername();
-
-//return theme.description and theme.themeName, subjectList
+const username = 'Lena Dorogenskaya';
 
 class Theme extends Component {
     constructor(props) {
@@ -23,25 +19,58 @@ class Theme extends Component {
             questions:[],
             currentPage: 1,
             pageSize: 2,
-            selectedQuestion: 0,
+            selectedQuestion: '',
             sortState: 'createDate',
-            themeActive: '-LfViy9MwyKAAk1QCyJO'
+
+            themeActive: '-LfViy9MwyKAAk1QCyJO',
+            themeDescription:'',
+            themeName:'',
+            subject:''
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
-    //
-    // setStateData (data) {
-    //     this.setState({questions: data});
-    // }
 
     componentDidMount() {
-        const themeId = '-LfViy9MwyKAAk1QCyJO';
-        const answers = getAnswersDynamic(themeId);
-        const questions = [...getQuestions];
-        // getQuestions(themeId, this.setStateData);
+        const themeId = this.state.themeActive;
+        database.ref('answers/' + themeId).once('value', snapshot => {
+            let data = snapshot.val();
+            let answers = [];
 
-        this.setState({answers, questions });
+            for (let key in data){
+            const answer = data[key] ;
+            answers.push({
+                name: answer.title,
+                tags: answer.questionsList,
+                createDate: answer.createDate,
+                description: answer.questionsList,
+                creator: answer.creator,
+                id: key,
+                coinCount: !answer.coinCount ? 0 : answer.coinCount,
+                likerList: !answer.likerList ? [] : answer.likerList,
+                liked: !answer.liked ? false : answer.liked
+            });
+        }
+        this.setState({answers});
+    });
 
+        database.ref('themes/' + themeId).once('value', snapshot => {
+            let theme = snapshot.val();
+            let questions = [];
+
+            for(let key in theme.questionsList){
+                questions.push({
+                    name: theme.questionsList[key].question,
+                    id: key
+                })
+            }
+
+            this.setState({
+                questions,
+                themeName:theme.themeName,
+                themeDescription:theme.themeDescription,
+                subject: theme.subject.subjectName
+            });
+        });
     }
 
     handleSort = (sortState) => {
@@ -62,22 +91,24 @@ class Theme extends Component {
     };
 
     render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState} = this.state;
-
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject } = this.state;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
 
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
-        const themeId = this.props.match.params.id;
+        // const themeId = this.props.match.params.id;
 
         return (
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader
                         showDrawer={this.handleShowDrawer}
-                        themeId={themeId}
+                        themeId={themeActive}
+                        themeName={themeName}
+                        themeDescription={themeDescription}
+                        subject={subject}
                     />
 
                     <AnswerList

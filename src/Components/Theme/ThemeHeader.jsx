@@ -4,6 +4,7 @@ import { Button, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
 function ThemeHeader(props) {
+    console.log(props);
     return (
         <div className="Theme-content__header">
             <h1 className="Theme-theme">Theme name</h1>
