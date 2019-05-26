@@ -16,7 +16,7 @@ class Question extends React.Component {
         return (
             <li>
                 <Link to={`/theme/question${id}`} className={questionClass}
-                             onClick={() => handleClick(id)}>{name}
+                      onClick={() => handleClick(id)}>{name}
             </Link>
             </li>
         );

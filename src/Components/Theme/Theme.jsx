@@ -25,14 +25,14 @@ class Theme extends Component {
             themeActive: '-LfViy9MwyKAAk1QCyJO',
             themeDescription:'',
             themeName:'',
-            subject:''
+            subject:{}
     };
         this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
 
     componentDidMount() {
         const themeId = this.state.themeActive;
-        database.ref('answers/' + themeId).once('value', snapshot => {
+        database.ref('answers/' + themeId).on('value', snapshot => {
             let data = snapshot.val();
             let answers = [];
 
@@ -53,7 +53,7 @@ class Theme extends Component {
         this.setState({answers});
     });
 
-        database.ref('themes/' + themeId).once('value', snapshot => {
+        database.ref('themes/' + themeId).on('value', snapshot => {
             let theme = snapshot.val();
             let questions = [];
 
@@ -68,7 +68,7 @@ class Theme extends Component {
                 questions,
                 themeName:theme.themeName,
                 themeDescription:theme.themeDescription,
-                subject: theme.subject.subjectName
+                subject: theme.subject
             });
         });
     }
@@ -83,6 +83,7 @@ class Theme extends Component {
     };
 
     handleQuestionClick = (selectedQuestion) => {
+        console.log(selectedQuestion);
         this.setState({ selectedQuestion, currentPage: 1 })
     };
 
@@ -104,7 +105,7 @@ class Theme extends Component {
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader
-                        showDrawer={this.handleShowDrawer}
+                        // showDrawer={this.handleShowDrawer}
                         themeId={themeActive}
                         themeName={themeName}
                         themeDescription={themeDescription}
@@ -117,6 +118,7 @@ class Theme extends Component {
                         username={username}
                         handleSort={this.handleSort}
                         sortState={sortState}
+                        questions={questions}
                     />
 
                     <Pagination

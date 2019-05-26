@@ -22,11 +22,13 @@ class AddNewAnswer extends Component {
     }
 
     componentDidMount() {
+        const subjectActiveRaw = this.props.subjectActive;
         const subjectActive = {
-            key: '-LbdUWtpbnCB-4q9bG16',
-            label: 'Белорусский язык',
-            value: 'Белорусский язык'
+            key: subjectActiveRaw.id,
+            label: subjectActiveRaw.subjectName,
+            value: subjectActiveRaw.subjectName
         };
+
         const themeKey = this.props.themeId;
 
         database.ref('themes/' + themeKey).once('value', snapshot => {
@@ -43,6 +45,7 @@ class AddNewAnswer extends Component {
                 themeName: data.themeName,
                 questionsList: questionsList
             };
+
             this.setState({subjectActive, themeActive, questionsList});
             this.props.form.setFieldsValue({'themes': [subjectActive.value, themeActive.themeName]})
         });
@@ -63,7 +66,7 @@ class AddNewAnswer extends Component {
             let themesList = [];
             let data = snapshot.val();
             for (let key in data) {
-                themesList.push({key: key, themeName: data[key].themeName, subjectsID: data[key].subjectsList});
+                themesList.push({key: key, themeName: data[key].themeName, subjectID: data[key].subject.id});
             }
             this.setState({themesList});
             this.collectOptions();
@@ -79,7 +82,7 @@ class AddNewAnswer extends Component {
                 return {
                     key: element1.key, value: element1.subjectName, label: element1.subjectName,
                     children: this.renameThemes(themesList.filter(element2 => {
-                        return element2.subjectsID.includes(element1.key)
+                        return element2.subjectID === element1.key
                     }))
                 }
             });
@@ -110,20 +113,20 @@ class AddNewAnswer extends Component {
         const subjectActive = e[0];
         database.ref('themes/' + e[1].key).once('value', snapshot => {
             let data = snapshot.val();
+            let questionsList = [];
+
+            if (data.questionsList) {
+                for (let key in data.questionsList){
+                    questionsList.push({id: key, name: data.questionsList[key].question});
+                }
+            }
+
             const themeActive = {
                 key: e[1].key,
                 themeName: data.themeName,
-                questionsList: data.questionsList
+                questionsList: questionsList
             };
 
-
-            let questionsList = [];
-
-            if (themeActive.questionsList) {
-                themeActive.questionsList.forEach((item, i) => {
-                    questionsList.push({key: i, name: item.question});
-                });
-            }
             this.setState({subjectActive, themeActive, questionsList, selectedQuestions: []});
             this.props.form.setFieldsValue({questionsList: undefined})
         });

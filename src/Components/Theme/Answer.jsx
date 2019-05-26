@@ -22,20 +22,23 @@ class Answer extends React.Component {
     };
 
     render() {
-        const {handleClick, questionId, name, answer } = this.props;
-
+        const {handleClick, questionId, name, answer, questions } = this.props;
         return (
             <div className="Answer">
                     <div className="Answer__info">
                         <h2>{name}</h2>
                         <ul className="Answer__tags">
                             Questions:
-                            {questionId.map(tag =>
-                                <AnswerTag
-                                    key={tag}
-                                    onClick={() => handleClick(tag)}
-                                    value={tag}/>
-                                )}
+                            {questions
+                                .filter((question) => questionId.includes(question.id ))
+                                .map(tag =>
+                                    <AnswerTag
+                                        key={tag.id}
+                                        onClick={() => handleClick(tag.id)}
+                                        value={tag.name}
+                                    />
+                                )
+                            }
                         </ul>
                         <p>{answer.description}</p>
                         <video src={answer.videoSrc}></video>
