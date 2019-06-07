@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Joi from "joi-browser";
 import { Button, Input, Cascader } from 'antd';
 
-class Form extends Component {
+class FormM extends Component {
     state = {
         data:{},
         errors:{}
@@ -106,4 +106,4 @@ class Form extends Component {
         );
     }
 }
-export default Form;
+export default FormM;

@@ -15,18 +15,25 @@ import EditProgramContentForm from "../Forms/EditProgramContentForm";
 import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
 import AddNewThemeForm from '../Forms/AddNewThemeForm';
 import EditThemeForm from '../Forms/EditThemeForm';
+import Profile from "../Profile/profile";
+import Logout from "../Forms/logout";
 
 class Main extends Component {
     render() {
         return (
             <main className="main">
                 <Switch>
-                    <Route path="/themes/:id" component={Theme}/>
-                    <Route path='/theme' component={Theme}/>
+                    <Route path="/themes/:id"
+                           render={(props) => (
+                               <Theme {...props} user={this.props.user}/>
+                           )}
+                           />
                     <Route path='/program' component={Program}/>
                     <Route path='/login' component={Login}/>
+                    <Route path='/logout' component={Logout}/>
                     <Route path='/register' component={Register}/>
                     <Route path="/not-found" component={NotFound}/>
+                    <Route path='/profile' component={Profile}/>
                     <Route path='/admin' exact component={Admin}/>
                     <Route path='/' exact component={Home}/>
                     <Route path="/admin/program/add" component={AddNewProgramForm}/>

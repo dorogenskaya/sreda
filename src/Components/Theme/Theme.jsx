@@ -8,13 +8,12 @@ import  _ from 'lodash';
 import './Theme.css';
 import {database} from "../../model/firebase";
 
-const username = 'Lena Dorogenskaya';
-
 class Theme extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            user: this.props.user,
             answers: [],
             questions:[],
             currentPage: 1,
@@ -92,7 +91,7 @@ class Theme extends Component {
     };
 
     render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject } = this.state;
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject, user } = this.state;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
@@ -102,6 +101,7 @@ class Theme extends Component {
         // const themeId = this.props.match.params.id;
 
         return (
+
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader
@@ -115,7 +115,7 @@ class Theme extends Component {
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}
-                        username={username}
+                        username={user.username}
                         handleSort={this.handleSort}
                         sortState={sortState}
                         questions={questions}
