@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button,Form} from 'antd';
-import firebase, {googleProvider} from '../../model/firebase';
+import firebase, {database, googleProvider} from '../../model/firebase';
 
 class Login extends Component {
     constructor(props) {
@@ -15,19 +15,36 @@ class Login extends Component {
 
     handleSubmit = () => {
         let self = this;
-        console.log(this, 'this');
         firebase.auth().signInWithPopup(googleProvider).then((result)=> {
-            var token = result.credential.accessToken;
-            var user = result.user;
+            let token = result.credential.accessToken;
+            let user = result.user;
+            console.log(result, user.uid );
+            this.setState({user});
 
-            console.log(token, user, self);
-            this.setState({token, user});
-            window.location = '/';
-
+            // check if the user exist in DB if not => create user
+            database.ref('users/' + user.uid).once('value', snapshot => {
+                if (!snapshot.val()){
+                    const userData = {
+                        uid: user.uid,
+                        createDate: Date.now(),
+                        picture: user.photoURL,
+                        name: user.displayName,
+                        email: user.email,
+                        role: 4
+                    }
+                    database.ref('users/').child(user.uid).set(userData);
+                    console.log('there is no any account');
+                    window.location = '/';
+                } else {
+                    console.log('existing account');
+                    window.location = '/';
+                    return null;
+                }
+            })
         }).catch((error)=> {
             error ? this.setState({error}) : {};
-            console.log(error);
         });
+
     };
 
     render() {

@@ -6,7 +6,6 @@ import Theme from '../Theme/Theme';
 import Program from '../Program/Program';
 import CreateAnswerDrawer from '../Theme/createAnswerDrawer';
 import NotFound from '../NotFound/NotFound';
-import Register from "../Forms/register";
 import Login from "../Forms/login";
 import Admin from "../Admin/Admin";
 import AddNewProgramForm from "../Forms/AddNewProgramForm";
@@ -31,7 +30,7 @@ class Main extends Component {
                     <Route path='/program' component={Program}/>
                     <Route path='/login' component={Login}/>
                     <Route path='/logout' component={Logout}/>
-                    <Route path='/register' component={Register}/>
+                    <Route path='/register' component={Login}/>
                     <Route path="/not-found" component={NotFound}/>
                     <Route path='/profile' component={Profile}/>
                     <Route path='/admin' exact component={Admin}/>

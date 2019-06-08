@@ -5,7 +5,6 @@ import Main from "../Main/Main";
 import NavBar from "../NavBar/NavBar";
 import firebase from "../../model/firebase";
 
-
 class App extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +21,6 @@ class App extends Component {
                     isAdmin: true
                 }
                 this.setState({user})
-                console.log(user);
 
             } else {
                 console.log('there is no any user');
