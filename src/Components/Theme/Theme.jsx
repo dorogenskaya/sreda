@@ -8,12 +8,12 @@ import  _ from 'lodash';
 import './Theme.css';
 import firebase, {database} from "../../model/firebase";
 
+
 class Theme extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            user: this.props.user,
+            user: null,
             answers: [],
             questions:[],
             currentPage: 1,
@@ -30,6 +30,9 @@ class Theme extends Component {
     }
 
     componentDidMount() {
+        const {user}= this.props;
+        this.setState({user});
+
         const themeId = this.state.themeActive;
         database.ref('answers/' + themeId).on('value', snapshot => {
             let data = snapshot.val();
@@ -50,7 +53,7 @@ class Theme extends Component {
             });
         }
         this.setState({answers});
-    });
+        });
 
         database.ref('themes/' + themeId).on('value', snapshot => {
             let theme = snapshot.val();
@@ -101,7 +104,6 @@ class Theme extends Component {
         // const themeId = this.props.match.params.id;
 
         return (
-
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader

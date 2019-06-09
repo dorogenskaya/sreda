@@ -14,13 +14,11 @@ export const ProtectedAuthRoute = ({user, component: Component, ...rest}) => {
 };
 
 export const ProtectedRoleRoute = ({user, component: Component, ...rest}) => {
-    console.log(user);
-
     return (
         <Route
             {...rest}
             render = {props => {
-                if (user.user.role === 0)  return <Component {...props}/>;
+                if (user.role === 0)  return <Component {...props}/>;
                 return <Redirect to='/forbidden'/> ;
             }}
         />

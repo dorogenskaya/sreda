@@ -13,22 +13,26 @@ class App extends Component {
         };
     }
 
-    componentDidMount() {
+
+    componentWillMount() {
         this.authListener = firebase.auth().onAuthStateChanged((userLogged) => {
             database.ref('users/' + userLogged.uid).on('value', snapshot => {
                 let user = snapshot.val();
                 if (user)
-                    console.log(user);
-                    this.setState({user})
+                    return this.setState({user});
+                    return {};
             });
         });
     }
+    componentWillUnmount(){
 
+    }
     render() {
+        const {user} = this.state;
         return (
             <div className="App">
-                <NavBar user={this.state.user}/>
-                <Main user={this.state.user}/>
+                <NavBar user={user}/>
+                <Main user={user}/>
             </div>
         );
     }

@@ -22,14 +22,14 @@ import {ProtectedAuthRoute, ProtectedRoleRoute }from "../common/protectedRoute";
 
 class Main extends Component {
     render() {
-        const user = this.props;
+        const {user}= this.props;
         return (
             <main className="main">
                 <Switch>
                     <Route path="/themes/:id"
                            render={(props) => (<Theme {...props} user={user}/>)}/>
-                    <Route path="/themes"
-                           render={(props) => (<Theme {...props} user={user}/>)}/>
+                    {/*<Route path="/themes"*/}
+                           {/*render={(props) => (<Theme {...props} user={user}/>)}/>*/}
                     <Route path='/program' component={Program}/>
                     <Route path='/login' component={Login}/>
                     <Route path='/logout' component={Logout}/>

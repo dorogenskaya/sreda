@@ -2,7 +2,7 @@ import React from "react";
 import {Drawer} from 'antd';
 import AddNewAnswer from '../Forms/AddAnswerForm';
 
-export default function CreateAnswerDrawer ({match: {params: { id }}, history, location}) {
+export default function CreateAnswerDrawer ({match: {params: { id }}, history, location, user}) {
     const previousLocation = location.pathname.replace(/create-answer.*$/i, '');
     return (
         <Drawer
@@ -23,6 +23,7 @@ export default function CreateAnswerDrawer ({match: {params: { id }}, history, l
                 history={history}
                 previousLocation={previousLocation}
                 subjectActive={location.state.subject}
+                user={user}
             />
         </Drawer>
     );

@@ -152,9 +152,39 @@ class AddNewAnswer extends Component {
                     questionsList: values.questionsList,
                     title: values.title,
                     description: values.description,
-                    createDate: createDate
+                    createDate: createDate,
+                    creator: this.props.user.uid
                 }
-                database.ref('answers/' + this.state.themeActive.key).push().set(answerData);
+
+
+                // let data = this.normalizeData(values),
+                //     newKey = database.ref('theme').push().key,
+                //     newRefList;
+                //
+                // database.ref(`themes/${newKey}`).set(data).then(()=>{
+                //     if (values.questions) {
+                //         newRefList = newRefList = database.ref(`themes/${newKey}/questionsList`);
+                //         values.questions.forEach(item => {
+                //             newRefList.push({question: item});
+                //         })
+                //     }
+                //     this.setState({
+                //         successMessage: 'Новая тема успешно добавлена'
+                //     })
+                // });
+                // database.ref(`themes/${id}/questionsList`).push({question: item})
+
+
+                let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key,
+                newRefList;
+
+                database
+                    .ref(`answers/${this.state.themeActive.key}/${newKey}`)
+                    .set(answerData)
+                    .then(() => {
+                        database.ref(`users/${this.props.user.uid}/answersList`).push({newKey})
+                    }
+                );
                 this.props.history.push(this.props.previousLocation);
             }
             return err;
