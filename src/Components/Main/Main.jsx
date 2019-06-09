@@ -43,7 +43,7 @@ class Main extends Component {
                         user={user}
                     />
                     <ProtectedRoleRoute
-                        path='/admin'
+                        exact path='/admin'
                         component={Admin}
                         user={user}
                     />

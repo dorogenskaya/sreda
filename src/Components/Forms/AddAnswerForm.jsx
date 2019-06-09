@@ -65,7 +65,10 @@ class AddNewAnswer extends Component {
         database.ref('themes').once('value', snapshot => {
             let themesList = [];
             let data = snapshot.val();
+
+
             for (let key in data) {
+                console.log(key, data);
                 themesList.push({key: key, themeName: data[key].themeName, subjectID: data[key].subject.id});
             }
             this.setState({themesList});
@@ -145,6 +148,8 @@ class AddNewAnswer extends Component {
         let createDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
 
         this.props.form.validateFields((err, values) => {
+            console.log(values.questionsList);
+
             if (!err && values) {
                 const answerData = {
                     subject: this.state.subjectActive.key,
@@ -155,25 +160,6 @@ class AddNewAnswer extends Component {
                     createDate: createDate,
                     creator: this.props.user.uid
                 }
-
-
-                // let data = this.normalizeData(values),
-                //     newKey = database.ref('theme').push().key,
-                //     newRefList;
-                //
-                // database.ref(`themes/${newKey}`).set(data).then(()=>{
-                //     if (values.questions) {
-                //         newRefList = newRefList = database.ref(`themes/${newKey}/questionsList`);
-                //         values.questions.forEach(item => {
-                //             newRefList.push({question: item});
-                //         })
-                //     }
-                //     this.setState({
-                //         successMessage: 'Новая тема успешно добавлена'
-                //     })
-                // });
-                // database.ref(`themes/${id}/questionsList`).push({question: item})
-
 
                 let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key,
                 newRefList;
