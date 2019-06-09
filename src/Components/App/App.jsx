@@ -3,7 +3,7 @@ import './App.css';
 import 'antd/dist/antd.css';
 import Main from "../Main/Main";
 import NavBar from "../NavBar/NavBar";
-import firebase from "../../model/firebase";
+import firebase, {database} from "../../model/firebase";
 
 class App extends Component {
     constructor(props) {
@@ -14,23 +14,15 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.authListener = firebase.auth().onAuthStateChanged((userRaw) =>{
-            if (userRaw) {
-                const user = {
-                    username: userRaw.displayName,
-                    isAdmin: true
-                }
-                this.setState({user})
-
-            } else {
-                console.log('there is no any user');
-            }
-        } )
+        this.authListener = firebase.auth().onAuthStateChanged((userLogged) => {
+            database.ref('users/' + userLogged.uid).on('value', snapshot => {
+                let user = snapshot.val();
+                if (user)
+                    console.log(user);
+                    this.setState({user})
+            });
+        });
     }
-
-    // componentWillUnmount(){
-    //     this.authListener();
-    // }
 
     render() {
         return (

@@ -16,7 +16,7 @@ export default class AnswerList extends React.Component {
     };
 
     render() {
-        const {sortState, answers, handleClick, username, questions} = this.props;
+        const {sortState, answers, handleClick, user, questions} = this.props;
 
         return (
             <div className="AnswerList">
@@ -34,7 +34,7 @@ export default class AnswerList extends React.Component {
                         questions={questions}
                         name={answer.name}
                         handleClick={handleClick}
-                        username={username}
+                        username={user.name}
                         />;
                     })
                 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from './logo.svg';
+import firebase, {database, googleProvider} from '../../model/firebase';
 
 const NavBar = ({user}) => {
     return (
@@ -29,12 +30,12 @@ const NavBar = ({user}) => {
                     {user && (
                         <React.Fragment>
                             <li className="nav-list-item">
-                                <Link className="nav-list-item-link" to="/profile">{user.username}</Link>
+                                <Link className="nav-list-item-link" to="/profile">{user.name}</Link>
                             </li>
                             <li className="nav-list-item">
                                 <Link className="nav-list-item-link" to="/logout">Logout</Link>
                             </li>
-                            {user.isAdmin && (
+                            {user.role === 0 && (
                                 <React.Fragment>
                                 <li className="nav-list-item">
                                     <Link className="nav-list-item-link" to="/admin">Admin Panel</Link>

@@ -10,18 +10,14 @@ class Login extends Component {
             user: null,
             error: {}
         };
-
     }
 
     handleSubmit = () => {
         let self = this;
         firebase.auth().signInWithPopup(googleProvider).then((result)=> {
-            let token = result.credential.accessToken;
             let user = result.user;
-            console.log(result, user.uid );
             this.setState({user});
 
-            // check if the user exist in DB if not => create user
             database.ref('users/' + user.uid).once('value', snapshot => {
                 if (!snapshot.val()){
                     const userData = {
@@ -31,14 +27,11 @@ class Login extends Component {
                         name: user.displayName,
                         email: user.email,
                         role: 4
-                    }
+                    };
                     database.ref('users/').child(user.uid).set(userData);
-                    console.log('there is no any account');
                     window.location = '/';
                 } else {
-                    console.log('existing account');
                     window.location = '/';
-                    return null;
                 }
             })
         }).catch((error)=> {
@@ -69,7 +62,6 @@ class Login extends Component {
                     </Form.Item>
                 </Form>
             </div>
-
         );
     }
 }

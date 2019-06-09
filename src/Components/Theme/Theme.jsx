@@ -6,7 +6,7 @@ import Pagination from "../Pagination/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
 import './Theme.css';
-import {database} from "../../model/firebase";
+import firebase, {database} from "../../model/firebase";
 
 class Theme extends Component {
     constructor(props) {
@@ -105,7 +105,7 @@ class Theme extends Component {
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader
-                        // showDrawer={this.handleShowDrawer}
+                        user = {user}
                         themeId={themeActive}
                         themeName={themeName}
                         themeDescription={themeDescription}
@@ -115,10 +115,11 @@ class Theme extends Component {
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}
-                        username={user.username}
+                        // username={user.name}
                         handleSort={this.handleSort}
                         sortState={sortState}
                         questions={questions}
+                        user = {user}
                     />
 
                     <Pagination
