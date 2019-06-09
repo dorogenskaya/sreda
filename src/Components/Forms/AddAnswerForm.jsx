@@ -68,7 +68,6 @@ class AddNewAnswer extends Component {
 
 
             for (let key in data) {
-                console.log(key, data);
                 themesList.push({key: key, themeName: data[key].themeName, subjectID: data[key].subject.id});
             }
             this.setState({themesList});
@@ -148,8 +147,6 @@ class AddNewAnswer extends Component {
         let createDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate() + ' ' + tempDate.getHours() + ':' + tempDate.getMinutes() + ':' + tempDate.getSeconds();
 
         this.props.form.validateFields((err, values) => {
-            console.log(values.questionsList);
-
             if (!err && values) {
                 const answerData = {
                     subject: this.state.subjectActive.key,
@@ -161,14 +158,14 @@ class AddNewAnswer extends Component {
                     creator: this.props.user.uid
                 }
 
-                let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key,
-                newRefList;
+                let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key;
+
 
                 database
                     .ref(`answers/${this.state.themeActive.key}/${newKey}`)
                     .set(answerData)
                     .then(() => {
-                        database.ref(`users/${this.props.user.uid}/answersList`).push({newKey})
+                        database.ref(`users/${this.props.user.uid}/answersList`).set([newKey]);
                     }
                 );
                 this.props.history.push(this.props.previousLocation);

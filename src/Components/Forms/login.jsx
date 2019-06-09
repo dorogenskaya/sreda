@@ -22,7 +22,7 @@ class Login extends Component {
                 if (!snapshot.val()){
                     const userData = {
                         uid: user.uid,
-                        createDate: Date.now(),
+                        createDate: Date(),
                         picture: user.photoURL,
                         name: user.displayName,
                         email: user.email,
