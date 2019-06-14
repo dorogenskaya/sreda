@@ -160,7 +160,6 @@ class AddNewAnswer extends Component {
 
                 let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key;
 
-
                 database
                     .ref(`answers/${this.state.themeActive.key}/${newKey}`)
                     .set(answerData)

@@ -3,6 +3,7 @@ import './Answer.css';
 import PropTypes from 'prop-types';
 import AnswerTag from './AnswerTag';
 import AnswerActions from './AnswerActions';
+import { Redirect } from 'react-router-dom';
 
 
 class Answer extends React.Component {
@@ -15,13 +16,18 @@ class Answer extends React.Component {
 
     handleLike = answer => {
         let {answer: answerClone}  = this.state;
-        const {user} = this.props;
+        const {user, history} = this.props;
         if(user){
+            console.log(user, 'user in answer');
             const index = answer.likerList.indexOf(user.name);
             answerClone.liked = !answer.liked;
             answer.liked ? answer.likerList.push(user.name) : answer.likerList.splice(index,1);
             this.setState({ answer });
         }
+        console.log('anonim user liked');
+        // return(<Redirect to="/login" />);
+        return history.push('/login');
+
     };
 
     render() {
@@ -53,15 +59,10 @@ class Answer extends React.Component {
                         <img src="" alt=""/>
                         <h4>{answer.creator}</h4>
                     </div>
-                    {user && (
-                        <React.Fragment>
-                            <AnswerActions
-                                handleLike={() => this.handleLike(this.state.answer)}
-                                answer={answer}
-                            />
-                        </React.Fragment>
-                    )
-                    }
+                    <AnswerActions
+                        handleLike={() => this.handleLike(this.state.answer)}
+                        answer={answer}
+                    />
                 <div className="Answer__divider">
                 </div>
             </div>

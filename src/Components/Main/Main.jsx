@@ -28,6 +28,8 @@ class Main extends Component {
             <main className="main">
                 <Switch>
                     <Route path='/' exact component={Home}/>
+                    <Route path="/themes/:id/question:id"
+                           render={(props) => (<Theme {...props} user={user}/>)}/>
                     <Route path="/themes/:id"
                            render={(props) => (<Theme {...props} user={user}/>)}/>
                     {/*<Route path="/themes"*/}
@@ -48,7 +50,6 @@ class Main extends Component {
                         component={Admin}
                         user={user}
                     />
-
                     {/*<Route path='/admin' exact component={Admin}/>*/}
                     <Route path="/admin/program/add" component={AddNewProgramForm}/>
                     <Route path="/admin/program/edit/name" component={EditProgramNameForm}/>

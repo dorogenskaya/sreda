@@ -11,24 +11,19 @@ class App extends Component {
         this.state = {
             user: null,
             loading: true,
-            // auth: false
         };
     }
-
 
     componentWillMount() {
         this.authListener = firebase.auth().onAuthStateChanged((userLogged) => {
             if (userLogged) {
                 database.ref('users/' + userLogged.uid).on('value', snapshot => {
                     let user = snapshot.val();
-                    console.log(user, userLogged);
                     return this.setState({user, loading: false,
-                            // auth: true
                         });
 
                 });
             } else {
-                console.log(userLogged);
                 return this.setState({loading: false});
             }
         });
@@ -44,7 +39,7 @@ class App extends Component {
                     <h2>Loading...</h2>
                     <Spin size="large"/>
                 </div>
-                )
+            )
         }
 
         return (

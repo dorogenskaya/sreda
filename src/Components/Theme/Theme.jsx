@@ -31,20 +31,8 @@ class Theme extends Component {
     }
 
     componentDidMount() {
-        // const {user}= this.props;
-
-        let user = firebase.auth().currentUser;
-
-        if (user != null) {
-            user.providerData.forEach(function (profile) {
-                console.log("Sign-in provider: " + profile.providerId);
-                console.log("  Provider-specific UID: " + profile.uid);
-                console.log("  Name: " + profile.displayName);
-                console.log("  Email: " + profile.email);
-                console.log("  Photo URL: " + profile.photoURL);
-            });
-        }
-        this.setState({user});
+        const {user}= this.props;
+        // let user = firebase.auth().currentUser;
 
         const themeId = this.state.themeActive;
         database.ref('answers/' + themeId).on('value', snapshot => {
@@ -65,7 +53,7 @@ class Theme extends Component {
                 liked: !answer.liked ? false : answer.liked
             });
         }
-        this.setState({answers});
+        this.setState({answers, user});
         });
 
         database.ref('themes/' + themeId).on('value', snapshot => {
@@ -98,12 +86,12 @@ class Theme extends Component {
     };
 
     handleQuestionClick = (selectedQuestion) => {
-        console.log(selectedQuestion);
         this.setState({ selectedQuestion, currentPage: 1 })
     };
 
     handleQuestionsReset = () => {
         this.setState({selectedQuestion: 0 });
+        this.props.history.push(this.props.previousLocation);
     };
 
     render() {
@@ -115,6 +103,7 @@ class Theme extends Component {
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
         // const themeId = this.props.match.params.id;
+        const history = this.props.history;
 
         return (
             <div className="Theme">
@@ -130,7 +119,7 @@ class Theme extends Component {
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}
-                        // username={user.name}
+                        history={history}
                         handleSort={this.handleSort}
                         sortState={sortState}
                         questions={questions}
@@ -157,6 +146,7 @@ class Theme extends Component {
                             questions={questions}
                             selectedQuestion={selectedQuestion}
                             handleReset={this.handleQuestionsReset}
+                            themeActive={themeActive}
                         />
                     </div>
                 </div>

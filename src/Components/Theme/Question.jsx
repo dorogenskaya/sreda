@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 class Question extends React.Component {
-
     render() {
-        const { id, name, handleClick, selectedQuestion } = this.props;
+        const { id, name, handleClick, selectedQuestion, themeActive } = this.props;
         let questionClass = classNames('question',{
             'question-active': selectedQuestion === id,
             'question-normal': selectedQuestion !== id,
@@ -15,7 +14,8 @@ class Question extends React.Component {
 
         return (
             <li>
-                <Link to={`/theme/question${id}`} className={questionClass}
+                <Link to={`/themes/${themeActive}/question${id}`}
+                      className={questionClass}
                       onClick={() => handleClick(id)}>{name}
             </Link>
             </li>
