@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import AnswerList from "./AnswerList";
 import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
-import Pagination from "../Pagination/pagination";
+import Pagination from "../common/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
 import './Theme.css';
 import firebase, {database} from "../../model/firebase";
+
 
 
 class Theme extends Component {
@@ -30,7 +31,19 @@ class Theme extends Component {
     }
 
     componentDidMount() {
-        const {user}= this.props;
+        // const {user}= this.props;
+
+        let user = firebase.auth().currentUser;
+
+        if (user != null) {
+            user.providerData.forEach(function (profile) {
+                console.log("Sign-in provider: " + profile.providerId);
+                console.log("  Provider-specific UID: " + profile.uid);
+                console.log("  Name: " + profile.displayName);
+                console.log("  Email: " + profile.email);
+                console.log("  Photo URL: " + profile.photoURL);
+            });
+        }
         this.setState({user});
 
         const themeId = this.state.themeActive;

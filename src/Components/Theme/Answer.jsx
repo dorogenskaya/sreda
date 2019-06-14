@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import AnswerTag from './AnswerTag';
 import AnswerActions from './AnswerActions';
 
+
 class Answer extends React.Component {
     constructor(props) {
         super(props);
@@ -14,15 +15,18 @@ class Answer extends React.Component {
 
     handleLike = answer => {
         let {answer: answerClone}  = this.state;
-        const index = answer.likerList.indexOf(this.props.username);
-
-        answerClone.liked = !answer.liked;
-        answer.liked ? answer.likerList.push(this.props.username) : answer.likerList.splice(index,1);
-        this.setState({ answer });
+        const {user} = this.props;
+        if(user){
+            const index = answer.likerList.indexOf(user.name);
+            answerClone.liked = !answer.liked;
+            answer.liked ? answer.likerList.push(user.name) : answer.likerList.splice(index,1);
+            this.setState({ answer });
+        }
     };
 
     render() {
-        const {handleClick, questionId, name, answer, questions } = this.props;
+        const {handleClick, questionId, name, answer, questions,user } = this.props;
+
         return (
             <div className="Answer">
                     <div className="Answer__info">
@@ -49,11 +53,15 @@ class Answer extends React.Component {
                         <img src="" alt=""/>
                         <h4>{answer.creator}</h4>
                     </div>
-
-                    <AnswerActions
-                        handleLike={() => this.handleLike(this.state.answer)}
-                        answer={answer}
-                    />
+                    {user && (
+                        <React.Fragment>
+                            <AnswerActions
+                                handleLike={() => this.handleLike(this.state.answer)}
+                                answer={answer}
+                            />
+                        </React.Fragment>
+                    )
+                    }
                 <div className="Answer__divider">
                 </div>
             </div>

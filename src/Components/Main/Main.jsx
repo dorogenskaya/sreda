@@ -21,11 +21,13 @@ import {ProtectedAuthRoute, ProtectedRoleRoute }from "../common/protectedRoute";
 
 
 class Main extends Component {
+
     render() {
         const {user}= this.props;
         return (
             <main className="main">
                 <Switch>
+                    <Route path='/' exact component={Home}/>
                     <Route path="/themes/:id"
                            render={(props) => (<Theme {...props} user={user}/>)}/>
                     {/*<Route path="/themes"*/}
@@ -35,7 +37,6 @@ class Main extends Component {
                     <Route path='/logout' component={Logout}/>
                     <Route path='/register' component={Login}/>
                     <Route path="/not-found" component={NotFound}/>
-                    <Route path='/' exact component={Home}/>
 
                     <ProtectedAuthRoute
                         path='/profile'

@@ -33,7 +33,7 @@ export default class AnswerList extends React.Component {
                         questions={questions}
                         name={answer.name}
                         handleClick={handleClick}
-                        username={user.name}
+                        user={user}
                         />;
                     })
                 }

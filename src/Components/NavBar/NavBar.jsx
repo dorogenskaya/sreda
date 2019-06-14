@@ -19,6 +19,7 @@ const NavBar = ({user}) => {
 
                     {!user && (
                         <React.Fragment>
+                            <h2>Гостевой вход</h2>
                             <li className="nav-list-item">
                                 <Link className="nav-list-item-link" to="/login">Login</Link>
                             </li>

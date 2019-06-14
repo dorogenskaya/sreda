@@ -1,34 +1,52 @@
 import React, {Component} from 'react';
-import './App.css';
-import 'antd/dist/antd.css';
+import { Spin } from 'antd';
 import Main from "../Main/Main";
 import NavBar from "../NavBar/NavBar";
 import firebase, {database} from "../../model/firebase";
+import './App.css';
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: null
+            user: null,
+            loading: true,
+            // auth: false
         };
     }
 
 
     componentWillMount() {
         this.authListener = firebase.auth().onAuthStateChanged((userLogged) => {
-            database.ref('users/' + userLogged.uid).on('value', snapshot => {
-                let user = snapshot.val();
-                if (user)
-                    return this.setState({user});
-                    return {};
-            });
+            if (userLogged) {
+                database.ref('users/' + userLogged.uid).on('value', snapshot => {
+                    let user = snapshot.val();
+                    console.log(user, userLogged);
+                    return this.setState({user, loading: false,
+                            // auth: true
+                        });
+
+                });
+            } else {
+                console.log(userLogged);
+                return this.setState({loading: false});
+            }
         });
     }
     componentWillUnmount(){
-
+        this.authListener();
     }
     render() {
-        const {user} = this.state;
+        const {user, loading} = this.state;
+        if (loading === true) {
+            return (
+                <div style={{textAlign: "center", position: "absolute", top: "25%", left: "50%"}}>
+                    <h2>Loading...</h2>
+                    <Spin size="large"/>
+                </div>
+                )
+        }
+
         return (
             <div className="App">
                 <NavBar user={user}/>
