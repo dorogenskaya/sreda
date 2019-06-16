@@ -91,7 +91,7 @@ class Theme extends Component {
 
     handleQuestionsReset = () => {
         this.setState({selectedQuestion: 0 });
-        this.props.history.push(this.props.previousLocation);
+        this.props.history.push();
     };
 
     render() {
@@ -124,6 +124,7 @@ class Theme extends Component {
                         sortState={sortState}
                         questions={questions}
                         user = {user}
+                        themeActive={themeActive}
                     />
 
                     <Pagination

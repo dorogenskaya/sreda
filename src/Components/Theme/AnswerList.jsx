@@ -14,7 +14,7 @@ export default class AnswerList extends React.Component {
     };
 
     render() {
-        const {sortState, answers, handleClick, user, questions, history} = this.props;
+        const {sortState, answers, handleClick, user, questions, history, themeActive} = this.props;
         return (
             <div className="AnswerList">
                 <Radio.Group defaultValue={sortState} size="small">
@@ -32,7 +32,9 @@ export default class AnswerList extends React.Component {
                         handleClick={handleClick}
                         user={user}
                         history={history}
-                        />;
+                        themeActive={themeActive}
+
+                    />;
                     })
                 }
             </div>

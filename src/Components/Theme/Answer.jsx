@@ -3,8 +3,6 @@ import './Answer.css';
 import PropTypes from 'prop-types';
 import AnswerTag from './AnswerTag';
 import AnswerActions from './AnswerActions';
-import { Redirect } from 'react-router-dom';
-
 
 class Answer extends React.Component {
     constructor(props) {
@@ -22,12 +20,9 @@ class Answer extends React.Component {
             const index = answer.likerList.indexOf(user.name);
             answerClone.liked = !answer.liked;
             answer.liked ? answer.likerList.push(user.name) : answer.likerList.splice(index,1);
-            this.setState({ answer });
+            return this.setState({ answer });
         }
-        console.log('anonim user liked');
-        // return(<Redirect to="/login" />);
         return history.push('/login');
-
     };
 
     render() {
@@ -51,7 +46,6 @@ class Answer extends React.Component {
                             }
                         </ul>
                         <p>{answer.description}</p>
-                        <video src={answer.videoSrc}></video>
 
                     </div>
                     <div className="Answer__profile">
