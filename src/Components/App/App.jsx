@@ -15,18 +15,20 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.authListener = firebase.auth().onAuthStateChanged((userLogged) => {
-            if (userLogged) {
-                database.ref('users/' + userLogged.uid).on('value', snapshot => {
-                    let user = snapshot.val();
-                    return this.setState({user, loading: false,
+        if (!this.state.user) {
+            this.authListener = firebase.auth().onAuthStateChanged((userLogged) => {
+                if (userLogged) {
+                    database.ref('users/' + userLogged.uid).on('value', snapshot => {
+                        let user = snapshot.val();
+                        return this.setState({user, loading: false,
                         });
 
-                });
-            } else {
-                return this.setState({loading: false});
-            }
-        });
+                    });
+                } else {
+                    return this.setState({loading: false});
+                }
+            });
+        }
     }
     componentWillUnmount(){
         this.authListener();

@@ -35,7 +35,10 @@ class Main extends Component {
                     {/*<Route path="/themes"*/}
                            {/*render={(props) => (<Theme {...props} user={user}/>)}/>*/}
                     <Route path='/program' component={Program}/>
-                    <Route path='/login' component={Login}/>
+                    <Route
+                        path='/login'
+                        render={(props) => (<Login {...props}/>)} />
+
                     <Route path='/logout' component={Logout}/>
                     <Route path='/register' component={Login}/>
                     <Route path="/not-found" component={NotFound}/>
@@ -50,7 +53,6 @@ class Main extends Component {
                         component={Admin}
                         user={user}
                     />
-                    {/*<Route path='/admin' exact component={Admin}/>*/}
                     <Route path="/admin/program/add" component={AddNewProgramForm}/>
                     <Route path="/admin/program/edit/name" component={EditProgramNameForm}/>
                     <Route path="/admin/program/edit" component={EditProgramContentForm}/>
@@ -62,9 +64,7 @@ class Main extends Component {
 
                 </Switch>
                 <Route path="/themes/:id/create-answer"
-                       render={(props) => (
-                           <CreateAnswerDrawer {...props} user={user}/>
-                       )}
+                       render={(props) => (<CreateAnswerDrawer {...props} user={user}/>)}
                 />
             </main>
         )

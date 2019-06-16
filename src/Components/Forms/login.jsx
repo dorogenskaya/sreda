@@ -29,9 +29,9 @@ class Login extends Component {
                         role: 4
                     };
                     database.ref('users/').child(user.uid).set(userData);
-                    window.location = '/';
+                    this.props.history.goBack();
                 } else {
-                    window.location = '/';
+                    this.props.history.goBack();
                 }
             })
         }).catch((error)=> {
