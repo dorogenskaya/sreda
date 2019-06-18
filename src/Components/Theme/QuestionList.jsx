@@ -5,12 +5,14 @@ import PropTypes from 'prop-types';
 
 class QuestionList extends React.Component {
     render() {
-        const { handleReset, questions, handleClick, selectedQuestion } = this.props;
+        const { handleReset, questions, handleClick, selectedQuestion, themeActive } = this.props;
         return (
             <ol className="QuestionList">
-                <Link to="/theme" onClick={() => handleReset()}>All
+                <Link
+                    onClick={() => handleReset()}
+                    to={`/themes/${themeActive}`}
+                >All
                 </Link>
-
                 {questions.map(({id,name}) => (
                     <Question
                         key={id}
@@ -18,6 +20,7 @@ class QuestionList extends React.Component {
                         id={id}
                         name={name}
                         selectedQuestion={selectedQuestion}
+                        themeActive={themeActive}
                     />)
                     )
                 }

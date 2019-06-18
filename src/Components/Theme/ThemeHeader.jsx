@@ -4,7 +4,7 @@ import { Button, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
 function ThemeHeader(props) {
-    const {showDrawer, themeId, themeName, themeDescription, subject} = props;
+    const {user, themeId, themeName, themeDescription, subject} = props;
     return (
         <div className="Theme-content__header">
             <h1 className="Theme-theme">{themeName}</h1>
@@ -13,17 +13,20 @@ function ThemeHeader(props) {
                     <Link to={`/program/${subject.id}`}>{subject.subjectName}</Link>
                 </li>
             </ul>
-            <Button type="primary"
-                    // onClick={showDrawer}
-            >
-                <Icon type="plus" />
-                <Link
-                    to={{
-                        pathname: `/themes/${themeId}/create-answer`,
-                        state: { subject: subject }
-                    }}
-                    style={{color: "#FFF"}}>Добавить ответ</Link>
-            </Button>
+            {user && (
+                <React.Fragment>
+                    <Button type="primary">
+                        <Icon type="plus" />
+                        <Link
+                            to={{
+                                pathname: `/themes/${themeId}/create-answer`,
+                                state: { subject: subject }
+                            }}
+                            style={{color: "#FFF"}}>Добавить ответ</Link>
+                    </Button>
+                </React.Fragment>
+            )}
+
         </div>
     );
 }

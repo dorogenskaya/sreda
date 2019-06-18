@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 
 export default class AnswerTag extends React.Component{
     render(){
-        const {onClick, value } = this.props;
+        const {onClick, value, themeActive} = this.props;
         return (
             <li className="Answer__tag" key={value}>
-                <Link to={`/theme/question${value}`} onClick={() => onClick(value)}>
-                    {value}</Link>
+                <Link to={`/themes/${themeActive}/question${value}`}
+                      onClick={() => onClick(value)}>{value}
+                </Link>
             </li>
         )
     }

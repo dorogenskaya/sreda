@@ -1,37 +1,43 @@
 import React from 'react';
-import Form from '../common/form';
-import Joi from "joi-browser";
+import {Form, Input, Button,} from 'antd';
+import firebase, {googleProvider} from "../../model/firebase";
 
 class Register extends Form {
     state ={
-        data: {username: "", password: "", name:""},
+        user: null,
+        token: null,
         errors: {}
     };
 
-    schema = {
-        username: Joi.string().required().label('Username').email(),
-        password: Joi.string().required().label('Password').min(5),
-        name: Joi.string().required().label('Name'),
+    handleSubmit = () => {
+        console.log('Login with Google');
+        firebase.auth().signInWithPopup(googleProvider).then(function(result) {
+            var token = result.credential.accessToken;
+            var user = result.user;
 
-    };
+            this.setState({token, user});
+            window.location = '/';
 
-    doSubmit = () => {
-        //call to server
-        console.log('Submitted');
+        }).catch(function(error) {
+            this.setState({error});
+        });
     };
 
     render() {
         return (
             <div style={{margin: '32px'}}>
                 <h1> Register </h1>
-                <form onSubmit={this.handleSubmit}>
-                    {this.renderInput('username', 'Username')}
-                    {this.renderInput('password', 'Password', 'password')}
-                    {this.renderInput('name', 'Name')}
-                    {this.renderButton('Register')}
-                </form>
+                <Form >
+                    <Form.Item>
+                        <Button
+                            onClick={this.handleSubmit}
+                            type="primary"
+                            htmlType="submit"
+                        >Register with Google
+                        </Button>
+                    </Form.Item>
+                </Form>
             </div>
-
         );
     }
 }

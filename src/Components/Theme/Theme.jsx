@@ -2,19 +2,19 @@ import React, {Component} from 'react';
 import AnswerList from "./AnswerList";
 import ThemeHeader from "./ThemeHeader";
 import QuestionList from "./QuestionList";
-import Pagination from "../Pagination/pagination";
+import Pagination from "../common/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
 import './Theme.css';
-import {database} from "../../model/firebase";
+import firebase, {database} from "../../model/firebase";
 
-const username = 'Lena Dorogenskaya';
+
 
 class Theme extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
+            user: null,
             answers: [],
             questions:[],
             currentPage: 1,
@@ -31,6 +31,9 @@ class Theme extends Component {
     }
 
     componentDidMount() {
+        const {user}= this.props;
+        // let user = firebase.auth().currentUser;
+
         const themeId = this.state.themeActive;
         database.ref('answers/' + themeId).on('value', snapshot => {
             let data = snapshot.val();
@@ -50,8 +53,8 @@ class Theme extends Component {
                 liked: !answer.liked ? false : answer.liked
             });
         }
-        this.setState({answers});
-    });
+        this.setState({answers, user});
+        });
 
         database.ref('themes/' + themeId).on('value', snapshot => {
             let theme = snapshot.val();
@@ -83,16 +86,16 @@ class Theme extends Component {
     };
 
     handleQuestionClick = (selectedQuestion) => {
-        console.log(selectedQuestion);
         this.setState({ selectedQuestion, currentPage: 1 })
     };
 
     handleQuestionsReset = () => {
         this.setState({selectedQuestion: 0 });
+        this.props.history.push();
     };
 
     render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject } = this.state;
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject, user } = this.state;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
@@ -100,12 +103,13 @@ class Theme extends Component {
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
         // const themeId = this.props.match.params.id;
+        const history = this.props.history;
 
         return (
             <div className="Theme">
                 <div className="Theme-content">
                     <ThemeHeader
-                        // showDrawer={this.handleShowDrawer}
+                        user = {user}
                         themeId={themeActive}
                         themeName={themeName}
                         themeDescription={themeDescription}
@@ -115,10 +119,12 @@ class Theme extends Component {
                     <AnswerList
                         answers={answersPage}
                         handleClick={this.handleQuestionClick}
-                        username={username}
+                        history={history}
                         handleSort={this.handleSort}
                         sortState={sortState}
                         questions={questions}
+                        user = {user}
+                        themeActive={themeActive}
                     />
 
                     <Pagination
@@ -141,6 +147,7 @@ class Theme extends Component {
                             questions={questions}
                             selectedQuestion={selectedQuestion}
                             handleReset={this.handleQuestionsReset}
+                            themeActive={themeActive}
                         />
                     </div>
                 </div>

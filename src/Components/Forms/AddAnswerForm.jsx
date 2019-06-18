@@ -65,6 +65,8 @@ class AddNewAnswer extends Component {
         database.ref('themes').once('value', snapshot => {
             let themesList = [];
             let data = snapshot.val();
+
+
             for (let key in data) {
                 themesList.push({key: key, themeName: data[key].themeName, subjectID: data[key].subject.id});
             }
@@ -152,9 +154,19 @@ class AddNewAnswer extends Component {
                     questionsList: values.questionsList,
                     title: values.title,
                     description: values.description,
-                    createDate: createDate
+                    createDate: createDate,
+                    creator: this.props.user.uid
                 }
-                database.ref('answers/' + this.state.themeActive.key).push().set(answerData);
+
+                let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key;
+
+                database
+                    .ref(`answers/${this.state.themeActive.key}/${newKey}`)
+                    .set(answerData)
+                    .then(() => {
+                        database.ref(`users/${this.props.user.uid}/answersList`).set([newKey]);
+                    }
+                );
                 this.props.history.push(this.props.previousLocation);
             }
             return err;
@@ -165,7 +177,6 @@ class AddNewAnswer extends Component {
         const {getFieldDecorator} = this.props.form;
         const {TextArea} = Input;
         const {themeActive, subjectActive, questionsList, options} = this.state;
-
         return (
             <div className="wrapper-block">
                 <Form onSubmit={this.handleSubmit}>
