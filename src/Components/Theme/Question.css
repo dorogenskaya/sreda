@@ -1,14 +1,4 @@
-.question-active{
-    color: #FFF;
-}
-.question-normal{
-    color: black;
-}
-
-.question .question {
+.question{
     cursor: pointer;
-}
-
-.question .question-active {
-    cursor: default;
+    margin-bottom: 8px;
 }

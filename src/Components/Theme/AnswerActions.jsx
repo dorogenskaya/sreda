@@ -7,19 +7,17 @@ class AnswerActions extends React.Component{
     render () {
         return (
             <div className="Answer__actions" >
-                <div>
-                    <Like
-                        handleLike={this.props.handleLike}
-                        liked={this.props.answer.liked}
-                    />
-                    <CoinCount
-                        likerList={this.props.answer.likerList}
-                    />
-                </div>
-
+                <Like
+                    className="Answer__action"
+                    handleLike={this.props.handleLike}
+                    liked={this.props.answer.liked}
+                />
+                <CoinCount
+                    className="Answer__action"
+                    likerList={this.props.answer.likerList}
+                />
                 <Button
-                    type="default"
-                    className="ant-btn"
+                    className="ant-btn Answer__action"
                     icon="star">
                 </Button>
             </div>

@@ -1,34 +1,23 @@
-.Theme-content {
-    max-width: 75%;
-    background-color: aqua;
-    padding: 32px;
+.Theme {
+    display: grid;
+    grid-template-columns: 3fr 1fr ;
 }
-
-    .Theme-content__header {
-        margin: 32px 0 60px 0;
+    .Theme-content {
+        padding: 32px;
     }
-
-        .Theme-theme {
-            font-size: 3em;
-            display: inline-block;
+        .Theme-content__header {
+            margin: 32px 0 56px 0;
         }
+            .Theme-content__header__name {
+                font-size: 3em;
+            }
 
-        .Theme-theme__types {
-            font-size: 1em;
-        }
-
-        .Theme-theme__types__items {
-        }
-
-.Theme-questions {
-    position: fixed;
-    right: 0;
-    top: 60px;
-    width: 25%;
-    height: 100vh;
-    background-color: #ffca77;
-}
-
-.Theme-intro {
-    font-size: large;
-}
+    .Theme-questions {
+        position: fixed;
+        right: 0;
+        top: 56px;
+        width: 25%;
+        height: 100vh;
+        background-color: #f9f9f9;
+        padding: 24px;
+    }

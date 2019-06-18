@@ -2,13 +2,22 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Question from './Question';
 import PropTypes from 'prop-types';
+import './QuestionList.css';
+import '../common/common.css';
+import classNames from "classnames";
 
 class QuestionList extends React.Component {
     render() {
         const { handleReset, questions, handleClick, selectedQuestion, themeActive } = this.props;
+
+        let linkClass = classNames('question',{
+            'link-active': !selectedQuestion,
+            'link-normal': selectedQuestion
+        });
         return (
             <ol className="QuestionList">
                 <Link
+                    className={linkClass}
                     onClick={() => handleReset()}
                     to={`/themes/${themeActive}`}
                 >All

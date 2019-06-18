@@ -9,17 +9,37 @@
 .Answer__profile{
     margin-bottom: 32px;
 }
-.Answer__profile h4, img{
-    display: inline-block;
-    padding-right: 24px;
-}
+    .Answer__profile h4, img{
+        display: inline-block;
+        padding-right: 24px;
+    }
 
 .Answer__divider{
-    border-bottom: 1px solid antiquewhite;
+    border-bottom: 1px solid black;
 }
+
 .Answer__tags {
     display: flex;
     text-align: right;
     list-style: none outside;
-    padding-inline-start: 0px;
+    padding: 0;
 }
+    .Answer__tag{
+        padding: 0 12px;
+        margin-left: 8px;
+        background-color: bisque;
+        border-radius: 3px;
+    }
+
+.Answer__actions{
+    display: grid;
+    grid-template-columns: 80px auto 32px;
+    grid-column-gap: 16px;
+    margin-bottom: 16px;
+}
+    .Answer__action{
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        font-size: 30px;
+        text-align: center;
+    }

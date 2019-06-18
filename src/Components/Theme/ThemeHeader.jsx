@@ -7,9 +7,9 @@ function ThemeHeader(props) {
     const {user, themeId, themeName, themeDescription, subject} = props;
     return (
         <div className="Theme-content__header">
-            <h1 className="Theme-theme">{themeName}</h1>
-            <ul className="Theme-theme__types">
-                <li className="Theme-theme__types__items">
+            <h1 className="Theme-content__header__name">{themeName}</h1>
+            <ul className="Theme-content__header__types">
+                <li className="Theme-content__header__types__items">
                     <Link to={`/program/${subject.id}`}>{subject.subjectName}</Link>
                 </li>
             </ul>

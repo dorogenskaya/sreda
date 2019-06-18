@@ -1,0 +1,16 @@
+.Link {
+    color: black;
+}
+    .Link :hover {
+        color: #cccccc;
+    }
+
+.link-active{
+    color: blue;
+    text-decoration: none;
+    cursor: default;
+}
+
+.link-normal{
+    color: black;
+}

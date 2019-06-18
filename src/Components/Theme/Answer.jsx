@@ -33,7 +33,7 @@ class Answer extends React.Component {
                     <div className="Answer__info">
                         <h2>{name}</h2>
                         <ul className="Answer__tags">
-                            Questions:
+                            {/*Вопросы:*/}
                             {questions
                                 .filter((question) => questionId.includes(question.id ))
                                 .map(tag =>
@@ -48,11 +48,10 @@ class Answer extends React.Component {
                         <p>{answer.description}</p>
 
                     </div>
-                    <div className="Answer__profile">
-                        {/*Component creator*/}
-                        <img src="" alt=""/>
-                        <h4>{answer.creator}</h4>
-                    </div>
+                    {/*<div className="Answer__profile">*/}
+                        {/*<img src="" alt=""/>*/}
+                        {/*<h4>{answer.creator}</h4>*/}
+                    {/*</div>*/}
                     <AnswerActions
                         handleLike={() => this.handleLike(this.state.answer)}
                         answer={answer}

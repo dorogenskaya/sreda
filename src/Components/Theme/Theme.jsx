@@ -5,10 +5,8 @@ import QuestionList from "./QuestionList";
 import Pagination from "../common/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
-import './Theme.css';
+// import './Theme.css';
 import firebase, {database} from "../../model/firebase";
-
-
 
 class Theme extends Component {
     constructor(props) {
@@ -18,7 +16,7 @@ class Theme extends Component {
             answers: [],
             questions:[],
             currentPage: 1,
-            pageSize: 2,
+            pageSize: 10,
             selectedQuestion: '',
             sortState: 'createDate',
 
@@ -27,7 +25,7 @@ class Theme extends Component {
             themeName:'',
             subject:{}
     };
-        this.handleQuestionClick = this.handleQuestionClick.bind(this);
+        // this.handleQuestionClick = this.handleQuestionClick.bind(this);
     }
 
     componentDidMount() {
@@ -102,9 +100,7 @@ class Theme extends Component {
 
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
-        // const themeId = this.props.match.params.id;
         const history = this.props.history;
-
         return (
             <div className="Theme">
                 <div className="Theme-content">
@@ -138,18 +134,14 @@ class Theme extends Component {
                 </div>
 
                 <div className="Theme-questions">
-                    <div className="Theme-content__wrapper">
-                        <h2>Вопросы по
-                            теме</h2>
-
-                        <QuestionList
-                            handleClick={this.handleQuestionClick}
-                            questions={questions}
-                            selectedQuestion={selectedQuestion}
-                            handleReset={this.handleQuestionsReset}
-                            themeActive={themeActive}
-                        />
-                    </div>
+                    <h2>Вопросы по теме</h2>
+                    <QuestionList
+                        handleClick={this.handleQuestionClick}
+                        questions={questions}
+                        selectedQuestion={selectedQuestion}
+                        handleReset={this.handleQuestionsReset}
+                        themeActive={themeActive}
+                    />
                 </div>
             </div>
         );
