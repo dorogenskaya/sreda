@@ -14,6 +14,8 @@ class AddNewTheme extends Component {
         this.state = {
             subjectsList: null,
             themesList: null,
+            programsArray: null,
+            levels: null,
             successMessage: ''
         }
 
@@ -34,6 +36,24 @@ class AddNewTheme extends Component {
             this.setState({
                 subjectsList: arraySubjects
             })
+        });
+
+        database.ref('programs').once('value', (snapShot) => {
+            let data = snapShot.val(),
+                programsArray = [];
+            for (let key in data) {
+                programsArray.push({id: key, programName: data[key].programName})
+            }
+
+            programsArray = programsArray.sort((a, b) => a.programName > b.programName ? 1 : -1);
+
+            this.setState({programsArray})
+        });
+
+        database.ref('levels').once('value', (snapShot) => {
+            let levels = snapShot.val();
+
+            this.setState({levels})
         });
     }
 
@@ -65,11 +85,22 @@ class AddNewTheme extends Component {
         let questionsArray,
             data = {
                 themeName: values.themeName,
-                subjectsList: values.subjectsList
+                subject: {
+                    id: values.subject,
+                    subjectName: 'test'
+                }
             };
 
         if (values.themeDescription) {
             data.themeDescription = values.themeDescription;
+        }
+
+        if (values.programList) {
+            data.programList = values.programList;
+        }
+
+        if (values.levelList) {
+            data.levelList = values.levelList;
         }
 
         return data;
@@ -104,14 +135,41 @@ class AddNewTheme extends Component {
                         )}
                     </Form.Item>
 
-                    <InputSelect name={`subjectsList`}
-                                 label={`Выберите предмет(ы)`}
+                    <InputSelect name={`programList`}
+                                 label={`Выберите программу(ы)`}
+                                 config={{
+                                     mode: 'tags',
+                                     placeholder: 'Выберите программу(ы)',
+                                     style: {width: '100%'},
+                                     autoClearSearchValue: true,
+                                     allowClear: true,
+                                     onChange: null
+                                 }}
+                                 form={this.props.form}
+                                 data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
+                    />
+
+                    <InputSelect name={`levelList`}
+                                 label={`Выберите класс(ы)`}
+                                 config={{
+                                     mode: 'tags',
+                                     placeholder: 'Выберите класс(ы)',
+                                     style: {width: '100%'},
+                                     autoClearSearchValue: true,
+                                     allowClear: true,
+                                     onChange: null
+                                 }}
+                                 form={this.props.form}
+                                 data={{data: this.state.levels, nameKey: 'label', valueKey: 'id'}}
+                    />
+
+                    <InputSelect name={`subject`}
+                                 label={`Выберите предмет`}
                                  rules={[{
                                      required: true,
                                      message: 'Выберите предмет'
                                  }]}
                                  config={{
-                                     mode: 'tags',
                                      placeholder: 'Выберите предмет',
                                      style: {width: '100%'},
                                      autoClearSearchValue: true,
