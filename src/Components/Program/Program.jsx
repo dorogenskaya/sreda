@@ -1,148 +1,217 @@
 import React, {Component} from 'react';
-import ProgramData from './testProgramData';
-import ProgramFilter from './ProgramFilter';
-import ClassesFilter from './ClassesFilter';
-import SubjectsFilter from './SubjectsFilter';
+import {Form} from 'antd';
+import InputSelect from '../Forms/Input/InputSelect';
 import SubjectsList from './SubjectList';
+import {database} from '../../model/firebase';
 import './Program.css';
 
-class Program extends Component {
+class EditProgramFilter extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            programs: [],
-            currentProgram: null,
-            classes: [] ,
-            currentClass: null,
-            subjects: [],
-            currentSubjects: [],
-            subjectsData: []
+            programsData: null,
+            programsArray: null,
+            currentProgram: '-LbdUMkq7sqkAR6zaSax',
+            levels: null,
+            currentLevel: 'level_5',
+            subjectsData: null,
+            subjectsList: null,
+            themesData: null,
+            subjectThemes: []
         }
-
-        this.handleChangeProgram = this.handleChangeProgram.bind(this);
-        this.handleChangeClass = this.handleChangeClass.bind(this);
-        this.handleChangeSubjects = this.handleChangeSubjects.bind(this);
     }
 
-    componentDidMount () {
-        const currentProgram = this.getCurrentProgram();
-        const classes = this.getCurrentClasses(currentProgram)
-        const currentClass = classes[0].id;
-        const subjects =  this.getCurrentSubjects(currentClass);
-        const currentSubjects =  [];
+    componentDidMount() {
+        database.ref('programs').once('value', (snapShot) => {
+            let programsData = snapShot.val(),
+                programsArray = [];
+            for (let key in programsData) {
+                programsArray.push({id: key, programName: programsData[key].programName})
+            }
+            this.setState({programsData, programsArray})
+            this.setDefaultValues();
+        })
 
-        this.setState({
-            programs: this.getDataByKey('Programs'),
-            currentProgram: currentProgram,
-            classes: classes ,
-            currentClass: currentClass,
-            subjects: subjects,
-            currentSubjects: currentSubjects,
-            subjectsData: this.getSubjectsData(currentClass, currentSubjects)
+        database.ref('subjects').once('value', (snapShot) => {
+            let subjectsData = snapShot.val(),
+                subjectsList = [];
+            for (let key in subjectsData) {
+                subjectsList.push({id: key, subjectName: subjectsData[key].subjectName})
+            }
+            this.setState({subjectsData, subjectsList})
+            this.setDefaultValues();
+        })
+
+        database.ref('themes').once('value', (snapShot) => {
+            this.setState({
+                themesData: snapShot.val()
+            })
         })
     }
 
-    getDataByKey = (key) => ProgramData[key];
-
-    getCurrentProgram (Program = this.getDataByKey('defaultProgram')) {
-        return !Program ? null : this.getDataByKey('Programs').filter((item) => item.id === Program)[0];
-    }
-
-    getCurrentClasses (Program) {
-        const allClasses = this.getDataByKey('classes');
-        let data;
-        if (Program) {
-            data = Program.classes.map((clId) => allClasses.filter((item) => item.id === clId)[0]);
+    setDefaultValues () {
+        if (this.state.subjectsData && this.state.programsData) {
+            this.setLevels(this.state.currentProgram, true)
+            this.props.form.setFieldsValue({'program': this.state.currentProgram})
         }
-        return Program ? data : allClasses
     }
 
-    getCurrentSubjects (cl) {
-        const subjectsData = this.getDataByKey('subjects');
-        let currentClassSubjects;
-        let data;
-        if (cl) {
-            currentClassSubjects = this.getDataByKey('classes').filter((cls) => cls.id === cl)[0].subjects;
-            data = currentClassSubjects.map((subjId) => {
-                return subjectsData.filter((item) => item.id === subjId)[0]
+    setLevels (id, isDefaultValue) {
+        let program = id ? this.state.programsData[id] : null,
+            levels = program ? program.levelList : null,
+            oldValue = this.getCurrentLevel();
+
+        if (levels) {
+            this.setState({levels})
+        }
+        this.props.form.setFieldsValue({'level':  isDefaultValue ? this.state.currentLevel : oldValue})
+
+        this.setSubjects(isDefaultValue ? this.state.currentLevel : oldValue, id);
+        this.setContentData(id, this.getCurrentLevel(), this.getCurrentSubjects());
+    }
+
+    setSubjects (level, programId) {
+        let subjectsList = [],
+            oldValue = this.getCurrentSubjects(),
+            newValue = [];
+        for (let key in this.state.subjectsData) {
+            if (this.isContainsSubject(level, programId, this.state.subjectsData[key])) {
+                subjectsList.push({id: key, subjectName: this.state.subjectsData[key].subjectName})
+                if (oldValue && oldValue.includes(key)) {
+                    newValue.push(key);
+                }
+            }
+        }
+
+        this.setState({subjectsList})
+        this.props.form.setFieldsValue({'subject': newValue.length ? newValue : undefined });
+        this.setContentData(this.getCurrentProgram(), level, this.getCurrentSubjects());
+    }
+
+    isContainsSubject (level, programId, subject) {
+        let levels = subject.levelList || [],
+            programs = subject.programList || [];
+
+        return (levels.includes(level) || !level) && (programs.includes(programId) || !programId)
+        // return (!level && !programId) || (levels.includes(level) && programs.includes(programId)) || !programId && levels.includes(level) || !level && programs.includes(programId)
+    }
+
+    getCurrentProgram () {
+        return this.props.form.getFieldsValue(['program']).program
+    }
+
+    getCurrentLevel () {
+        return this.props.form.getFieldsValue(['level']).level
+    }
+
+    getCurrentSubjects () {
+        return this.props.form.getFieldsValue(['subject']).subject
+    }
+
+    onChangeProgram = (id) => {
+        this.setLevels(id)
+    }
+
+    onChangeLevel = (id) => {
+        let programId = this.props.form.getFieldsValue(['program']).program;
+        this.setSubjects(id, programId);
+    }
+
+    onChangeSubjects = (id)=> {
+        this.setContentData(this.getCurrentProgram(), this.getCurrentLevel(), id);
+    }
+
+    setContentData (program, level, subjects) {
+        if (subjects) {
+            this.setState({
+                subjectThemes: this.collectContentData(program, level, subjects)
+            })
+        } else {
+            this.setState({
+                subjectThemes: []
             })
         }
-        return cl ? data : subjectsData;
     }
 
-    getSelectedSubjectsData (list) {
-        return this.state.subjects.filter((item) => list.includes(item.id))
-    }
-
-    getSubjectsData (cl, list) {
-        const subcjectsList = !list.length ? this.getCurrentSubjects(cl) : list;
-        return subcjectsList.map((item) => {
-            return {subjectLabel: item.label, themesList: this.getClassThemesData(item)};
+    collectContentData (program, level, subjects) {
+        let data = [];
+        subjects.forEach((subject) => {
+            let subjectLabel = this.state.subjectsData[subject].subjectName,
+                themesData = this.state.themesData,
+                themesList = [];
+            for (let key in themesData) {
+                if (themesData[key].subject.id === subject && this.isAllowedTheme(program, level, themesData[key])) {
+                    themesData[key].id = key;
+                    themesList.push(themesData[key]);
+                }
+            }
+            if (themesList.length) {
+                data.push({subjectLabel, themesList})
+            }
         })
+        return data;
     }
 
-    getClassThemesData (cl) {
-        return cl.themes.map((theme) => {
-            return this.getThemeData(theme);
-        })
+    isAllowedTheme(program, level, theme) {
+        return (theme.programList.includes(program) || !program) && (theme.levelList.includes(level) || !level)
     }
 
-    getThemeData (theme) {
-        return this.getDataByKey('themes').filter((item) => item.id === theme)[0];
-    }
-
-    handleChangeProgram (val) {
-        const currentProgram = this.getCurrentProgram(val);
-        const currentClasses = this.getCurrentClasses(currentProgram);
-        const currentClass = currentClasses.filter((cl) => cl.id === this.state.currentClass).length ? this.state.currentClass : this.currentClassesList[0].id;
-        const subjects = this.getCurrentSubjects(currentClass);
-        const currentSubjects = [];
-
-        this.setState({
-            currentProgram: currentProgram,
-            classes: currentClasses,
-            currentClass: currentClass,
-            subjects: subjects,
-            currentSubjects: currentSubjects,
-            subjectsData: this.getSubjectsData(currentClass, currentSubjects)
-        })
-    }
-
-    handleChangeClass (val) {
-        const currentClass = val;
-        const subjects = this.getCurrentSubjects(currentClass);
-        const currentSubjects = [];
-
-        this.setState({
-            currentClass: currentClass,
-            subjects: subjects,
-            currentSubjects: currentSubjects,
-            subjectsData: this.getSubjectsData(currentClass, currentSubjects)
-        })
-    }
-
-    handleChangeSubjects (val) {
-        const currentSubjects = val;
-        const subjectsData = this.getSubjectsData(this.state.currentClass, this.getSelectedSubjectsData(currentSubjects));
-
-        this.setState({
-            currentSubjects: currentSubjects,
-            subjectsData: subjectsData
-        })
-    }
-
-    render () {
+    render() {
         return (<div className="Program">
-                    <h1>Program Page</h1>
-                    <div className="Program-filters">
-                        <ProgramFilter programs={ this.state.programs} currentProgram={this.state.currentProgram} handleChange={this.handleChangeProgram}/>
-                        <ClassesFilter classes={this.state.classes} currentClass={this.state.currentClass} hanleChange={this.handleChangeClass}/>
-                        <SubjectsFilter subjects={this.state.subjects} currentSubjects={this.state.currentSubjects} hanleChange={this.handleChangeSubjects}/>
+            <h1>Program Page</h1>
+            <Form>
+                <div className="Program-filters">
+                    <div className="filter-block">
+                        <InputSelect name={`program`}
+                                     label={`Выберите программу`}
+                                     config={{
+                                         placeholder: 'Выберите программу',
+                                         style: {width: '100%'},
+                                         autoClearSearchValue: true,
+                                         allowClear: true,
+                                         onChange: this.onChangeProgram
+                                     }}
+                                     form={this.props.form}
+                                     data={{data: this.state.programsArray, nameKey: 'programName', valueKey: 'id'}}
+                        />
                     </div>
-                    <SubjectsList data={this.state.subjectsData}/>
-                </div>)
+                    <div className="filter-block">
+                        <InputSelect name={`level`}
+                                     label={`Выберите класс`}
+                                     config={{
+                                         placeholder: 'Выберите класс',
+                                         style: {width: '100%'},
+                                         autoClearSearchValue: true,
+                                         allowClear: true,
+                                         onChange: this.onChangeLevel
+                                     }}
+                                     form={this.props.form}
+                                     data={{data: this.state.levels, nameKey: 'label', valueKey: 'id'}}
+                        />
+                    </div>
+                    <div className="filter-block">
+                        <InputSelect name={`subject`}
+                                     label={`Выберите предмет`}
+
+                                     config={{
+                                         mode: 'tags',
+                                         placeholder: 'Выберите предмет',
+                                         style: {width: '100%'},
+                                         autoClearSearchValue: true,
+                                         allowClear: true,
+                                         onChange: this.onChangeSubjects
+                                     }}
+                                     form={this.props.form}
+                                     data={{data: this.state.subjectsList, nameKey: 'subjectName', valueKey: 'id'}}
+                        />
+                    </div>
+                </div>
+            </Form>
+            <SubjectsList data={this.state.subjectThemes}/>
+        </div>)
     }
 };
 
+const Program = Form.create({name: 'edit_program'})(EditProgramFilter);
 export default Program;
