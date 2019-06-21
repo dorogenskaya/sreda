@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Form, Input, Button, Cascader} from 'antd';
 import InputSelect from './Input/InputSelect';
 import {database} from '../../model/firebase';
+import '../common/common.css';
 
 class AddNewAnswer extends Component {
     constructor(props) {
@@ -244,6 +245,7 @@ class AddNewAnswer extends Component {
                         <Button
                             type="primary"
                             htmlType="submit"
+                            className="button btn-black"
                         >Сохранить ответ
                         </Button>
                     </Form.Item>

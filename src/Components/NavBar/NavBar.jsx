@@ -46,7 +46,7 @@ const NavBar = ({user}) => {
                     )}
                 </ul>
             </nav>
-        </header>
+         </header>
     );
 };
 

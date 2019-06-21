@@ -10,30 +10,34 @@ class QuestionList extends React.Component {
     render() {
         const { handleReset, questions, handleClick, selectedQuestion, themeActive } = this.props;
 
-        let linkClass = classNames('question',{
+        let linkClass = classNames('link',{
             'link-active': !selectedQuestion,
             'link-normal': selectedQuestion
         });
         return (
-            <ol className="QuestionList">
-                <Link
-                    className={linkClass}
-                    onClick={() => handleReset()}
-                    to={`/themes/${themeActive}`}
-                >All
-                </Link>
-                {questions.map(({id,name}) => (
-                    <Question
-                        key={id}
-                        handleClick={handleClick}
-                        id={id}
-                        name={name}
-                        selectedQuestion={selectedQuestion}
-                        themeActive={themeActive}
-                    />)
-                    )
-                }
-            </ol>
+            <div>
+                <div className="question" style={{listStyleType: "none"}}>
+                    <Link
+                        className={linkClass}
+                        onClick={() => handleReset()}
+                        to={`/themes/${themeActive}`}
+                    >Все вопросы
+                    </Link>
+                </div>
+                <ol className="QuestionList">
+                    {questions.map(({id,name}) => (
+                        <Question
+                            key={id}
+                            handleClick={handleClick}
+                            id={id}
+                            name={name}
+                            selectedQuestion={selectedQuestion}
+                            themeActive={themeActive}
+                        />)
+                        )
+                    }
+                </ol>
+            </div>
         );
     }
 }

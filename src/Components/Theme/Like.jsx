@@ -6,11 +6,10 @@ export default class Like extends React.Component {
         return (
             <Button
                 type={this.props.liked? "default"  : "primary"}
-                className="btn ant-btn"
+                // className="button btn-black"
                 onClick={this.props.handleLike}
                 icon={this.props.liked? "dislike" : "like"}
             >
-            <span className="align-middle">Like</span>
             </Button>
         )
     }

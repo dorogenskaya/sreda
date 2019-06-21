@@ -33,7 +33,6 @@ class Answer extends React.Component {
                     <div className="Answer__info">
                         <h2>{name}</h2>
                         <ul className="Answer__tags">
-                            {/*Вопросы:*/}
                             {questions
                                 .filter((question) => questionId.includes(question.id ))
                                 .map(tag =>
@@ -45,7 +44,7 @@ class Answer extends React.Component {
                                 )
                             }
                         </ul>
-                        <p>{answer.description}</p>
+                        <p className="intro">{answer.description}</p>
 
                     </div>
                     {/*<div className="Answer__profile">*/}

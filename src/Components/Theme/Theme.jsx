@@ -134,7 +134,7 @@ class Theme extends Component {
                 </div>
 
                 <div className="Theme-questions">
-                    <h2>Вопросы по теме</h2>
+                    {/*<h2>Вопросы по теме</h2>*/}
                     <QuestionList
                         handleClick={this.handleQuestionClick}
                         questions={questions}
