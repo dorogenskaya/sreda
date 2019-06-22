@@ -1,8 +1,9 @@
 import React from 'react';
-import './Answer.css';
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AnswerTag from './AnswerTag';
 import AnswerActions from './AnswerActions';
+import './Answer.css';
 
 class Answer extends React.Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class Answer extends React.Component {
     };
 
     render() {
-        const {handleClick, questionId, name, answer, questions,user } = this.props;
+        const {handleClick, questionId, name, answer, questions, user} = this.props;
 
         return (
             <div className="Answer">
@@ -47,10 +48,13 @@ class Answer extends React.Component {
                         <p className="intro">{answer.description}</p>
 
                     </div>
-                    {/*<div className="Answer__profile">*/}
-                        {/*<img src="" alt=""/>*/}
-                        {/*<h4>{answer.creator}</h4>*/}
-                    {/*</div>*/}
+                    <div className="Answer__profile">
+                        <Link to={{pathname: `/profile/${answer.creator.creatorId}`}}>
+                            <img src={answer.creator.creatorPicture} alt="" style={{width: 32}}/>
+                            <h4>{answer.creator.creatorName}</h4>
+                        </Link>
+
+                    </div>
                     <AnswerActions
                         handleLike={() => this.handleLike(this.state.answer)}
                         answer={answer}

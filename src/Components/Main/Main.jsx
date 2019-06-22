@@ -32,8 +32,7 @@ class Main extends Component {
                            render={(props) => (<Theme {...props} user={user}/>)}/>
                     <Route path="/themes/:id"
                            render={(props) => (<Theme {...props} user={user}/>)}/>
-                    {/*<Route path="/themes"*/}
-                           {/*render={(props) => (<Theme {...props} user={user}/>)}/>*/}
+
                     <Route path='/program' component={Program}/>
                     <Route
                         path='/login'

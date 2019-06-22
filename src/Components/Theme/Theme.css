@@ -12,14 +12,6 @@
                 font-size: 3em;
             }
 
-
-
-
-p.intro::first-letter {
-    color: #ff0000;
-    font-size:200%;
-}
-
 .Theme-content__header__subjects{
     padding: 0;
 }

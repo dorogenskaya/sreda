@@ -44,8 +44,6 @@
     text-shadow: none;
 }
 
-
-
 .App ::selection{
     color: #fff;
     background-color: #000;

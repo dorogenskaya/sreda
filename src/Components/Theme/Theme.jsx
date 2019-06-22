@@ -5,7 +5,7 @@ import QuestionList from "./QuestionList";
 import Pagination from "../common/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
-// import './Theme.css';
+import './Theme.css';
 import firebase, {database} from "../../model/firebase";
 
 class Theme extends Component {
@@ -20,7 +20,7 @@ class Theme extends Component {
             selectedQuestion: '',
             sortState: 'createDate',
 
-            themeActive: '-LfViy9MwyKAAk1QCyJO',
+            themeActive: this.props.match.params.id,
             themeDescription:'',
             themeName:'',
             subject:{}
@@ -30,7 +30,6 @@ class Theme extends Component {
 
     componentDidMount() {
         const {user}= this.props;
-        // let user = firebase.auth().currentUser;
 
         const themeId = this.state.themeActive;
         database.ref('answers/' + themeId).on('value', snapshot => {
@@ -93,7 +92,7 @@ class Theme extends Component {
     };
 
     render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject, user } = this.state;
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject, user} = this.state;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;

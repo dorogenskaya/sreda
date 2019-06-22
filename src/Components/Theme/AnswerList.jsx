@@ -15,28 +15,31 @@ export default class AnswerList extends React.Component {
 
     render() {
         const {sortState, answers, handleClick, user, questions, history, themeActive} = this.props;
+        console.log(answers);
         return (
             <div className="AnswerList">
-                <Radio.Group defaultValue={sortState} size="small">
-                    <Radio.Button value="createDate" onClick={() => this.sorting('createDate')} >Последние</Radio.Button>
-                    <Radio.Button value="favorite" onClick={() => this.sorting('likerlist.length')}>Популярные</Radio.Button>
-                </Radio.Group>
-
-                {answers.map(answer => {
-                    return <Answer
-                        key={answer.id}
-                        answer={answer}
-                        questionId={answer.tags}
-                        questions={questions}
-                        name={answer.name}
-                        handleClick={handleClick}
-                        user={user}
-                        history={history}
-                        themeActive={themeActive}
-
-                    />;
-                    })
-                }
+                {answers.length !== 0 && (
+                    <React.Fragment>
+                        <Radio.Group defaultValue={sortState} size="small">
+                            <Radio.Button value="createDate" onClick={() => this.sorting('createDate')} >Последние</Radio.Button>
+                            <Radio.Button value="favorite" onClick={() => this.sorting('likerlist.length')}>Популярные</Radio.Button>
+                        </Radio.Group>
+                        {answers.map(answer => {
+                            return <Answer
+                                key={answer.id}
+                                answer={answer}
+                                questionId={answer.tags}
+                                questions={questions}
+                                name={answer.name}
+                                handleClick={handleClick}
+                                user={user}
+                                history={history}
+                                themeActive={themeActive}
+                                />;
+                            })
+                        }
+                    </React.Fragment>
+                )}
             </div>
         );
     }

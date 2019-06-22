@@ -64,10 +64,9 @@ class AddNewTheme extends Component {
                 let data = this.normalizeData(values),
                     newKey = database.ref('theme').push().key,
                     newRefList;
-
                 database.ref(`themes/${newKey}`).set(data).then(()=>{
                     if (values.questions) {
-                        newRefList = newRefList = database.ref(`themes/${newKey}/questionsList`);
+                        newRefList = database.ref(`themes/${newKey}/questionsList`);
                         values.questions.forEach(item => {
                             newRefList.push({question: item});
                         })
@@ -80,14 +79,13 @@ class AddNewTheme extends Component {
         });
     };
 
-
     normalizeData (values) {
         let questionsArray,
             data = {
                 themeName: values.themeName,
                 subject: {
                     id: values.subject,
-                    subjectName: 'test'
+                    subjectName: this.getSubjectName(values.subject)
                 }
             };
 
@@ -104,6 +102,10 @@ class AddNewTheme extends Component {
         }
 
         return data;
+    }
+
+    getSubjectName (id) {
+        return this.state.subjectsList.filter(subject => subject.key === id)[0].subjectName
     }
 
     clearSuccessState () {

@@ -156,7 +156,11 @@ class AddNewAnswer extends Component {
                     title: values.title,
                     description: values.description,
                     createDate: createDate,
-                    creator: this.props.user.uid
+                    creator: {
+                        creatorName: this.props.user.name,
+                        creatorId:this.props.user.uid,
+                        creatorPicture: this.props.user.picture
+                    }
                 }
 
                 let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key;
