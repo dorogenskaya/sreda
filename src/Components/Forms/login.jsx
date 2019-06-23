@@ -13,7 +13,6 @@ class Login extends Component {
     }
 
     handleSubmit = () => {
-        let self = this;
         firebase.auth().signInWithPopup(googleProvider).then((result)=> {
             let user = result.user;
             this.setState({user});
@@ -35,7 +34,7 @@ class Login extends Component {
                 }
             })
         }).catch((error)=> {
-            error ? this.setState({error}) : {};
+            this.setState({error});
         });
 
     };

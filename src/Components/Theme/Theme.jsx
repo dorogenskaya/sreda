@@ -6,7 +6,7 @@ import Pagination from "../common/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
 import './Theme.css';
-import firebase, {database} from "../../model/firebase";
+import {database} from "../../model/firebase";
 
 class Theme extends Component {
     constructor(props) {
@@ -37,19 +37,19 @@ class Theme extends Component {
             let answers = [];
 
             for (let key in data){
-            const answer = data[key] ;
-            answers.push({
-                name: answer.title,
-                tags: answer.questionsList,
-                createDate: answer.createDate,
-                description: answer.description,
-                creator: answer.creator,
-                id: key,
-                coinCount: !answer.coinCount ? 0 : answer.coinCount,
-                likerList: !answer.likerList ? [] : answer.likerList,
-                liked: !answer.liked ? false : answer.liked
-            });
-        }
+                const answer = data[key];
+
+                answers.push({
+                    name: answer.title,
+                    tags: answer.questionsList,
+                    createDate: answer.createDate,
+                    description: answer.description,
+                    creator: answer.creator,
+                    id: key,
+                    likerList: !answer.likerList ? [] :  answer.likerList,
+                    liked: answer.likerList ? answer.likerList.includes(user.name) : false
+                });
+            }
         this.setState({answers, user});
         });
 

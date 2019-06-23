@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Input, Button} from 'antd';
 import InputSelect from './Input/InputSelect';
 import DynamicInputs from './Input/DynamicInputs';
 import {database} from '../../model/firebase';
 import {Link} from 'react-router-dom';
 
-let id = 0;
+// let id = 0;
 
 class AddNewTheme extends Component {
     constructor(props) {
@@ -80,7 +80,8 @@ class AddNewTheme extends Component {
     };
 
     normalizeData (values) {
-        let questionsArray,
+        let
+            // questionsArray,
             data = {
                 themeName: values.themeName,
                 subject: {

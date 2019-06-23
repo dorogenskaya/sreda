@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AnswerTag from './AnswerTag';
 import AnswerActions from './AnswerActions';
+import {database} from "../../model/firebase";
 import './Answer.css';
 
 class Answer extends React.Component {
@@ -15,19 +16,37 @@ class Answer extends React.Component {
 
     handleLike = answer => {
         let {answer: answerClone}  = this.state;
-        const {user, history} = this.props;
+        const {user, history, themeActive} = this.props;
+
         if(user){
-            console.log(user, 'user in answer');
             const index = answer.likerList.indexOf(user.name);
             answerClone.liked = !answer.liked;
-            answer.liked ? answer.likerList.push(user.name) : answer.likerList.splice(index,1);
+            if (answer.liked) {
+                answer.likerList.push(user.name);
+
+                database.ref().child(`/answers/${themeActive}/${answer.id}/`).update({likerList: answer.likerList });
+                database.ref().child(`/users/${user.uid}/answerLikes`).once("value", snapshot => {
+                    const answerLikes = snapshot.val() ? snapshot.val() : [];
+                    answerLikes.push(answer.id);
+                    database.ref().child(`/users/${user.uid}/`).update({answerLikes:answerLikes});
+                });
+
+            } else {
+                answer.likerList.splice(index,1);
+                database.ref().child(`/answers/${themeActive}/${answer.id}/`).update({likerList: answer.likerList });
+                database.ref().child(`/users/${user.uid}/answerLikes`).once("value", snapshot => {
+                    let answerLikes = snapshot.val();
+                    answerLikes.splice(answerLikes.indexOf(answer.id),1);
+                    database.ref().child(`/users/${user.uid}/`).update({answerLikes:answerLikes});
+                });
+            }
             return this.setState({ answer });
         }
         return history.push('/login');
     };
 
     render() {
-        const {handleClick, questionId, name, answer, questions, user} = this.props;
+        const {handleClick, questionId, name, answer, questions} = this.props;
 
         return (
             <div className="Answer">

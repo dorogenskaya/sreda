@@ -117,7 +117,7 @@ class AddNewAnswer extends Component {
         database.ref('themes/' + e[1].key).once('value', snapshot => {
             let data = snapshot.val();
             let questionsList = [];
-
+            console.log(data);
             if (data.questionsList) {
                 for (let key in data.questionsList){
                     questionsList.push({id: key, name: data.questionsList[key].question});

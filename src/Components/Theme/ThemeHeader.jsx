@@ -9,6 +9,7 @@ function ThemeHeader(props) {
     return (
         <div className="Theme-content__header">
             <h1 className="Theme-content__header__name">{themeName}</h1>
+            <p>{themeDescription}</p>
             <ul className="Theme-content__header__subjects">
                 <li className="Theme-content__header__subject">
                     <Link to={`/program/${subject.id}`}>{subject.subjectName}</Link>
