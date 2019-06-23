@@ -19,27 +19,56 @@ class Answer extends React.Component {
         const {user, history, themeActive} = this.props;
 
         if(user){
-            const index = answer.likerList.indexOf(user.name);
             answerClone.liked = !answer.liked;
             if (answer.liked) {
                 answer.likerList.push(user.name);
 
                 database.ref().child(`/answers/${themeActive}/${answer.id}/`).update({likerList: answer.likerList });
-                database.ref().child(`/users/${user.uid}/answerLikes`).once("value", snapshot => {
-                    const answerLikes = snapshot.val() ? snapshot.val() : [];
-                    answerLikes.push(answer.id);
-                    database.ref().child(`/users/${user.uid}/`).update({answerLikes:answerLikes});
+                database.ref().child(`/users/${user.uid}/answersLiked`).once("value", snapshot => {
+                    const answersLiked = snapshot.val() ? snapshot.val() : [];
+                    answersLiked.push(answer.id);
+                    database.ref().child(`/users/${user.uid}/`).update({answersLiked:answersLiked});
                 });
 
             } else {
-                answer.likerList.splice(index,1);
+                answer.likerList.splice(answer.likerList.indexOf(user.name),1);
                 database.ref().child(`/answers/${themeActive}/${answer.id}/`).update({likerList: answer.likerList });
-                database.ref().child(`/users/${user.uid}/answerLikes`).once("value", snapshot => {
-                    let answerLikes = snapshot.val();
-                    answerLikes.splice(answerLikes.indexOf(answer.id),1);
-                    database.ref().child(`/users/${user.uid}/`).update({answerLikes:answerLikes});
+                database.ref().child(`/users/${user.uid}/answersLiked`).once("value", snapshot => {
+                    let answersLiked = snapshot.val();
+                    answersLiked.splice(answersLiked.indexOf(answer.id),1);
+                    database.ref().child(`/users/${user.uid}/`).update({answersLiked:answersLiked});
                 });
             }
+            return this.setState({ answer });
+        }
+        return history.push('/login');
+    };
+
+    handleFavorite = (answer) => {
+        let {answer: answerClone}  = this.state;
+        const {user, history} = this.props;
+
+        if(user){
+            //toggle
+            answerClone.favorite = !answer.favorite;
+            //write to the users DB
+            if (answer.favorite) {
+                database.ref().child(`/users/${user.uid}/answersFavorite`).once("value", snapshot => {
+                    const answersFavorite = snapshot.val() ? snapshot.val() : [];
+                    answersFavorite.push(answer.id);
+                    database.ref().child(`/users/${user.uid}/`).update({answersFavorite:answersFavorite});
+                });
+
+            // delete from db
+
+            } else {
+                database.ref().child(`/users/${user.uid}/answersFavorite`).once("value", snapshot => {
+                    const answersFavorite = snapshot.val();
+                    answersFavorite.splice(answersFavorite.indexOf(answer.id),1);
+                    database.ref().child(`/users/${user.uid}/`).update({answersFavorite:answersFavorite});
+                });
+            }
+            console.log(answer.favorite);
             return this.setState({ answer });
         }
         return history.push('/login');
@@ -77,6 +106,7 @@ class Answer extends React.Component {
                     <AnswerActions
                         handleLike={() => this.handleLike(this.state.answer)}
                         answer={answer}
+                        handleFavorite={() => this.handleFavorite(this.state.answer)}
                     />
                 <div className="Answer__divider">
                 </div>

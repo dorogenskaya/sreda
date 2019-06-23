@@ -24,8 +24,7 @@ class Theme extends Component {
             themeDescription:'',
             themeName:'',
             subject:{}
-    };
-        // this.handleQuestionClick = this.handleQuestionClick.bind(this);
+        };
     }
 
     componentDidMount() {
@@ -47,7 +46,8 @@ class Theme extends Component {
                     creator: answer.creator,
                     id: key,
                     likerList: !answer.likerList ? [] :  answer.likerList,
-                    liked: answer.likerList ? answer.likerList.includes(user.name) : false
+                    liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
+                    favorite: !!(user && user.answersFavorite && user.answersFavorite.include(answer.id))
                 });
             }
         this.setState({answers, user});
@@ -133,7 +133,6 @@ class Theme extends Component {
                 </div>
 
                 <div className="Theme-questions">
-                    {/*<h2>Вопросы по теме</h2>*/}
                     <QuestionList
                         handleClick={this.handleQuestionClick}
                         questions={questions}
