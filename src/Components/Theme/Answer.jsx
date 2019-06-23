@@ -17,7 +17,6 @@ class Answer extends React.Component {
     handleLike = answer => {
         let {answer: answerClone}  = this.state;
         const {user, history, themeActive} = this.props;
-
         if(user){
             answerClone.liked = !answer.liked;
             if (answer.liked) {
@@ -49,18 +48,19 @@ class Answer extends React.Component {
         const {user, history} = this.props;
 
         if(user){
-            //toggle
             answerClone.favorite = !answer.favorite;
-            //write to the users DB
             if (answer.favorite) {
-                database.ref().child(`/users/${user.uid}/answersFavorite`).once("value", snapshot => {
-                    const answersFavorite = snapshot.val() ? snapshot.val() : [];
-                    answersFavorite.push(answer.id);
-                    database.ref().child(`/users/${user.uid}/`).update({answersFavorite:answersFavorite});
+                database
+                    .ref()
+                    .child(`/users/${user.uid}/answersFavorite`)
+                    .once("value", snapshot => {
+                        const answersFavorite = snapshot.val() ? snapshot.val() : [];
+                        answersFavorite.push(answer.id);
+                        database
+                            .ref()
+                            .child(`/users/${user.uid}/`)
+                            .update({answersFavorite:answersFavorite});
                 });
-
-            // delete from db
-
             } else {
                 database.ref().child(`/users/${user.uid}/answersFavorite`).once("value", snapshot => {
                     const answersFavorite = snapshot.val();
@@ -68,14 +68,29 @@ class Answer extends React.Component {
                     database.ref().child(`/users/${user.uid}/`).update({answersFavorite:answersFavorite});
                 });
             }
-            console.log(answer.favorite);
             return this.setState({ answer });
         }
         return history.push('/login');
     };
 
+    handleDelete = (answer) => {
+        const {user, themeActive} = this.props;
+        database
+            .ref()
+            .child(`/answers/${themeActive}/${answer.id}`)
+            .remove()
+            .then(() => {
+                database.ref().child(`/users/${user.uid}/answersList`).once("value", snapshot => {
+                    const answersList = snapshot.val();
+                    answersList.splice(answersList.indexOf(answer.id),1);
+                    database.ref().child(`/users/${user.uid}/`).update({answersList:answersList});
+                }
+                )
+            });
+    }
+
     render() {
-        const {handleClick, questionId, name, answer, questions} = this.props;
+        const {handleClick, questionId, name, answer, questions, user} = this.props;
 
         return (
             <div className="Answer">
@@ -106,7 +121,9 @@ class Answer extends React.Component {
                     <AnswerActions
                         handleLike={() => this.handleLike(this.state.answer)}
                         answer={answer}
+                        user={user}
                         handleFavorite={() => this.handleFavorite(this.state.answer)}
+                        handleDelete={() => this.handleDelete(this.state.answer)}
                     />
                 <div className="Answer__divider">
                 </div>

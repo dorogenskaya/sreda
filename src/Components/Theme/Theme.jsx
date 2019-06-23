@@ -37,7 +37,6 @@ class Theme extends Component {
 
             for (let key in data){
                 const answer = data[key];
-
                 answers.push({
                     name: answer.title,
                     tags: answer.questionsList,
@@ -47,8 +46,9 @@ class Theme extends Component {
                     id: key,
                     likerList: !answer.likerList ? [] :  answer.likerList,
                     liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
-                    favorite: !!(user && user.answersFavorite && user.answersFavorite.include(answer.id))
+                    favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key))
                 });
+
             }
         this.setState({answers, user});
         });

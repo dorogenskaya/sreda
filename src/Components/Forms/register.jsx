@@ -10,7 +10,6 @@ class Register extends Form {
     };
 
     handleSubmit = () => {
-        console.log('Login with Google');
         firebase.auth().signInWithPopup(googleProvider).then(function(result) {
             var token = result.credential.accessToken;
             var user = result.user;
