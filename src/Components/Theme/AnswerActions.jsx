@@ -1,5 +1,5 @@
 import React from 'react';
-import Toggle from './Toggle';
+import Toggle from '../common/Toggle';
 import CoinCount from './CoinCount';
 import {Button, Icon} from 'antd';
 
@@ -21,7 +21,7 @@ class AnswerActions extends React.Component{
                     likerList={answer.likerList}
                 />
 
-                {user && user.answersList && user.answersList.includes(answer.id) ? (
+                {user && user.uid === answer.creator.creatorId ? (
                     <Button type="danger"
                             style={{ width: "100%", height: 42}}
                             onClick={this.props.handleDelete}>
