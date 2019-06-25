@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import firebase from '../../model/firebase';
 
 class Logout extends Component {

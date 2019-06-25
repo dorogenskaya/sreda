@@ -8,7 +8,7 @@ class SubjectItem extends Component {
         return (<div className="subject-item">
             <h3 className="subject-item-title">{subjectLabel}</h3>
             <div className="themes-list">
-                {themesList.map((theme, i) => <ThemeItem key={i} data={theme}/>)}
+                {themesList.map((theme, i) => <ThemeItem key={i} data={theme} id={theme.id}/>)}
             </div>
         </div>)
     }

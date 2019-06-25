@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Form, Input, Button, Cascader} from 'antd';
 import InputSelect from './Input/InputSelect';
 import {database} from '../../model/firebase';
+import '../common/common.css';
 
 class AddNewAnswer extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class AddNewAnswer extends Component {
             subjectsList: [],
             themesList: [],
             options: []
-        }
+        };
 
         this.handleSelectTheme = this.handleSelectTheme.bind(this);
     }
@@ -94,11 +95,11 @@ class AddNewAnswer extends Component {
         }
     }
 
-    filterOptions(collectedArray) {
+    filterOptions = (collectedArray) => {
         return collectedArray.filter(object => {
             return object.children.length > 0
         });
-    }
+    };
 
     renameThemes(data) {
         let newThemes = [];
@@ -107,7 +108,7 @@ class AddNewAnswer extends Component {
                 label: obj.themeName,
                 key: obj.key
             })
-        )
+        );
         return newThemes;
     }
 
@@ -116,7 +117,6 @@ class AddNewAnswer extends Component {
         database.ref('themes/' + e[1].key).once('value', snapshot => {
             let data = snapshot.val();
             let questionsList = [];
-
             if (data.questionsList) {
                 for (let key in data.questionsList){
                     questionsList.push({id: key, name: data.questionsList[key].question});
@@ -132,13 +132,13 @@ class AddNewAnswer extends Component {
             this.setState({subjectActive, themeActive, questionsList, selectedQuestions: []});
             this.props.form.setFieldsValue({questionsList: undefined})
         });
-    }
+    };
 
     handleSelectQuestions = (value) => {
         let questionsList = [...this.state.questionsList];
         let selectedQuestions = questionsList.filter(question => value.includes(question.id));
         this.setState({selectedQuestions});
-    }
+    };
 
     handleSubmit = (e, v) => {
         e.preventDefault();
@@ -155,16 +155,26 @@ class AddNewAnswer extends Component {
                     title: values.title,
                     description: values.description,
                     createDate: createDate,
-                    creator: this.props.user.uid
-                }
+                    creator: {
+                        creatorName: this.props.user.name,
+                        creatorId:this.props.user.uid,
+                        creatorPicture: this.props.user.picture
+                    }
+                };
 
                 let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key;
-
                 database
                     .ref(`answers/${this.state.themeActive.key}/${newKey}`)
                     .set(answerData)
                     .then(() => {
-                        database.ref(`users/${this.props.user.uid}/answersList`).set([newKey]);
+                        database
+                            .ref()
+                            .child(`users/${this.props.user.uid}/answersList`)
+                            .once("value", snapshot => {
+                                const answersList = snapshot.val() ? snapshot.val() : [];
+                                answersList.push(newKey);
+                                database.ref().child(`/users/${this.props.user.uid}/`).update({answersList:answersList});
+                        });
                     }
                 );
                 this.props.history.push(this.props.previousLocation);
@@ -244,6 +254,7 @@ class AddNewAnswer extends Component {
                         <Button
                             type="primary"
                             htmlType="submit"
+                            className="button btn-black"
                         >Сохранить ответ
                         </Button>
                     </Form.Item>

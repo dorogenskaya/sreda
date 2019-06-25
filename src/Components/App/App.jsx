@@ -20,9 +20,7 @@ class App extends Component {
                 if (userLogged) {
                     database.ref('users/' + userLogged.uid).on('value', snapshot => {
                         let user = snapshot.val();
-                        return this.setState({user, loading: false,
-                        });
-
+                        return this.setState({user, loading: false});
                     });
                 } else {
                     return this.setState({loading: false});

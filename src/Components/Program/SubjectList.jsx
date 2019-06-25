@@ -10,7 +10,7 @@ class SubjectList extends Component {
                 data={item}
                 subjectLabel={item.subjectLabel}
                 themesList={item.themesList}/>)
-        }
+            }
         </div>
     }
 };

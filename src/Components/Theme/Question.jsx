@@ -1,21 +1,22 @@
 import React from 'react';
-import './Question.css';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import '../common/common.css';
+import './QuestionList.css';
 
 class Question extends React.Component {
     render() {
         const { id, name, handleClick, selectedQuestion, themeActive } = this.props;
-        let questionClass = classNames('question',{
-            'question-active': selectedQuestion === id,
-            'question-normal': selectedQuestion !== id,
+        let linkClass = classNames('link',{
+            'link-active': selectedQuestion === id,
+            'link-normal': selectedQuestion !== id,
         });
 
         return (
-            <li>
+            <li className="question">
                 <Link to={`/themes/${themeActive}/question${id}`}
-                      className={questionClass}
+                      className={linkClass}
                       onClick={() => handleClick(id)}>{name}
                 </Link>
             </li>

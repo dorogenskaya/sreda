@@ -1,6 +1,6 @@
 import React from 'react';
-import './AnswerTag.css';
-import { Link } from 'react-router-dom';
+import './Answer.css';
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 export default class AnswerTag extends React.Component{
