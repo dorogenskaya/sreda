@@ -6,9 +6,7 @@ import Pagination from "../common/pagination";
 import {paginate} from '../../util/paginate';
 import  _ from 'lodash';
 import './Theme.css';
-import firebase, {database} from "../../model/firebase";
-
-
+import {database} from "../../model/firebase";
 
 class Theme extends Component {
     constructor(props) {
@@ -18,21 +16,19 @@ class Theme extends Component {
             answers: [],
             questions:[],
             currentPage: 1,
-            pageSize: 2,
+            pageSize: 10,
             selectedQuestion: '',
             sortState: 'createDate',
 
-            themeActive: '-LfViy9MwyKAAk1QCyJO',
+            themeActive: this.props.match.params.id,
             themeDescription:'',
             themeName:'',
             subject:{}
-    };
-        this.handleQuestionClick = this.handleQuestionClick.bind(this);
+        };
     }
 
     componentDidMount() {
         const {user}= this.props;
-        // let user = firebase.auth().currentUser;
 
         const themeId = this.state.themeActive;
         database.ref('answers/' + themeId).on('value', snapshot => {
@@ -40,19 +36,20 @@ class Theme extends Component {
             let answers = [];
 
             for (let key in data){
-            const answer = data[key] ;
-            answers.push({
-                name: answer.title,
-                tags: answer.questionsList,
-                createDate: answer.createDate,
-                description: answer.description,
-                creator: answer.creator,
-                id: key,
-                coinCount: !answer.coinCount ? 0 : answer.coinCount,
-                likerList: !answer.likerList ? [] : answer.likerList,
-                liked: !answer.liked ? false : answer.liked
-            });
-        }
+                const answer = data[key];
+                answers.push({
+                    name: answer.title,
+                    tags: answer.questionsList,
+                    createDate: answer.createDate,
+                    description: answer.description,
+                    creator: answer.creator,
+                    id: key,
+                    likerList: !answer.likerList ? [] :  answer.likerList,
+                    liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
+                    favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key))
+                });
+
+            }
         this.setState({answers, user});
         });
 
@@ -95,16 +92,14 @@ class Theme extends Component {
     };
 
     render() {
-        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject, user } = this.state;
+        const {answers, selectedQuestion, currentPage, pageSize, questions, sortState, themeActive, themeName, themeDescription, subject, user} = this.state;
         const filteredAnswers = selectedQuestion
             ? answers.filter(({tags}) => tags.includes(selectedQuestion))
             : answers;
 
         const sorted = _.orderBy(filteredAnswers, [sortState], ['desc']);
         const answersPage = paginate(sorted, currentPage, pageSize);
-        // const themeId = this.props.match.params.id;
         const history = this.props.history;
-
         return (
             <div className="Theme">
                 <div className="Theme-content">
@@ -138,18 +133,13 @@ class Theme extends Component {
                 </div>
 
                 <div className="Theme-questions">
-                    <div className="Theme-content__wrapper">
-                        <h2>Вопросы по
-                            теме</h2>
-
-                        <QuestionList
-                            handleClick={this.handleQuestionClick}
-                            questions={questions}
-                            selectedQuestion={selectedQuestion}
-                            handleReset={this.handleQuestionsReset}
-                            themeActive={themeActive}
-                        />
-                    </div>
+                    <QuestionList
+                        handleClick={this.handleQuestionClick}
+                        questions={questions}
+                        selectedQuestion={selectedQuestion}
+                        handleReset={this.handleQuestionsReset}
+                        themeActive={themeActive}
+                    />
                 </div>
             </div>
         );

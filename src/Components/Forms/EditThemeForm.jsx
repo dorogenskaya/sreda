@@ -116,7 +116,7 @@ class EditTheme extends Component {
 
     getPreparedData(values, id) {
         let data = {},
-            removeList,
+            // removeList,
             questionsList = {};
 
         if (this.state.questionsList.length) {
@@ -171,7 +171,7 @@ class EditTheme extends Component {
     }
 
     render() {
-        const CheckboxGroup = Checkbox.Group;
+        // const CheckboxGroup = Checkbox.Group;
         const {getFieldDecorator} = this.props.form;
         const mainContent = this.state.isRemoveMode ? <h3>{'Для удаления темы нажмите кнопку "Удалить тему"'}</h3> :
             <EditThemeFields form={this.props.form} programList={this.state.programList} levelList={this.state.levelList} subjectsList={this.state.subjectsList} questionsList={this.state.questionsList} />;

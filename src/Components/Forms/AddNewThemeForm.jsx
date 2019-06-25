@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Form, Input, Icon, Button, Select} from 'antd';
+import {Form, Input, Button} from 'antd';
 import InputSelect from './Input/InputSelect';
 import DynamicInputs from './Input/DynamicInputs';
 import {database} from '../../model/firebase';
 import {Link} from 'react-router-dom';
 
-let id = 0;
+// let id = 0;
 
 class AddNewTheme extends Component {
     constructor(props) {
@@ -64,10 +64,9 @@ class AddNewTheme extends Component {
                 let data = this.normalizeData(values),
                     newKey = database.ref('theme').push().key,
                     newRefList;
-
                 database.ref(`themes/${newKey}`).set(data).then(()=>{
                     if (values.questions) {
-                        newRefList = newRefList = database.ref(`themes/${newKey}/questionsList`);
+                        newRefList = database.ref(`themes/${newKey}/questionsList`);
                         values.questions.forEach(item => {
                             newRefList.push({question: item});
                         })
@@ -80,14 +79,14 @@ class AddNewTheme extends Component {
         });
     };
 
-
     normalizeData (values) {
-        let questionsArray,
+        let
+            // questionsArray,
             data = {
                 themeName: values.themeName,
                 subject: {
                     id: values.subject,
-                    subjectName: 'test'
+                    subjectName: this.getSubjectName(values.subject)
                 }
             };
 
@@ -104,6 +103,10 @@ class AddNewTheme extends Component {
         }
 
         return data;
+    }
+
+    getSubjectName (id) {
+        return this.state.subjectsList.filter(subject => subject.key === id)[0].subjectName
     }
 
     clearSuccessState () {

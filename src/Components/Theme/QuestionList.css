@@ -1,0 +1,8 @@
+.QuestionList {
+      padding: 0 16px;
+  }
+
+.question{
+    cursor: pointer;
+    margin-bottom: 8px;
+}

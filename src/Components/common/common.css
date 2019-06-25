@@ -1,0 +1,50 @@
+.link {
+    color: black;
+    text-decoration: none;
+}
+.link:focus{
+    text-decoration: none;
+}
+
+.link:hover{
+    color: #cccccc;
+}
+
+.link-active{
+    color: #cccccc;
+    cursor: default;
+}
+
+.App .ant-btn,
+.ant-form .ant-btn{
+    color: #000;
+    border: 2px solid #000000;
+    background-color: #fff;
+    border-radius: 0;
+}
+.App .ant-btn-primary,
+.ant-form .ant-btn-primary {
+    color: #fff;
+    background-color: black;
+    border: 2px solid #000000;
+    border-radius: 0;
+    transition: all 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+    text-shadow: none;
+}
+
+.App .ant-btn:hover,
+.App .ant-btn:focus,
+.App .ant-btn:active
+.ant-form .ant-btn-primary:hover,
+.ant-form .ant-btn-primary:focus,
+.ant-form .ant-btn-primary:active{
+    color: #000;
+    border: 2px solid #000000;
+    background-color: #fff;
+    text-shadow: none;
+}
+
+.App ::selection{
+    color: #fff;
+    background-color: #000;
+}

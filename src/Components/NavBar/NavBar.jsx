@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from './logo.svg';
-import firebase, {database, googleProvider} from '../../model/firebase';
 
 const NavBar = ({user}) => {
     return (
@@ -47,7 +46,7 @@ const NavBar = ({user}) => {
                     )}
                 </ul>
             </nav>
-        </header>
+         </header>
     );
 };
 
