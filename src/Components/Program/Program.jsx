@@ -53,13 +53,22 @@ class EditProgramFilter extends Component {
     }
 
     setDefaultValues () {
+        let query = this.props.location.search,
+            subjectData;
         if (this.state.subjectsData && this.state.programsData) {
-            this.setLevels(this.state.currentProgram, true)
-            this.props.form.setFieldsValue({'program': this.state.currentProgram})
+            if (query) {
+                subjectData = [query.split('?').join('')];
+                this.setLevels(this.state.currentProgram, false)
+                this.props.form.setFieldsValue({'subject':  subjectData})
+                this.setContentData (null, null, subjectData)
+            } else {
+                this.setLevels(this.state.currentProgram, true, true)
+                this.props.form.setFieldsValue({'program': this.state.currentProgram})
+            }
         }
     }
 
-    setLevels (id, isDefaultValue) {
+    setLevels (id, isSetProgramId, isDefaultValue) {
         let program = id ? this.state.programsData[id] : null,
             levels = program ? program.levelList : null,
             oldValue = this.getCurrentLevel();
@@ -69,7 +78,7 @@ class EditProgramFilter extends Component {
         }
         this.props.form.setFieldsValue({'level':  isDefaultValue ? this.state.currentLevel : oldValue})
 
-        this.setSubjects(isDefaultValue ? this.state.currentLevel : oldValue, id);
+        this.setSubjects(isDefaultValue ? this.state.currentLevel : oldValue, isSetProgramId ? id : null);
     }
 
     setSubjects (level, programId) {
@@ -111,7 +120,7 @@ class EditProgramFilter extends Component {
     }
 
     onChangeProgram = (id) => {
-        this.setLevels(id)
+        this.setLevels(id, true)
     }
 
     onChangeLevel = (id) => {
