@@ -17,12 +17,19 @@ class EditProgramFilter extends Component {
             currentLevel: 'level_5',
             subjectsData: null,
             subjectsList: null,
+            subjectsIds: null,
             themesData: null,
             subjectThemes: []
         }
     }
 
     componentDidMount() {
+        database.ref('themes').once('value', (snapShot) => {
+            this.setState({
+                themesData: snapShot.val()
+            })
+        })
+
         database.ref('programs').once('value', (snapShot) => {
             let programsData = snapShot.val(),
                 programsArray = [];
@@ -36,28 +43,32 @@ class EditProgramFilter extends Component {
         database.ref('subjects').once('value', (snapShot) => {
             let subjectsData = snapShot.val(),
                 subjectsList = [];
+
             for (let key in subjectsData) {
                 subjectsList.push({id: key, subjectName: subjectsData[key].subjectName})
             }
             this.setState({subjectsData, subjectsList})
             this.setDefaultValues();
         })
-
-        database.ref('themes').once('value', (snapShot) => {
-            this.setState({
-                themesData: snapShot.val()
-            })
-        })
     }
 
     setDefaultValues () {
+        let query = this.props.location.search,
+            subjectData;
         if (this.state.subjectsData && this.state.programsData) {
-            this.setLevels(this.state.currentProgram, true)
-            this.props.form.setFieldsValue({'program': this.state.currentProgram})
+            if (query) {
+                subjectData = [query.split('?').join('')];
+                this.setLevels(this.state.currentProgram, false)
+                this.props.form.setFieldsValue({'subject':  subjectData})
+                this.setContentData (null, null, subjectData)
+            } else {
+                this.setLevels(this.state.currentProgram, true, true)
+                this.props.form.setFieldsValue({'program': this.state.currentProgram})
+            }
         }
     }
 
-    setLevels (id, isDefaultValue) {
+    setLevels (id, isSetProgramId, isDefaultValue) {
         let program = id ? this.state.programsData[id] : null,
             levels = program ? program.levelList : null,
             oldValue = this.getCurrentLevel();
@@ -67,16 +78,17 @@ class EditProgramFilter extends Component {
         }
         this.props.form.setFieldsValue({'level':  isDefaultValue ? this.state.currentLevel : oldValue})
 
-        this.setSubjects(isDefaultValue ? this.state.currentLevel : oldValue, id);
-        this.setContentData(id, this.getCurrentLevel(), this.getCurrentSubjects());
+        this.setSubjects(isDefaultValue ? this.state.currentLevel : oldValue, isSetProgramId ? id : null);
     }
 
     setSubjects (level, programId) {
         let subjectsList = [],
             oldValue = this.getCurrentSubjects(),
-            newValue = [];
+            newValue = [],
+            subjectsIds = [];
         for (let key in this.state.subjectsData) {
             if (this.isContainsSubject(level, programId, this.state.subjectsData[key])) {
+                subjectsIds.push(key)
                 subjectsList.push({id: key, subjectName: this.state.subjectsData[key].subjectName})
                 if (oldValue && oldValue.includes(key)) {
                     newValue.push(key);
@@ -84,9 +96,8 @@ class EditProgramFilter extends Component {
             }
         }
 
-        this.setState({subjectsList})
         this.props.form.setFieldsValue({'subject': newValue.length ? newValue : undefined });
-        this.setContentData(this.getCurrentProgram(), level, this.getCurrentSubjects());
+        this.setState({subjectsList, subjectsIds}, () => {this.setContentData(programId, level, this.getCurrentSubjects())})
     }
 
     isContainsSubject (level, programId, subject) {
@@ -94,7 +105,6 @@ class EditProgramFilter extends Component {
             programs = subject.programList || [];
 
         return (levels.includes(level) || !level) && (programs.includes(programId) || !programId)
-        // return (!level && !programId) || (levels.includes(level) && programs.includes(programId)) || !programId && levels.includes(level) || !level && programs.includes(programId)
     }
 
     getCurrentProgram () {
@@ -110,12 +120,11 @@ class EditProgramFilter extends Component {
     }
 
     onChangeProgram = (id) => {
-        this.setLevels(id)
+        this.setLevels(id, true)
     }
 
     onChangeLevel = (id) => {
-        let programId = this.props.form.getFieldsValue(['program']).program;
-        this.setSubjects(id, programId);
+        this.setSubjects(id, this.getCurrentProgram());
     }
 
     onChangeSubjects = (id)=> {
@@ -123,25 +132,21 @@ class EditProgramFilter extends Component {
     }
 
     setContentData (program, level, subjects) {
-        if (subjects) {
-            this.setState({
-                subjectThemes: this.collectContentData(program, level, subjects)
-            })
-        } else {
-            this.setState({
-                subjectThemes: []
-            })
-        }
+        let subjectsData = subjects && subjects.length ? subjects : this.state.subjectsIds
+        this.setState({
+            subjectThemes: this.collectContentData(program, level, subjectsData)
+        })
     }
 
     collectContentData (program, level, subjects) {
-        let data = [];
+        let data = [],
+            themesData = this.state.themesData;
+
         subjects.forEach((subject) => {
             let subjectLabel = this.state.subjectsData[subject].subjectName,
-                themesData = this.state.themesData,
                 themesList = [];
             for (let key in themesData) {
-                if (themesData[key].subject.id === subject && this.isAllowedTheme(program, level, themesData[key])) {
+                if (themesData[key].subject.id === subject && this.isAllowedTheme(program, level, themesData[key], subjectLabel)) {
                     themesData[key].id = key;
                     themesList.push(themesData[key]);
                 }
@@ -153,7 +158,7 @@ class EditProgramFilter extends Component {
         return data;
     }
 
-    isAllowedTheme(program, level, theme) {
+    isAllowedTheme(program, level, theme, sub) {
         return (theme.programList.includes(program) || !program) && (theme.levelList.includes(level) || !level)
     }
 
