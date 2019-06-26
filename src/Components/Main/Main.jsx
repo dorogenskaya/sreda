@@ -15,7 +15,7 @@ import EditProgramContentForm from "../Forms/EditProgramContentForm";
 import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
 import AddNewThemeForm from '../Forms/AddNewThemeForm';
 import EditThemeForm from '../Forms/EditThemeForm';
-import Profile from "../Profile/profile";
+import Profile from "../Profile/Profile";
 import Logout from "../Forms/logout";
 import {ProtectedAuthRoute, ProtectedRoleRoute }from "../common/protectedRoute";
 
@@ -43,10 +43,13 @@ class Main extends Component {
                     <Route path="/not-found" component={NotFound}/>
 
                     <ProtectedAuthRoute
-                        path='/profile'
+                        path='/myprofile'
                         component={Profile}
                         user={user}
                     />
+                    <Route path="/profile/:id"
+                           render={(props) => (<Profile {...props} user={user}/>)}/>
+
                     <ProtectedRoleRoute
                         exact path='/admin'
                         component={Admin}

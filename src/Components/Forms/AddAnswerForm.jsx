@@ -161,20 +161,25 @@ class AddNewAnswer extends Component {
                         creatorPicture: this.props.user.picture
                     }
                 };
+                const {themeActive} = this.state;
 
-                let newKey = database.ref(`answers/${this.state.themeActive.key}`).push().key;
+                let newKey = database.ref(`answers/${themeActive.key}`).push().key;
                 database
-                    .ref(`answers/${this.state.themeActive.key}/${newKey}`)
+                    .ref(`answers/${themeActive.key}/${newKey}`)
                     .set(answerData)
                     .then(() => {
                         database
                             .ref()
-                            .child(`users/${this.props.user.uid}/answersList`)
+                            .child(`users/${this.props.user.uid}/answersList/${themeActive.key}`)
                             .once("value", snapshot => {
                                 const answersList = snapshot.val() ? snapshot.val() : [];
                                 answersList.push(newKey);
-                                database.ref().child(`/users/${this.props.user.uid}/`).update({answersList:answersList});
+                                database.ref().child(`users/${this.props.user.uid}/answersList/${themeActive.key}`).update(answersList);
                         });
+                        // database
+                        //     .ref()
+                        //     .child(`users/${this.props.user.uid}/answersList/${themeActive.key}`)
+                        //     .set({themeId: newKey});
                     }
                 );
                 this.props.history.push(this.props.previousLocation);

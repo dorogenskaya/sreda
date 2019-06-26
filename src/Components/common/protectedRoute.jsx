@@ -1,14 +1,13 @@
 import React from 'react';
 import {Route, Redirect } from 'react-router-dom';
 
-// pic info about auth user from separate service
 export const ProtectedAuthRoute = ({user, component: Component, ...rest}) => {
     return (
         <Route
             {...rest}
             render = {props => {
                 if (!user)  return <Redirect to='/login'/>;
-                return <Component {...props}/> ;
+                return <Component {...props} user={user}/> ;
             }}/>
     );
 };
