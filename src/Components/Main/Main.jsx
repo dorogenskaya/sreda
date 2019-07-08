@@ -15,7 +15,7 @@ import EditProgramContentForm from "../Forms/EditProgramContentForm";
 import AddNewSubjectForm from '../Forms/AddNewSubjectForm';
 import AddNewThemeForm from '../Forms/AddNewThemeForm';
 import EditThemeForm from '../Forms/EditThemeForm';
-import Profile from "../Profile/Profile";
+import Profile from "../Profile/profile";
 import Logout from "../Forms/logout";
 import {ProtectedAuthRoute, ProtectedRoleRoute }from "../common/protectedRoute";
 
