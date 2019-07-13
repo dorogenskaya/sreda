@@ -6,7 +6,6 @@ import {Button, Icon} from 'antd';
 class AnswerActions extends React.Component{
     render () {
         const {answer, user} = this.props;
-        // console.log(answer.id);
         return (
             <div className="Answer__actions" >
                 <Toggle

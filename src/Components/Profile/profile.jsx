@@ -19,110 +19,62 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const {user} = this.props;
-        const {activeTab} = this.state;
+        this.getAnswers(this.props.user, this.state.activeTab);
+    }
 
-        const getAnswers = new Promise((resolve, reject) => {
-                const data = database.ref().child(`/users/${user.uid}/answersList`).on("value", snapshot => {
-                    let answersLiked = snapshot.val(),
-                        answers = [];
-                    resolve(answersLiked);
+    handleTab = (activeTab) => {
+        console.log(activeTab,this.state.user);
+        this.getAnswers(this.state.user,activeTab);
+    };
 
-                });
 
-            reject('fdjksfjlds');
-        });
-        getAnswers.then((data)=>{
-            const answersLiked = data;
-            let answers = [];
-            for (let key in answersLiked) {
-                answersLiked[key].map( (i) => {
-                    database
-                        .ref(`/answers/${key}/${i}`)
-                        .on("value", snapshot => {
-                            let answer = snapshot.val();
+    handlePageClick = (currentPage) =>{
+        this.setState({ currentPage });
+    };
+
+    getAnswers = (user, activeTab) => {
+        if (activeTab === 'Мои') {
+            database.ref('/answers').on("value", snapshot => {
+                let answersObject = snapshot.val(),
+                    answers = [];
+                for (let themeKey in answersObject) {
+                    let theme = answersObject[themeKey];
+
+                    for (let key in theme) {
+                        let answer = theme[key];
+                        if (answer.creator.creatorId === user.uid)
+
                             answers.push({
                                 name: answer.title,
                                 tags: answer.questionsList,
                                 createDate: answer.createDate,
                                 description: answer.description,
                                 creator: answer.creator,
-                                id: i,
+                                id: key,
                                 likerList: !answer.likerList ? [] :  answer.likerList,
                                 liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
-                                favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(i))
+                                favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key)),
+                                themeId: themeKey,
+                                themeName: answer.theme.themeName
                             });
-                            return answers;
-                        });
                     }
-                )
-            }
-
-            console.log(data);})
-    }
-
-    handleTab = (activeTab) => {
-        console.log(this);
-        const {user} = this.state;
-
-        const myFirstPromise = new Promise((resolve, reject) => {
-            this.getAnswers(user, activeTab);
-            const answers = this.getAnswers(user, activeTab);
-            console.log(answers);
-            if (answers) resolve('good');
-            reject ('bad');
-        });
-
-        myFirstPromise.then((message) => {
-            console.log("Yay! " + message);
-        });
-    };
-
-    handlePageClick = (currentPage) =>{
-        this.setState({ currentPage });
-    };
-
-
-    getAnswers = (user, activeTab) => {
-        if (activeTab === 'Мои') {
-            database.ref().child(`/users/${user.uid}/answersList`).on("value", snapshot => {
-                let answersLiked = snapshot.val(),
-                    answers = [];
-                for (let key in answersLiked) {
-                    answersLiked[key].map( (i) => {
-                        database
-                            .ref(`/answers/${key}/${i}`)
-                            .on("value", snapshot => {
-                                let answer = snapshot.val();
-                                answers.push({
-                                    name: answer.title,
-                                    tags: answer.questionsList,
-                                    createDate: answer.createDate,
-                                    description: answer.description,
-                                    creator: answer.creator,
-                                    id: i,
-                                    likerList: !answer.likerList ? [] :  answer.likerList,
-                                    liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
-                                    favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(i))
-                                });
-                                return answers;
-                            }).then((answers) => {
-                            console.log(answers);
-                        });
-                        }
-                    )
                 }
+                this.setDataAnswers(answers)
             });
         } else {
-            return console.log("favorites");
+            //TAKE FAVORITES
+            console.log("favorites");
         }
     };
+
+    setDataAnswers (answers) {
+        this.setState({answers: answers})
+    }
 
 
     render() {
         const {answers, currentPage, pageSize, questions, sortState, activeTab, user} = this.state;
 
-        // const answersActiveTab = this.getAnswers(activeTab, user);
         const answersPage = paginate(answers, currentPage, pageSize);
         const history = this.props.history;
 

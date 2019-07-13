@@ -91,40 +91,47 @@ class Answer extends React.Component {
 
     render() {
         const {handleClick, questionId, name, answer, questions, user} = this.props;
-
+        const {pathname} = this.props.history.location;
+        console.log(answer);
         return (
             <div className="Answer">
-                    <div className="Answer__info">
-                        <h2>{name}</h2>
-                        <ul className="Answer__tags">
-                            {questions
-                                .filter((question) => questionId.includes(question.id ))
-                                .map(tag =>
-                                    <AnswerTag
-                                        key={tag.id}
-                                        onClick={() => handleClick(tag.id)}
-                                        value={tag.name}
-                                    />
-                                )
-                            }
-                        </ul>
-                        <p className="intro">{answer.description}</p>
-
-                    </div>
-                    <div className="Answer__profile">
-                        <Link to={{pathname: `/profile/${answer.creator.creatorId}`}}>
-                            <img src={answer.creator.creatorPicture} alt="" style={{width: 32}}/>
-                            <h4>{answer.creator.creatorName}</h4>
+                <div className="Answer__info">
+                    {pathname === '/myprofile' && (
+                        <Link to={{pathname: `/themes/${answer.themeId}`}}>
+                            <h4>{answer.themeName}</h4>
                         </Link>
 
-                    </div>
-                    <AnswerActions
-                        handleLike={() => this.handleLike(this.state.answer)}
-                        answer={answer}
-                        user={user}
-                        handleFavorite={() => this.handleFavorite(this.state.answer)}
-                        handleDelete={() => this.handleDelete(this.state.answer)}
-                    />
+                    )}
+                    <h2>{name}</h2>
+                    <ul className="Answer__tags">
+                        {questions
+                            .filter((question) => questionId.includes(question.id ))
+                            .map(tag =>
+                                <AnswerTag
+                                    key={tag.id}
+                                    onClick={() => handleClick(tag.id)}
+                                    value={tag.name}
+                                />
+                            )
+                        }
+                    </ul>
+                    <p className="intro">{answer.description}</p>
+
+                </div>
+                <div className="Answer__profile">
+                    <Link to={{pathname: `/profile/${answer.creator.creatorId}`}}>
+                        <img src={answer.creator.creatorPicture} alt="" style={{width: 32}}/>
+                        <h4>{answer.creator.creatorName}</h4>
+                    </Link>
+
+                </div>
+                <AnswerActions
+                    handleLike={() => this.handleLike(this.state.answer)}
+                    answer={answer}
+                    user={user}
+                    handleFavorite={() => this.handleFavorite(this.state.answer)}
+                    handleDelete={() => this.handleDelete(this.state.answer)}
+                />
                 <div className="Answer__divider">
                 </div>
             </div>

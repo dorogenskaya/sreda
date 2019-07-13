@@ -150,7 +150,7 @@ class AddNewAnswer extends Component {
             if (!err && values) {
                 const answerData = {
                     subject: this.state.subjectActive.key,
-                    theme: this.state.themeActive.key,
+                    theme: {themeId: this.state.themeActive.key, themeName: this.state.themeActive.themeName},
                     questionsList: values.questionsList,
                     title: values.title,
                     description: values.description,
