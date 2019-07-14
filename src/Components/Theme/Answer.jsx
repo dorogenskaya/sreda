@@ -96,7 +96,7 @@ class Answer extends React.Component {
         return (
             <div className="Answer">
                 <div className="Answer__info">
-                    {pathname === '/myprofile' && (
+                    {pathname.includes('profile') && (
                         <Link to={{pathname: `/themes/${answer.themeId}`}}>
                             <h4>{answer.themeName}</h4>
                         </Link>

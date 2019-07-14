@@ -30,7 +30,7 @@ const NavBar = ({user}) => {
                     {user && (
                         <React.Fragment>
                             <li className="nav-list-item">
-                                <Link className="nav-list-item-link" to="/myprofile">{user.name}</Link>
+                                <Link className="nav-list-item-link" to="/profile/myprofile">{user.name}</Link>
                             </li>
                             <li className="nav-list-item">
                                 <Link className="nav-list-item-link" to="/logout">Logout</Link>

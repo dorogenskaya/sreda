@@ -43,7 +43,7 @@ class Main extends Component {
                     <Route path="/not-found" component={NotFound}/>
 
                     <ProtectedAuthRoute
-                        path='/myprofile'
+                        path='/profile/myprofile'
                         component={Profile}
                         user={user}
                     />

@@ -23,7 +23,6 @@ class Profile extends Component {
     }
 
     handleTab = (activeTab) => {
-        console.log(activeTab,this.state.user);
         this.getAnswers(this.state.user,activeTab);
     };
 
@@ -34,7 +33,7 @@ class Profile extends Component {
 
     getAnswers = (user, activeTab) => {
         if (activeTab === 'Мои') {
-            database.ref('/answers').on("value", snapshot => {
+            database.ref('answers').on("value", snapshot => {
                 let answersObject = snapshot.val(),
                     answers = [];
                 for (let themeKey in answersObject) {
@@ -62,8 +61,35 @@ class Profile extends Component {
                 this.setDataAnswers(answers)
             });
         } else {
-            //TAKE FAVORITES
-            console.log("favorites");
+            console.log(user.answersFavorite);
+            database.ref('answers').on("value", snapshot => {
+                let answersObject = snapshot.val(),
+                    answers = [];
+                user.answersFavorite.forEach((answerId) => {
+                    for (let themeKey in answersObject) {
+                        let theme = answersObject[themeKey];
+
+                        for (let key in theme) {
+                            let answer = theme[key];
+                            if (key === answerId)
+                                answers.push({
+                                    name: answer.title,
+                                    tags: answer.questionsList,
+                                    createDate: answer.createDate,
+                                    description: answer.description,
+                                    creator: answer.creator,
+                                    id: key,
+                                    likerList: !answer.likerList ? [] : answer.likerList,
+                                    liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
+                                    favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key)),
+                                    themeId: themeKey,
+                                    themeName: answer.theme.themeName
+                                });
+                        }
+                    }
+                    this.setDataAnswers(answers)
+                });
+            });
         }
     };
 
