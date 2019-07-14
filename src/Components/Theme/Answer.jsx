@@ -92,7 +92,6 @@ class Answer extends React.Component {
     render() {
         const {handleClick, questionId, name, answer, questions, user} = this.props;
         const {pathname} = this.props.history.location;
-        console.log(answer);
         return (
             <div className="Answer">
                 <div className="Answer__info">

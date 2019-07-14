@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Pagination from "../common/pagination";
 import AnswerList from "../Theme/AnswerList";
-import Tab from "../common/Tab"
+import UserProfile from "./UserProfile";
+import Tab from "../common/Tab";
 import {paginate} from "../../util/paginate";
 import {database} from "../../model/firebase";
 
@@ -9,7 +10,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: this.props.user,
+            userProfile: {},
             answers: [],
             questions: [],
             currentPage: 1,
@@ -19,11 +20,22 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        this.getAnswers(this.props.user, this.state.activeTab);
+        console.log(this.props.match.params.id, this.props);
+        database
+            .ref("users/" + this.props.match.params.id)
+            .once("value", snapshot => {
+                const userProfile =snapshot.val();
+                this.setState ({userProfile});
+            })
+            .then(() => {
+                this.getAnswers(this.state.userProfile, this.state.activeTab);
+            })
+        ;
+
     }
 
     handleTab = (activeTab) => {
-        this.getAnswers(this.state.user,activeTab);
+        this.getAnswers(this.state.userProfile, activeTab);
     };
 
 
@@ -61,7 +73,7 @@ class Profile extends Component {
                 this.setDataAnswers(answers)
             });
         } else {
-            console.log(user.answersFavorite);
+            console.log(user);
             database.ref('answers').on("value", snapshot => {
                 let answersObject = snapshot.val(),
                     answers = [];
@@ -99,7 +111,8 @@ class Profile extends Component {
 
 
     render() {
-        const {answers, currentPage, pageSize, questions, sortState, activeTab, user} = this.state;
+        console.log(this.state.userProfile, this.props.user);
+        const {answers, currentPage, pageSize, questions, sortState, activeTab, userProfile} = this.state;
 
         const answersPage = paginate(answers, currentPage, pageSize);
         const history = this.props.history;
@@ -112,6 +125,7 @@ class Profile extends Component {
                         items={['Мои', 'Избранные']}
                         handleClick={this.handleTab}
                         activeTab={activeTab}
+                        classCss={'tab_h2'}
                     />
 
                     <AnswerList
@@ -119,7 +133,7 @@ class Profile extends Component {
                         history={history}
                         sortState={sortState}
                         questions={questions}
-                        user = {user}
+                        user = {this.props.user}
                     />
 
                     <Pagination
@@ -133,7 +147,9 @@ class Profile extends Component {
                 </div>
 
                 <div className="Theme-questions">
-                    {/*Profile component*/}
+                    <UserProfile
+                        user={userProfile}
+                    />
                 </div>
             </div>
         );

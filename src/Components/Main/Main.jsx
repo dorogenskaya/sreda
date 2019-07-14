@@ -42,11 +42,12 @@ class Main extends Component {
                     <Route path='/register' component={Login}/>
                     <Route path="/not-found" component={NotFound}/>
 
-                    <ProtectedAuthRoute
-                        path='/profile/myprofile'
-                        component={Profile}
-                        user={user}
-                    />
+                    {/*<ProtectedAuthRoute*/}
+                        {/*path='/profile/myprofile'*/}
+                        {/*component={Profile}*/}
+                        {/*user={user}*/}
+                    {/*/>*/}
+
                     <Route path="/profile/:id"
                            render={(props) => (<Profile {...props} user={user}/>)}/>
 
