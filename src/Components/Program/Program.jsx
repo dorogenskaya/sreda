@@ -4,6 +4,7 @@ import InputSelect from '../Forms/Input/InputSelect';
 import SubjectsList from './SubjectList';
 import {database} from '../../model/firebase';
 import './Program.css';
+import SearchComponent from '../Search/Search';
 
 class EditProgramFilter extends Component {
     constructor(props) {
@@ -164,6 +165,7 @@ class EditProgramFilter extends Component {
 
     render() {
         return (<div className="Program">
+            <SearchComponent/>
             <h1>Program Page</h1>
             <Form>
                 <div className="Program-filters">

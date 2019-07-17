@@ -1,0 +1,35 @@
+.search-component_empty .result-wrapper,
+.search-component_empty .search-overlay {
+    display: none;
+}
+
+.search-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.search-component_active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 11;
+    display: flex;
+    padding: 50px 100px;
+}
+
+.search-component_active .search-body {
+    width: 100%;
+    background: #fff;
+    padding: 50px;
+    border: 3px solid #ccc;
+    position: relative;
+}
+
+.result-wrapper {
+    padding-top: 50px;
+}
