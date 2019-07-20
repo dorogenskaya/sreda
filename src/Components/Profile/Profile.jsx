@@ -155,7 +155,6 @@ class Profile extends Component {
                         current={currentPage}
                         hideOnSinglePage={true}
                     />
-
                 </div>
 
                 <div className="Theme-questions">

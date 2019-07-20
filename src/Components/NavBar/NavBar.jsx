@@ -13,7 +13,7 @@ const NavBar = ({user}) => {
                         </Link>
                     </li>
                     <li className="nav-list-item">
-                        <Link className="nav-list-item-link" to="/program">Program Page</Link>
+                        <Link className="nav-list-item-link" to="/program">Программа</Link>
                     </li>
                     <li className="nav-list-item">
                         <Link className="nav-list-item-link" to="/rating">Рейтинг</Link>
@@ -23,10 +23,10 @@ const NavBar = ({user}) => {
                         <React.Fragment>
                             <h2>Гостевой вход</h2>
                             <li className="nav-list-item">
-                                <Link className="nav-list-item-link" to="/login">Login</Link>
+                                <Link className="nav-list-item-link" to="/login">Логин</Link>
                             </li>
                             <li className="nav-list-item">
-                                <Link className="nav-list-item-link" to="/register">Register</Link>
+                                <Link className="nav-list-item-link" to="/register">Регистрация</Link>
                             </li>
                         </React.Fragment>
                     )}
@@ -36,12 +36,12 @@ const NavBar = ({user}) => {
                                 <Link className="nav-list-item-link" to={`/profile/${user.uid}`}>{user.name}</Link>
                             </li>
                             <li className="nav-list-item">
-                                <Link className="nav-list-item-link" to="/logout">Logout</Link>
+                                <Link className="nav-list-item-link" to="/logout">Выход</Link>
                             </li>
                             {user.role === 0 && (
                                 <React.Fragment>
                                 <li className="nav-list-item">
-                                    <Link className="nav-list-item-link" to="/admin">Admin Panel</Link>
+                                    <Link className="nav-list-item-link" to="/admin">Админка</Link>
                                 </li>
                                 </React.Fragment>
                             )}
