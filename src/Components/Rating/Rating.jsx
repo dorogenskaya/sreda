@@ -5,12 +5,6 @@ class Rating extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userProfile: {},
-            answers: [],
-            questions: [],
-            currentPage: 1,
-            pageSize: 10,
-            activeTab: 'Мои'
         };
     }
 
