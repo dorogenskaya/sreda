@@ -34,6 +34,8 @@ class Main extends Component {
                            render={(props) => (<Theme {...props} user={user}/>)}/>
 
                     <Route path='/program' component={Program}/>
+                    <Route path='/rating' component={Rating}/>
+
                     <Route
                         path='/login'
                         render={(props) => (<Login {...props}/>)} />

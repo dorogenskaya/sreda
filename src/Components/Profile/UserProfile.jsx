@@ -2,7 +2,14 @@ import React from 'react';
 
 const UserProfile = (props) => {
     const {user} = props;
-    console.log(user.coinCounter);
+
+    this.getCoinCounts =(coinCounter) => {
+        let coins = 0;
+        for (let key in coinCounter) {
+            coins += coinCounter[key].all;
+        }
+        return coins;
+    };
 
     this.renderRole = (role) => {
         switch(role) {
@@ -23,6 +30,7 @@ const UserProfile = (props) => {
 
     return (
         <div>
+            <div>{this.getCoinCounts(user.coinCounter)} coins</div>
             <img src={user.picture}
                  alt=""
                  style={{width: 200}}
@@ -30,7 +38,6 @@ const UserProfile = (props) => {
             <div>{user.name}</div>
             <div>{this.renderRole(user.role)}</div>
             {user.role < 4 && (<div>Permissions</div>)}
-            <div>Coins count</div>
             <h2>Rating</h2>
         </div>
     );

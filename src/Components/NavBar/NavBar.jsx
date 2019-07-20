@@ -15,6 +15,9 @@ const NavBar = ({user}) => {
                     <li className="nav-list-item">
                         <Link className="nav-list-item-link" to="/program">Program Page</Link>
                     </li>
+                    <li className="nav-list-item">
+                        <Link className="nav-list-item-link" to="/rating">Рейтинг</Link>
+                    </li>
 
                     {!user && (
                         <React.Fragment>

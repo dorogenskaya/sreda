@@ -19,7 +19,6 @@ class Profile extends Component {
         };
     }
 
-
     componentDidMount() {
         database
             .ref("users/" + this.props.match.params.id)
@@ -88,7 +87,6 @@ class Profile extends Component {
                 this.setDataAnswers(answers)
             });
         } else {
-            console.log(user);
             database.ref('answers').on("value", snapshot => {
                 let answersObject = snapshot.val(),
                     answers = [];
@@ -126,7 +124,6 @@ class Profile extends Component {
 
 
     render() {
-        console.log(this.state.userProfile, this.props.user);
         const {answers, currentPage, pageSize, questions, sortState, activeTab, userProfile} = this.state;
 
         const answersPage = paginate(answers, currentPage, pageSize);
