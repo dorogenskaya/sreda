@@ -19,8 +19,8 @@ class Profile extends Component {
         };
     }
 
+
     componentDidMount() {
-        console.log(this.props.match.params.id, this.props);
         database
             .ref("users/" + this.props.match.params.id)
             .once("value", snapshot => {
@@ -31,7 +31,22 @@ class Profile extends Component {
                 this.getAnswers(this.state.userProfile, this.state.activeTab);
             })
         ;
+    }
 
+    componentDidUpdate(propsUpdate) {
+        if (this.props.match.params.id === propsUpdate.match.params.id) {
+            return;
+        }
+        database
+            .ref("users/" + this.props.match.params.id)
+            .once("value", snapshot => {
+                const userProfile =snapshot.val();
+                this.setState ({userProfile});
+            })
+            .then(() => {
+                this.getAnswers(this.state.userProfile, this.state.activeTab);
+            })
+        ;
     }
 
     handleTab = (activeTab) => {
@@ -55,19 +70,19 @@ class Profile extends Component {
                         let answer = theme[key];
                         if (answer.creator.creatorId === user.uid)
 
-                            answers.push({
-                                name: answer.title,
-                                tags: answer.questionsList,
-                                createDate: answer.createDate,
-                                description: answer.description,
-                                creator: answer.creator,
-                                id: key,
-                                likerList: !answer.likerList ? [] :  answer.likerList,
-                                liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
-                                favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key)),
-                                themeId: themeKey,
-                                themeName: answer.theme.themeName
-                            });
+                        answers.push({
+                            name: answer.title,
+                            tags: answer.questionsList,
+                            createDate: answer.createDate,
+                            description: answer.description,
+                            creator: answer.creator,
+                            id: key,
+                            likerList: !answer.likerList ? [] :  answer.likerList,
+                            liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
+                            favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key)),
+                            themeId: themeKey,
+                            themeName: answer.theme.themeName
+                        });
                     }
                 }
                 this.setDataAnswers(answers)
@@ -84,19 +99,19 @@ class Profile extends Component {
                         for (let key in theme) {
                             let answer = theme[key];
                             if (key === answerId)
-                                answers.push({
-                                    name: answer.title,
-                                    tags: answer.questionsList,
-                                    createDate: answer.createDate,
-                                    description: answer.description,
-                                    creator: answer.creator,
-                                    id: key,
-                                    likerList: !answer.likerList ? [] : answer.likerList,
-                                    liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
-                                    favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key)),
-                                    themeId: themeKey,
-                                    themeName: answer.theme.themeName
-                                });
+                            answers.push({
+                                name: answer.title,
+                                tags: answer.questionsList,
+                                createDate: answer.createDate,
+                                description: answer.description,
+                                creator: answer.creator,
+                                id: key,
+                                likerList: !answer.likerList ? [] : answer.likerList,
+                                liked: answer.likerList && user ? answer.likerList.includes(user.name) : false,
+                                favorite: !!(user && user.answersFavorite && user.answersFavorite.includes(key)),
+                                themeId: themeKey,
+                                themeName: answer.theme.themeName
+                            });
                         }
                     }
                     this.setDataAnswers(answers)

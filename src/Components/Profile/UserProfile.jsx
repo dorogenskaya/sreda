@@ -2,6 +2,7 @@ import React from 'react';
 
 const UserProfile = (props) => {
     const {user} = props;
+    console.log(user.coinCounter);
 
     this.renderRole = (role) => {
         switch(role) {
