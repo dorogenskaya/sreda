@@ -5,8 +5,6 @@ import './RatingTable.css';
 class RatingTable extends Component {
     render() {
         const {userList} = this.props;
-        console.log(userList);
-
         return (
             <React.Fragment>
                 <div className="table-header">

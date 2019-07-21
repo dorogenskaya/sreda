@@ -9,11 +9,10 @@ const UserRow = (props) => {
 
     let rowClass = classNames('table-row',{
         'row-highlight': user.key < 10,
-        'row-me': user.name == firebase.auth().currentUser.displayName
+        'row-me': user.name === firebase.auth().currentUser.displayName
     });
 
     return (
-
         <div className={rowClass}>
             <div className="rowClass">{user.key}</div>
             <div className="rowClass">{user.picture}</div>

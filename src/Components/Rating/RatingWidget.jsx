@@ -10,114 +10,30 @@ class RatingWidget extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            activeTab:'неделя',
-            userList:[],
+            activeTab: 'неделя',
+            userList: [],
             currentPage: 1,
-            pageSize: 15
+            pageSize: 15,
+            subject: this.props.subject
         };
     }
     componentDidMount () {
-        this.getUsers(this.state.activeTab);
+        const {userList} = this.props || [];
+        console.log( userList, '!!!!!!!!!!!!');
+        this.setState({userList});
     }
+    //
+    // getUsers = (activeTab) => {
+    // };
+    //
+    // setDataUsers = (userList) => {
+    //     this.setState({userList})
+    // };
 
-    getUsers = (activeTab) => {
-        const userList = [
-            {picture: "user.picture",
-                name: "Лена Дорогенская",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-            {picture: "user.picture",
-                name: "Лена Дорогенская",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-            {picture: "user.picture",
-                name: "Лена Дорогенская",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-            {picture: "user.picture",
-                name: "Лена Дорогенская",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-            {picture: "user.picture",
-                name: "Lena Dorogenskaya",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-
-            {picture: "user.picture",
-                name: "Лена Дорогенская",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-            {picture: "user.picture",
-                name: "Лена Дорогенская",
-                coins: 23
-            },
-            {picture: "user.picture",
-                name: "Ваня Довгаленок",
-                coins: 34
-            },
-            {picture: "user.picture",
-                name: "Саша Матвеев",
-                coins: 22
-            },
-        ];
-        this.setDataUsers(userList);
-    };
-
-    setDataUsers = (userList) => {
-        this.setState({userList: userList})
-    };
 
     handleTab = (activeTab) => {
         console.log(activeTab);
-        this.getUsers(activeTab);
+        // this.getUsers(activeTab);
     };
 
     handlePageClick = (currentPage) =>{
@@ -126,16 +42,17 @@ class RatingWidget extends Component {
 
     render() {
         const {userList, activeTab,  currentPage, pageSize} = this.state;
+
         const sorted =
             _.orderBy(userList, ['coins'], ['desc'])
             .map((user, index) => {
             return {picture: user.picture, name: user.name, coins: user.coins, key: index+1};
         });
-
         const paginated = paginate(sorted, currentPage, pageSize);
 
         return (
             <React.Fragment>
+                <h1>subjectName</h1>
                 <Tab
                     items = {['неделя', 'всё время']}
                     handleClick={this.handleTab}
@@ -148,7 +65,7 @@ class RatingWidget extends Component {
 
                 <Pagination
                     onChange={this.handlePageClick}
-                    total={userList.length}
+                    total={userList ? userList.length :0}
                     pageSize={pageSize}
                     current={currentPage}
                     hideOnSinglePage={true}
