@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import UserRow from "./UserRow";
 import './RatingTable.css';
 
-
 class RatingTable extends Component {
     render() {
         const {userList} = this.props;
@@ -10,7 +9,14 @@ class RatingTable extends Component {
 
         return (
             <React.Fragment>
-                { userList.map(user => <UserRow user={user}/>)}
+                <div className="table-header">
+                    <span className="item">место</span>
+                    <span className="item">анскулер</span>
+                    <span className="item item__right">монеты</span>
+                </div>
+                {userList.map((user)=>
+                    <UserRow key={user.key} user={user}/>
+                )}
             </React.Fragment>
         );
     }

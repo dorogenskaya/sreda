@@ -4,6 +4,7 @@ import AnswerList from "../Theme/AnswerList";
 import UserProfile from "./UserProfile";
 import Tab from "../common/Tab";
 import {paginate} from "../../util/paginate";
+import  _ from 'lodash';
 import {database} from "../../model/firebase";
 
 class Profile extends Component {
@@ -15,7 +16,8 @@ class Profile extends Component {
             questions: [],
             currentPage: 1,
             pageSize: 10,
-            activeTab: 'Мои'
+            activeTab: 'Мои',
+            sortState:'createDate'
         };
     }
 
@@ -55,6 +57,11 @@ class Profile extends Component {
 
     handlePageClick = (currentPage) =>{
         this.setState({ currentPage });
+    };
+
+    handleSort = (sortState) => {
+        if (sortState === this.state.sortState) return null;
+        this.setState({ sortState });
     };
 
     getAnswers = (user, activeTab) => {
@@ -118,7 +125,7 @@ class Profile extends Component {
         }
     };
 
-    setDataAnswers (answers) {
+    setDataAnswers = (answers)=> {
         this.setState({answers: answers})
     }
 
@@ -126,7 +133,8 @@ class Profile extends Component {
     render() {
         const {answers, currentPage, pageSize, questions, sortState, activeTab, userProfile} = this.state;
 
-        const answersPage = paginate(answers, currentPage, pageSize);
+        const sorted = _.orderBy(answers, [sortState], ['desc']);
+        const answersPage = paginate(sorted, currentPage, pageSize);
         const history = this.props.history;
 
         return (
@@ -144,6 +152,7 @@ class Profile extends Component {
                         answers={answersPage}
                         history={history}
                         sortState={sortState}
+                        handleSort={this.handleSort}
                         questions={questions}
                         user = {this.props.user}
                     />

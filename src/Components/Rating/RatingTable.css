@@ -1,13 +1,31 @@
-.table {
+.table-header {
+    display: grid;
+    grid-gap: 24px;
+    grid-template-columns: 24px auto 10%;
+    border-bottom: 1px solid black;
+    padding: 8px 0;
+}
+
+.table-row {
     display: grid;
     grid-gap: 24px;
     grid-template-columns: 24px 24px auto 10%;
     border-bottom: 1px solid black;
-    padding: 8px;
-
+    padding: 4px 0;
 }
+    .row-highlight {
+        background-color: aqua;
+    }
+    .row-me {
+        background-color: #0099ff;
+    }
 
 .item {
-    align-self: start;
-    padding: 4px;
+    justify-self: start;
+    padding: 2px;
+    align-self: center;
+}
+
+.item__right {
+    justify-self: end;
 }
