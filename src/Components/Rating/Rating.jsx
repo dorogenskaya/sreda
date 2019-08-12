@@ -13,50 +13,53 @@ class Rating extends Component {
         // take userSubjectsKeys from coincounts new
         // left max 4 with the biggest number
         const userSubjectsKeys = [
+            '-LfViy9MwyKAAk1QCyJO',
             '-Lb9fI5xXlQWJfDilNru',
             '-LeGgXVgvvOlaonvEQCc'
         ];
         const userLists = [];
-        const userList = [];
-
-        for (let subject of userSubjectsKeys){
-            database.ref('users').on("value", snapshot => {
+        database
+            .ref('users')
+            .once("value", snapshot => {
                 let users = snapshot.val();
-                for (let key in users){
-                    let user = users[key];
-                    console.log(user, user.coinCounter );
-                    if (user.coinCounter && user.coinCounter[subject])
-                        userList.push({
-                            name: user.name,
-                            picture: user.picture,
-                            uid: user.picture,
-                            role: user.role,
-                            coins: user.coinCounter[subject].new,
-                            allCoins: user.coinCounter[subject].all
-                        });
+                for (let subject of userSubjectsKeys){
+                    console.log(subject, 'subject');
+                    for (let key in users){
+                        let user = users[key];
+                        /*** @param {{coinCounter:string}} user*/
+                        if(!user.coinCounter || !user.coinCounter[subject]){
 
-                };
-            });
-            userLists.push({subject:subject, userList:userList });
-        }
-        this.setState({userLists});
-        console.log(userLists, userList);
+                        } else {
+                            const userList = [];
+                            userList.push({
+                                name: user.name,
+                                picture: user.picture,
+                                uid: user.picture,
+                                role: user.role,
+                                coins: user.coinCounter[subject].new,
+                                allCoins: user.coinCounter[subject].all
+                            });
+                            userLists.push({subject:subject, userList:userList });
+                        }
+                    };
+
+                }
+            })
+            .then(() => {this.setState({userLists})});
     }
-
 
     render() {
         const {userLists} = this.state;
         return (
             <div className="Theme">
                 <div className="Theme-content">
-                    {userLists.map(object => {
-                        console.log(object.userList);
-                        return <RatingWidget
+                    {userLists.map(object =>
+                         <RatingWidget
                             key={object.subject}
                             user={this.props.user}
                             subject={object.subject}
                             userList={object.userList}/>
-                        })
+                        )
                     }
                 </div>
 

@@ -11,16 +11,15 @@ class RatingWidget extends Component {
         super(props);
         this.state = {
             activeTab: 'неделя',
-            userList: [],
+            userList: this.props || [],
             currentPage: 1,
             pageSize: 15,
             subject: this.props.subject
         };
     }
     componentDidMount () {
-        const {userList} = this.props || [];
-        console.log( userList, '!!!!!!!!!!!!');
-        this.setState({userList});
+        // const {userList} = this.props || [];
+        // this.setState({userList});
     }
     //
     // getUsers = (activeTab) => {
@@ -45,10 +44,11 @@ class RatingWidget extends Component {
 
         const sorted =
             _.orderBy(userList, ['coins'], ['desc'])
-            .map((user, index) => {
-            return {picture: user.picture, name: user.name, coins: user.coins, key: index+1};
+            .map((user, index) => {return {picture: user.picture, name: user.name, coins: user.coins, key: index+1};
         });
+        console.log('sorted');
         const paginated = paginate(sorted, currentPage, pageSize);
+        console.log('paginated');
 
         return (
             <React.Fragment>
