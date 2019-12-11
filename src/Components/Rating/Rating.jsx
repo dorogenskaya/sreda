@@ -37,15 +37,15 @@ class Rating extends Component {
                     let user = users[key];
                     const userList = [];
 
-                    if (!user.coinCounter || !user.coinCounter.allCoins){
+                    if (!user.allCoins){
                     } else {
                         userListsAll.push({
                             name: user.name,
                             picture: user.picture,
                             uid: user.uid,
                             role: user.role,
-                            coins: user.coinCounter.allCoins.all,
-                            allCoins: user.coinCounter.allCoins.new,
+                            coins: user.allCoins.new,
+                            allCoins: user.allCoins.all,
                         });
                     }
 
@@ -89,11 +89,12 @@ class Rating extends Component {
                     ;}
                 }}
             }})
-            .then(() => {this.setState({userLists, userListsAll })});
+            .then(() => {this.setState({userLists, userListsAll})});
     }
 
     render() {
         const {userLists, userListsAll} = this.state;
+        console.log(userListsAll);
         return (
             <div className="Theme">
                 <div className="Theme-content">
