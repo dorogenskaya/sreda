@@ -32,18 +32,22 @@ class Rating extends Component {
             .ref('users')
             .once("value", snapshot => {
                 let users = snapshot.val();
+
                 for (let key in users){
                     let user = users[key];
                     const userList = [];
 
-                    // add allCoins
-                    userListsAll.push({
-                        name: user.name,
-                        picture: user.picture,
-                        uid: user.uid,
-                        role: user.role,
-                        allCoins: user.coinCounter
-                    });
+                    if (!user.coinCounter || !user.coinCounter.allCoins){
+                    } else {
+                        userListsAll.push({
+                            name: user.name,
+                            picture: user.picture,
+                            uid: user.uid,
+                            role: user.role,
+                            coins: user.coinCounter.allCoins.all,
+                            allCoins: user.coinCounter.allCoins.new,
+                        });
+                    }
 
                     for (let keySubject in user.coinCounter ){
                         const subject = userSubjectsKeys.find(({key}) => key === `${keySubject}`);
